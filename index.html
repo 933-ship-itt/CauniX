@@ -116,15 +116,9 @@
             transform: scale(0.96);
         }
         @keyframes bgLogoPulse {
-            0% {
-                opacity: 0.1;
-            }
-            50% {
-                opacity: 0.32;
-            }
-            100% {
-                opacity: 0.1;
-            }
+            0% { opacity: 0.1; }
+            50% { opacity: 0.32; }
+            100% { opacity: 0.1; }
         }
 
         .tech-card {
@@ -265,7 +259,6 @@
             box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.25);
         }
 
-        /* --- New Visual System: Main Content Wrapper --- */
         #visualMainContent {
             position: relative;
             width: 100%;
@@ -273,7 +266,6 @@
             z-index: 10;
         }
 
-        /* Hero canvas layer */
         .hero-canvas-layer {
             position: absolute;
             top: 0;
@@ -284,7 +276,6 @@
             pointer-events: none;
         }
 
-        /* App logo watermark inside hero */
         .app-logo-watermark {
             position: absolute;
             top: 50%;
@@ -296,7 +287,6 @@
             pointer-events: none;
         }
 
-        /* Director UI overlay */
         .director-ui-graphic {
             position: absolute;
             inset: 0;
@@ -307,7 +297,6 @@
             pointer-events: none;
         }
 
-        /* Scene content (replaces old scene-graphic) */
         .scene-content {
             position: absolute;
             text-align: center;
@@ -358,7 +347,6 @@
             font-size: clamp(0.6rem, 1.8vw, 0.9rem);
         }
 
-        /* --- Finale Stage --- */
         #finaleStage {
             position: absolute;
             inset: 0;
@@ -532,11 +520,11 @@
                                 <canvas id="heroCanvas" class="hero-canvas-layer"></canvas>
                                 <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="app-logo-watermark" alt="CauniX Logo">
                                 <div class="director-ui-graphic">
-                                    <div class="scene-content active" data-scene="0"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
-                                    <div class="scene-content" data-scene="1"><h1>No SIM Communication.</h1><p>Legacy Reimagined</p></div>
-                                    <div class="scene-content" data-scene="2"><h1>Global.</h1><p>Continental Precision</p></div>
-                                    <div class="scene-content" data-scene="3"><h1>Synced.</h1><p>Instant Protocol</p></div>
-                                    <div class="scene-content" data-scene="4">
+                                    <div class="scene-content active"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
+                                    <div class="scene-content"><h1>No SIM Communication.</h1><p>Legacy Reimagined</p></div>
+                                    <div class="scene-content"><h1>Global.</h1><p>Continental Precision</p></div>
+                                    <div class="scene-content"><h1>Synced.</h1><p>Instant Protocol</p></div>
+                                    <div class="scene-content">
                                         <h1>CauniX</h1>
                                         <p>Your Voice. Your Rules.</p>
                                         <span class="url-text">CAUNIX.COM</span>
@@ -656,7 +644,7 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === NEW HERO VISUAL GRAPHIC SYSTEM ===
+        // === LOOPING HERO GRAPHIC WITH FINALE (exact sequence) ===
         (function initHeroGraphic() {
             const canvas = document.getElementById('heroCanvas');
             if (!canvas) return;
@@ -665,6 +653,7 @@
             let width, height, currentScene = 0,
                 frame = 0,
                 loopActive = true;
+            let finaleTimeline = null;
 
             const SPEED = 16;
             const SCENE_DURATION = 160;
@@ -716,6 +705,42 @@
 
             const particles = Array.from({ length: 800 }, () => new Particle(true));
 
+            function resetAllScenes() {
+                scenes.forEach(scene => {
+                    scene.classList.remove('active', 'exit');
+                    scene.style.transition = 'none';
+                    scene.offsetHeight;
+                    scene.style.transition = '';
+                });
+                currentScene = 0;
+                scenes[0].classList.add('active');
+            }
+
+            function resetFinaleElements() {
+                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
+                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+                gsap.set("#urlLayer", { opacity: 0, y: 0 });
+                gsap.set(".guide-line", { opacity: 0 });
+                gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1, width: "auto", borderLeft: "none", borderRight: "none" });
+                gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
+            }
+
+            function restartLoop() {
+                if (finaleTimeline) {
+                    finaleTimeline.kill();
+                    finaleTimeline = null;
+                }
+                resetFinaleElements();
+                document.getElementById('finaleStage').style.display = 'none';
+                document.getElementById('visualMainContent').style.display = 'block';
+                gsap.set("#visualMainContent", { opacity: 1 });
+                resetAllScenes();
+                loopActive = true;
+                frame = 0;
+                currentScene = 0;
+                requestAnimationFrame(animate);
+            }
+
             function runFinale() {
                 loopActive = false;
                 gsap.to("#visualMainContent", {
@@ -730,7 +755,27 @@
             }
 
             function startGSAPFinale() {
-                const tl = gsap.timeline({ defaults: { ease: "expo.inOut" } });
+                if (finaleTimeline) {
+                    finaleTimeline.kill();
+                    finaleTimeline = null;
+                }
+                resetFinaleElements();
+
+                const tl = gsap.timeline({
+                    defaults: { ease: "expo.inOut" },
+                    onComplete: () => {
+                        gsap.to("#finaleStage", {
+                            opacity: 0,
+                            duration: 0.8,
+                            delay: 2.5,
+                            onComplete: () => {
+                                gsap.set("#finaleStage", { opacity: 1 });
+                                restartLoop();
+                            }
+                        });
+                    }
+                });
+
                 tl.set(".guide-line", { opacity: 1 });
                 tl.from("#introFrame", { width: 0, duration: 1.2, borderLeft: "2px solid #000", borderRight: "2px solid #000" });
                 tl.to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8 }, "-=0.6");
@@ -741,10 +786,14 @@
                 tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
                 tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
                 tl.to("#logoFinal", { scale: 0.95, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+                finaleTimeline = tl;
             }
 
             function animate() {
-                if (!loopActive) return;
+                if (loopActive) {
+    frame++;
+}
                 frame++;
                 if (frame >= SCENE_DURATION) {
                     frame = 0;
