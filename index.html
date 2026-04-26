@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CauniX: Lightweight Internet Calling with Google Sign‑In</title>
+    <meta name="description" content="CauniX is a lightweight communication app. Sign in with Google, get your own in‑app identity, and start voice calls instantly — no phone number needed.">
+    <meta rel="canonical" href="https://caunix.app/">
+
+    <!-- Open Graph & Social Preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://caunix.app/">
+    <meta property="og:title" content="CauniX: Google‑Based Voice Calls Without a Phone Number">
+    <meta property="og:description" content="Lightweight, real‑time voice calls with just a Google account. No SIM, no carrier — just your CauniX identity.">
+    <meta property="og:image" content="https://caunix.app/og-image.png">
+    <meta property="og:site_name" content="CauniX">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://caunix.app/">
+    <meta name="twitter:title" content="CauniX: Google‑Based Voice Calls Without a Phone Number">
+    <meta name="twitter:description" content="Lightweight, real‑time voice calls with just a Google account. No SIM, no carrier — just your CauniX identity.">
+    <meta name="twitter:image" content="https://caunix.app/og-image.png">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "CauniX",
+            "description": "Lightweight internet‑based voice calling app. Sign in with Google, obtain a unique in‑app identity, and connect instantly without a phone number.",
+            "url": "https://caunix.app",
+            "applicationCategory": "CommunicationApplication",
+            "operatingSystem": "Web, Android, iOS",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "210"
+            }
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png">
+
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest">
+    </script>
+
+    <style>
+        :root {
+            --color-primary: #3b6ef5;
+            --color-primary-dark: #2351d0;
+            --color-secondary: #5f6b7a;
+            --color-success: #10b981;
+            --color-danger: #ef4444;
+            --color-warning: #f59e0b;
+            --color-bg-light: #f0f2f9;
+            --color-card-bg: #ffffff;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --color-border: #dde3f0;
+            --color-accent: #6366f1;
+            --sidebar-from: #1a2a6c;
+            --sidebar-via: #2343b8;
+            --sidebar-to: #3b6ef5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--color-text-primary);
+            scroll-behavior: smooth;
+            min-height: 100vh;
+            /* Light sky blue background instead of white */
+            background-color: #e0f2fe; /* sky-100 / light sky blue */
+        }
+
+        #mainCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .tech-card {
+            border: 1px solid var(--color-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            background-color: var(--color-card-bg);
+            color: var(--color-text-primary);
+        }
+        .tech-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(59, 110, 245, 0.15);
+        }
+
+        .network-visualization {
+            background-color: #ffffff;
+            background-image: radial-gradient(var(--color-primary) 0.8px, #f0f4fe 0.8px);
+            background-size: 20px 20px;
+            border: 1px solid var(--color-primary);
+            box-shadow: 0 0 30px rgba(59, 110, 245, 0.2);
+        }
+
+        .btn-google {
+            background: linear-gradient(135deg, #2343b8, #3b6ef5);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(59, 110, 245, 0.35);
+        }
+        .btn-google:hover {
+            background: linear-gradient(135deg, #1a2a6c, #2343b8);
+            box-shadow: 0 6px 20px rgba(27, 40, 180, 0.45);
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-image-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-device {
+            width: 100%;
+            max-width: 560px;
+            height: auto;
+            max-height: 460px;
+            object-fit: contain;
+            border-radius: 18px;
+            box-shadow: 0 30px 60px rgba(41, 30, 80, 0.35);
+            transform-origin: center;
+            animation: floatY 6s ease-in-out infinite;
+        }
+
+        @keyframes floatY {
+            0% { transform: translateY(0px) rotate(-1deg); }
+            50% { transform: translateY(-14px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(-1deg); }
+        }
+
+        .panel {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06);
+            padding: 28px;
+        }
+
+        .landing-cta-btn {
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .landing-cta-primary {
+            background: linear-gradient(135deg, #3b6ef5, #7c3aed);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 30px rgba(59, 110, 245, 0.12);
+        }
+        .landing-cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(59, 110, 245, 0.18);
+        }
+        .landing-cta-secondary {
+            background: #ffffff;
+            color: #1f2937;
+            border: 1px solid #e6edf7;
+        }
+        .landing-cta-secondary:hover {
+            border-color: #c7d2fe;
+            transform: translateY(-1px);
+        }
+
+        .btn-google-signin {
+            background: #ffffff;
+            color: #1f2937;
+            border: 1px solid #dde3f0;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .btn-google-signin:hover {
+            border-color: #3b6ef5;
+            box-shadow: 0 4px 16px rgba(59, 110, 245, 0.18);
+            transform: translateY(-1px);
+        }
+        .btn-google-signin svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Additional tweaks for sky blue theme */
+        .bg-sky-light {
+            background-color: #e0f2fe; /* light sky blue */
+        }
+    </style>
+</head>
+<body class="bg-sky-light text-slate-800">
+    <canvas id="mainCanvas"></canvas>
+
+    <!-- Header -->
+    <header id="main-header" class="sticky top-0 z-40 backdrop-blur-md bg-sky-light/80 border-b border-slate-200 transition-opacity duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-2">
+                    <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" 
+                         alt="CauniX logo" 
+                         class="h-8 w-auto object-contain" />
+                    <!-- Black word logo instead of gradient -->
+                    <span class="text-2xl font-extrabold tracking-tight text-black">CauniX</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Features</a>
+                    <a href="#mission" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">How It Works</a>
+                    <a href="#" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Safety</a>
+                </nav>
+                <div>
+                    <button id="nav-launch-call" class="btn-google-signin font-semibold py-2 px-5 rounded-lg transition duration-200 shadow-sm">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        Sign In with Google
+                    </button>
+                </div>
+                <button id="menu-button" class="md:hidden text-slate-600 hover:text-blue-700"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-slate-200 bg-sky-light">
+            <a href="#features" class="block text-slate-600 hover:text-blue-700 font-medium transition duration-150">Features</a>
+            <a href="#mission" class="block text-slate-600 hover:text-blue-700 font-medium transition duration-150">How It Works</a>
+            <a href="#" class="block text-slate-600 hover:text-blue-700 font-medium transition duration-150">Safety</a>
+            <button id="mobile-launch-call" class="w-full btn-google-signin font-semibold py-2 rounded-lg transition duration-200 mt-2 shadow-sm justify-center">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Sign In with Google
+            </button>
+        </div>
+    </header>
+
+    <!-- Landing Page Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="pt-20 pb-32 md:pt-32 md:pb-48 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center pt-1 lg:-mt-32 lg:pb-32 relative z-30">
+                <div class="animate-on-scroll relative p-8 lg:p-12 lg:pr-0">
+                    <!-- Changed the large decorative background to light sky blue -->
+                    <div class="absolute top-0 bottom-0 left-0 right-0 lg:right-[-45vw] bg-sky-light rounded-3xl border border-slate-100 shadow-xl -z-10"></div>
+                    <div class="relative z-10">
+                        <p class="text-blue-700 text-lg font-semibold mb-4 uppercase tracking-widest">
+                            CauniX — Lightweight voice, real‑time connection
+                        </p>
+                        <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight mb-6 text-slate-900">
+                            Talk Instantly.<br>No Phone Number.
+                        </h1>
+                        <p class="text-xl text-slate-600 mb-10 max-w-xl">
+                            Sign in with Google, get your unique CauniX identity, and start voice calls with anyone on the app. No SIM, no carrier — just pure internet communication.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="hero-launch-call" class="landing-cta-btn landing-cta-primary flex-1 sm:flex-none justify-center">
+                                <i data-lucide="mic" class="w-5 h-5"></i>
+                                Start Talking Free
+                            </button>
+                            <button onclick="document.getElementById('features')?.scrollIntoView({behavior:'smooth'})" class="landing-cta-btn landing-cta-secondary flex-1 sm:flex-none justify-center">
+                                <i data-lucide="info" class="w-5 h-5"></i>
+                                How It Works
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-400 mt-4 flex items-center gap-1">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i>
+                            End‑to‑end encrypted · No ads · No tracking
+                        </p>
+                    </div>
+                </div>
+                <div class="relative flex justify-center items-center animate-on-scroll z-20">
+                    <div class="hero-image-wrapper lg:scale-110">
+                        <img id="hero-device-image" 
+                             class="hero-device" 
+                             src="https://i.postimg.cc/j2tQFBx5/image.png" 
+                             alt="CauniX voice call interface — clean, minimal design" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="relative z-10 -mt-20 py-20 md:py-32 bg-sky-light border-t border-b border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-extrabold mb-4 text-slate-800 animate-on-scroll animated">
+                    Built for Real Conversations
+                </h2>
+                <p class="text-xl text-slate-600 mb-16 max-w-3xl mx-auto animate-on-scroll animated">
+                    CauniX replaces phone numbers with a simple Google sign‑in and a lightweight identity. Talk, connect, and stay safe — all within a frictionless app.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated border border-slate-50 hover:shadow-lg transition-shadow">
+                        <div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4">
+                            <i data-lucide="log-in" class="w-7 h-7 text-blue-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Google Account Sign‑In</h3>
+                        <p class="text-slate-500 text-sm">One tap to sign in. No new passwords, no phone numbers. Your Google account becomes your key to CauniX.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated border border-slate-50 hover:shadow-lg transition-shadow">
+                        <div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4">
+                            <i data-lucide="fingerprint" class="w-7 h-7 text-blue-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Unique In‑App Identity</h3>
+                        <p class="text-slate-500 text-sm">After sign‑in you get a CauniX ID — your personal handle for calls. No SIM, no carrier, no phone number exposure.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated border border-slate-50 hover:shadow-lg transition-shadow">
+                        <div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4">
+                            <i data-lucide="phone" class="w-7 h-7 text-blue-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Crystal‑Clear Voice</h3>
+                        <p class="text-slate-500 text-sm">Direct app‑to‑app voice calls optimized for clarity and low latency. Optional expansion to video and messaging.</p>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated border border-slate-50 hover:shadow-lg transition-shadow">
+                        <div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4">
+                            <i data-lucide="wifi" class="w-7 h-7 text-blue-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Real‑Time Presence</h3>
+                        <p class="text-slate-500 text-sm">See who's online instantly. Firebase‑powered cloud sync updates availability and call state in real time.</p>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated border border-slate-50 hover:shadow-lg transition-shadow">
+                        <div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4">
+                            <i data-lucide="shield" class="w-7 h-7 text-blue-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Safety by Design</h3>
+                        <p class="text-slate-500 text-sm">Block, report, and rate‑limited actions. Account‑based identity helps keep the platform trustworthy.</p>
+                    </div>
+                    <!-- Card 6 -->
+                    <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll bg-gradient-to-br from-blue-50 to-white animated border border-blue-100 hover:shadow-lg transition-shadow">
+                        <div class="p-3 bg-blue-100 rounded-3xl inline-block mb-4">
+                            <i data-lucide="zap" class="w-7 h-7 text-blue-700"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2 text-slate-800">Minimal Friction</h3>
+                        <p class="text-slate-500 text-sm">No setup wizards, no carrier plans. Open the app, see your people, and start talking in seconds.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission / How It Works Section -->
+        <section id="mission" class="py-20 md:py-32 bg-sky-light">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="panel rounded-3xl p-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div class="animate-on-scroll">
+                            <h2 class="text-4xl font-extrabold mb-4 text-slate-800">
+                                Over‑the‑Top, <span class="text-gradient">Phone‑Free</span> Communication
+                            </h2>
+                            <p class="text-xl text-slate-600 mb-6">
+                                CauniX operates completely independent of mobile carriers and traditional telephony. It's an internet‑native calling layer: log in with Google, claim your identity, and connect directly with other users — no phone numbers, no SIM cards.
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span class="text-blue-700 font-bold text-sm">1</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-800">Sign in with Google</h4>
+                                        <p class="text-sm text-slate-500">Your existing Gmail or Workspace account becomes your CauniX key. One click and you're in.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span class="text-blue-700 font-bold text-sm">2</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-800">Receive Your CauniX ID</h4>
+                                        <p class="text-sm text-slate-500">A unique, lightweight identity is generated for you. This replaces a phone number for all CauniX calls.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span class="text-blue-700 font-bold text-sm">3</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-800">See Who's Online & Call</h4>
+                                        <p class="text-sm text-slate-500">Real‑time presence shows you who's available. Tap to start a voice call. No dial codes, no waiting.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="network-visualization p-8 rounded-3xl h-80 flex items-center justify-center relative animate-on-scroll">
+                            <i data-lucide="hexagon" class="w-16 h-16 text-blue-400 absolute top-4 left-4 opacity-40"></i>
+                            <i data-lucide="hexagon" class="w-16 h-16 text-blue-600 absolute bottom-4 right-4 opacity-40"></i>
+                            <div class="text-center">
+                                <div class="flex justify-center space-x-2 mb-4">
+                                    <div class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+                                    <div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+                                </div>
+                                <p class="text-xl font-mono text-slate-800">Google → CauniX ID → Call</p>
+                                <p class="text-sm text-slate-500">Over‑the‑top · No carrier · Real‑time sync</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 md:py-20 bg-sky-light border-t border-b border-blue-200">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="max-w-4xl mx-auto animate-on-scroll">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-slate-800">
+                        Ready to Ditch the <span class="text-gradient">Phone Number</span>?
+                    </h2>
+                    <p class="text-xl text-slate-600 mb-10">
+                        Join the lightweight communication layer. Sign in with Google and start talking — free, forever.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center">
+                        <button id="final-launch-call" class="btn-google font-bold py-3 px-8 rounded-xl transition duration-200 flex items-center justify-center shadow-xl transform hover:scale-[1.05]">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff" opacity="0.9"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity="0.7"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff" opacity="0.6"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity="0.8"/>
+                            </svg>
+                            Sign In with Google — It's Free
+                        </button>
+                        <button onclick="alert('Contact us: hello@caunix.app')" class="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-bold py-3 px-8 rounded-xl transition duration-200">
+                            Talk to the Team
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="main-footer" class="py-12 bg-sky-light border-t border-slate-200 transition-opacity duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-slate-200 pb-8 mb-8">
+                <div class="col-span-2 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-3">
+                        <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" 
+                             alt="CauniX logo" 
+                             class="h-8 w-auto object-contain" />
+                        <!-- Black word logo in footer as well -->
+                        <span class="text-xl font-extrabold tracking-tight text-black">CauniX</span>
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2">Lightweight internet calling. Sign in with Google, get an identity, and talk — phone‑free.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4>
+                    <ul class="space-y-3 text-slate-500 text-sm">
+                        <li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Identity</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Presence</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Safety</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4>
+                    <ul class="space-y-3 text-slate-500 text-sm">
+                        <li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Community</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4>
+                    <ul class="space-y-3 text-slate-500 text-sm">
+                        <li><a href="#" class="hover:text-blue-700 transition">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-blue-700 transition">Acceptable Use</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4>
+                    <ul class="flex space-x-4 text-slate-500">
+                        <li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a></li>
+                        <li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="github" class="w-5 h-5"></i></a></li>
+                        <li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                <p>&copy; 2026 CauniX. All rights reserved. Over‑the‑top communication, free from carriers.</p>
+                <p class="mt-2 md:mt-0">Lightweight · Encrypted · Free</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        function scrollToMission() {
+            document.getElementById('mission')?.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('nav-launch-call')?.addEventListener('click', scrollToMission);
+        document.getElementById('mobile-launch-call')?.addEventListener('click', () => {
+            scrollToMission();
+            mobileMenu?.classList.add('hidden');
+        });
+        document.getElementById('hero-launch-call')?.addEventListener('click', scrollToMission);
+        document.getElementById('final-launch-call')?.addEventListener('click', scrollToMission);
+
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, { threshold: 0.1 });
+        animatedElements.forEach(el => observer.observe(el));
+
+        // Canvas background animation
+        (function() {
+            const canvas = document.getElementById('mainCanvas');
+            const ctx = canvas.getContext('2d');
+
+            let width, height, tick = 0;
+            const stars = [];
+            const bokeh = [];
+
+            const STAR_COUNT = 60;
+            const BASE_VELOCITY = 2;
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+
+                bokeh.length = 0;
+                for (let i = 0; i < 12; i++) {
+                    bokeh.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        r: Math.random() * 100 + 50,
+                        s: Math.random() * 0.1 + 0.05
+                    });
+                }
+            }
+
+            function createStar(isInitial = false) {
+                let x, y;
+                const z = Math.random();
+
+                if (isInitial) {
+                    x = Math.random() * width;
+                    y = Math.random() * height;
+                } else {
+                    if (Math.random() > 0.5) {
+                        x = -150;
+                        y = Math.random() * height - 200;
+                    } else {
+                        x = Math.random() * width - 200;
+                        y = -150;
+                    }
+                }
+
+                stars.push({
+                    x: x,
+                    y: y,
+                    z: z,
+                    len: (Math.random() * 15 + 10) * (0.5 + z),
+                    width: (Math.random() * 1.5 + 1) * (0.5 + z),
+                    speed: (BASE_VELOCITY + Math.random()) * (0.5 + z * 1.5)
+                });
+
+                stars.sort((a, b) => a.z - b.z);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            for (let i = 0; i < STAR_COUNT; i++) createStar(true);
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+
+                bokeh.forEach(p => {
+                    ctx.beginPath();
+                    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+                    g.addColorStop(0, 'rgba(58, 123, 213, 0.04)');
+                    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = g;
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                    p.y -= p.s;
+                    if (p.y + p.r < 0) p.y = height + p.r;
+                });
+
+                const ribbonGrad = ctx.createLinearGradient(0, 0, width, 0);
+                ribbonGrad.addColorStop(0, '#00d2ff');
+                ribbonGrad.addColorStop(0.5, '#3a7bd5');
+                ribbonGrad.addColorStop(1, '#8e44ad');
+
+                ctx.fillStyle = ribbonGrad;
+                ctx.beginPath();
+                for (let x = 0; x <= width; x += 4) {
+                    const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                for (let x = width; x >= 0; x -= 4) {
+                    const thick = 90 + Math.sin(tick + x * 0.003) * 15;
+                    const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
+                    ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fill();
+
+                for (let i = stars.length - 1; i >= 0; i--) {
+                    const s = stars[i];
+                    s.x += s.speed;
+                    s.y += s.speed;
+
+                    const alphaHead = 0.2 + (s.z * 0.7);
+                    const alphaTail = 0.1 + (s.z * 0.4);
+
+                    const grad = ctx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
+                    grad.addColorStop(0, 'rgba(142, 68, 173, 0)');
+                    grad.addColorStop(0.5, `rgba(58, 123, 213, ${alphaTail})`);
+                    grad.addColorStop(1, `rgba(0, 210, 255, ${alphaHead})`);
+
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = s.width;
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(s.x, s.y);
+                    ctx.lineTo(s.x - s.len, s.y - s.len);
+                    ctx.stroke();
+
+                    if (s.x > width + 100 || s.y > height + 100) {
+                        stars.splice(i, 1);
+                        createStar();
+                    }
+                }
+
+                tick += 0.015;
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        })();
+    </script>
+</body>
+</html>
