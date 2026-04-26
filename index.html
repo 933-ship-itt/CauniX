@@ -7,7 +7,6 @@
     <meta name="description" content="CauniX is a lightweight communication app. Sign in with Google, get your own in‑app identity, and start voice calls instantly — no phone number needed.">
     <meta rel="canonical" href="https://caunix.app/">
 
-    <!-- Open Graph & Social Preview -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://caunix.app/">
     <meta property="og:title" content="CauniX: Google‑Based Voice Calls Without a Phone Number">
@@ -15,14 +14,12 @@
     <meta property="og:image" content="https://caunix.app/og-image.png">
     <meta property="og:site_name" content="CauniX">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://caunix.app/">
     <meta name="twitter:title" content="CauniX: Google‑Based Voice Calls Without a Phone Number">
     <meta name="twitter:description" content="Lightweight, real‑time voice calls with just a Google account. No SIM, no carrier — just your CauniX identity.">
     <meta name="twitter:image" content="https://caunix.app/og-image.png">
 
-    <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -48,10 +45,13 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js">
+    </script>
 
     <style>
         :root {
@@ -67,6 +67,9 @@
             --color-text-secondary: #475569;
             --color-border: #dde3f0;
             --color-accent: #6366f1;
+            --pure-white: #ffffff;
+            --pure-black: #000000;
+            --accent-gray: #e0e0e0;
         }
 
         * {
@@ -78,7 +81,7 @@
             color: var(--color-text-primary);
             scroll-behavior: smooth;
             min-height: 100vh;
-            background-color: #e0f2fe; 
+            background-color: #e0f2fe;
         }
 
         #mainCanvas {
@@ -91,7 +94,6 @@
             pointer-events: none;
         }
 
-        /* MAIN BACKGROUND LOGO - faint, pulsing, only in background */
         .bg-main-logo {
             position: fixed;
             top: 0;
@@ -114,9 +116,15 @@
             transform: scale(0.96);
         }
         @keyframes bgLogoPulse {
-            0% { opacity: 0.1; }
-            50% { opacity: 0.32; }
-            100% { opacity: 0.1; }
+            0% {
+                opacity: 0.1;
+            }
+            50% {
+                opacity: 0.32;
+            }
+            100% {
+                opacity: 0.1;
+            }
         }
 
         .tech-card {
@@ -203,7 +211,6 @@
             transform: translateY(-1px);
         }
 
-        /* New gradient "Get Started" button */
         .btn-get-started {
             background: linear-gradient(135deg, #3b6ef5, #8b5cf6);
             color: white;
@@ -231,7 +238,7 @@
             border-radius: 0.85rem;
             font-weight: 600;
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -242,7 +249,6 @@
             transform: translateY(-1px);
         }
 
-        /* Hero container without any logo inside */
         .hero-aspect-wrapper {
             aspect-ratio: 16 / 9;
             width: 100%;
@@ -256,27 +262,53 @@
             background: #ffffff;
             border-radius: 2rem;
             overflow: hidden;
-            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.25);
         }
+
+        /* --- New Visual System: Main Content Wrapper --- */
+        #visualMainContent {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+        }
+
+        /* Hero canvas layer */
         .hero-canvas-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            z-index: 5;
             pointer-events: none;
         }
+
+        /* App logo watermark inside hero */
+        .app-logo-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            width: clamp(150px, 35vw, 400px);
+            opacity: 0.08;
+            pointer-events: none;
+        }
+
+        /* Director UI overlay */
         .director-ui-graphic {
             position: absolute;
             inset: 0;
-            z-index: 2;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
             pointer-events: none;
         }
-        .scene-graphic {
+
+        /* Scene content (replaces old scene-graphic) */
+        .scene-content {
             position: absolute;
             text-align: center;
             opacity: 0;
@@ -286,46 +318,133 @@
             width: 90%;
             visibility: hidden;
         }
-        .scene-graphic.active {
+        .scene-content.active {
             opacity: 1;
             transform: translateY(0);
             filter: blur(0px);
             visibility: visible;
         }
-        .scene-graphic.exit {
+        .scene-content.exit {
             opacity: 0;
             transform: scale(1.05);
             filter: blur(15px);
             visibility: visible;
         }
-        .scene-graphic h1 {
-            font-size: clamp(2rem, 6vw, 3.5rem);
+        .scene-content h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin: 0;
             color: #000000;
-            line-height: 1.2;
+            line-height: 1.1;
             font-weight: 900;
-            letter-spacing: -0.03em;
-            font-family: 'DM Sans', sans-serif;
+            letter-spacing: -0.04em;
+            font-family: 'Inter', 'DM Sans', sans-serif;
         }
-        .scene-graphic p {
-            font-size: clamp(0.7rem, 2.5vw, 1rem);
+        .scene-content p {
+            font-size: clamp(0.7rem, 2vw, 1rem);
             color: #000000;
             margin-top: 12px;
             font-weight: 700;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.35em;
             text-transform: uppercase;
             opacity: 0.75;
         }
+        .scene-content .url-text {
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            margin-top: 20px;
+            display: block;
+            color: #000000;
+            opacity: 0.6;
+            font-size: clamp(0.6rem, 1.8vw, 0.9rem);
+        }
+
+        /* --- Finale Stage --- */
+        #finaleStage {
+            position: absolute;
+            inset: 0;
+            z-index: 2000;
+            background: var(--pure-white);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            perspective: 2000px;
+        }
+
+        .intro-frame {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-origin: 82.5% 50%;
+        }
+
+        .intro-svg {
+            width: min(600px, 80vw);
+            height: auto;
+            overflow: visible;
+        }
+
+        .letter-path {
+            fill: transparent;
+            stroke: var(--pure-black);
+            stroke-width: 2px;
+            stroke-dasharray: 1200;
+            stroke-dashoffset: 1200;
+            font-size: clamp(60px, 10vw, 120px);
+            font-weight: 900;
+            font-family: 'Inter', 'DM Sans', sans-serif;
+        }
+
+        .fill-text {
+            font-size: clamp(60px, 10vw, 120px);
+            font-weight: 900;
+            fill: var(--pure-black);
+            clip-path: inset(100% 0% 0% 0%);
+            font-family: 'Inter', 'DM Sans', sans-serif;
+        }
+
+        .sub-url-path {
+            font-size: clamp(16px, 2.5vw, 30px);
+            font-weight: 700;
+            fill: var(--pure-black);
+            letter-spacing: 0.3em;
+            opacity: 0;
+            font-family: 'Inter', 'DM Sans', sans-serif;
+        }
+
+        .guide-line {
+            position: absolute;
+            background: var(--accent-gray);
+            opacity: 0;
+            z-index: -1;
+            width: 1px;
+            height: 120px;
+            left: 50%;
+        }
+
+        .logo-final-container {
+            position: absolute;
+            width: clamp(180px, 30vw, 350px);
+            height: clamp(180px, 30vw, 350px);
+            opacity: 0;
+            transform: scale(0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         @media (max-width: 768px) {
             .hero-graphic-container {
                 border-radius: 1.5rem;
             }
-            .scene-graphic p {
+            .scene-content p {
                 letter-spacing: 0.2em;
+            }
+            .guide-line {
+                height: 80px;
             }
         }
 
-        /* white panel for footer links */
         .footer-white-panel {
             background: #ffffff;
             border-radius: 2rem;
@@ -333,17 +452,16 @@
             padding: 2rem;
         }
 
-        /* new privacy/contact section cards */
         .info-card {
             background: #fff;
             border-radius: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
             transition: all 0.2s;
             border: 1px solid #eef2ff;
         }
         .info-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 30px -12px rgba(59,110,245,0.12);
+            box-shadow: 0 20px 30px -12px rgba(59, 110, 245, 0.12);
             border-color: #cbd5e1;
         }
     </style>
@@ -351,12 +469,10 @@
 <body class="bg-sky-light text-slate-800">
     <canvas id="mainCanvas"></canvas>
 
-    <!-- MAIN BACKGROUND LOGO: ONLY HERE, FAINT & PULSING -->
     <div class="bg-main-logo">
         <img src="https://i.postimg.cc/WbDd0yZz/Gemini-Generated-Image-qnvgp1qnvgp1qnvg-removebg-preview.png" alt="CauniX background emblem">
     </div>
 
-    <!-- Header with updated navigation and Get Started button -->
     <header id="main-header" class="sticky top-0 z-40 backdrop-blur-md bg-sky-light/80 border-b border-slate-200 transition-opacity duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
@@ -364,7 +480,6 @@
                     <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" alt="CauniX logo" class="h-8 w-auto object-contain" />
                     <span class="text-2xl font-extrabold tracking-tight text-black">CauniX</span>
                 </div>
-                <!-- Extended navigation: Features, How It Works, Safety, Policy & Legal, Pricing, Contact -->
                 <nav class="hidden md:flex space-x-6 lg:space-x-7">
                     <a href="#features" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Features</a>
                     <a href="#mission" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">How It Works</a>
@@ -373,7 +488,6 @@
                     <a href="#pricing-block" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Pricing</a>
                     <a href="#privacy-contact-section" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Contact</a>
                 </nav>
-                <!-- Get Started button (blue-purple gradient) replaces Google sign-in -->
                 <div>
                     <button id="nav-get-started" class="btn-get-started font-semibold py-2 px-5 rounded-lg transition duration-200 shadow-md">
                         <i data-lucide="sparkles" class="w-4 h-4"></i> Get Started
@@ -382,7 +496,6 @@
                 <button id="menu-button" class="md:hidden text-slate-600 hover:text-blue-700"><i data-lucide="menu" class="w-6 h-6"></i></button>
             </div>
         </div>
-        <!-- Mobile menu updated -->
         <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-slate-200 bg-sky-light">
             <a href="#features" class="block text-slate-600 hover:text-blue-700 font-medium">Features</a>
             <a href="#mission" class="block text-slate-600 hover:text-blue-700 font-medium">How It Works</a>
@@ -397,7 +510,6 @@
     </header>
 
     <main>
-        <!-- Hero Section (removed internal logo, only background canvas and animated scenes) -->
         <section class="pt-20 pb-32 md:pt-32 md:pb-48 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center pt-1 lg:-mt-32 lg:pb-32 relative z-30">
                 <div class="animate-on-scroll relative p-8 lg:p-12 lg:pr-0">
@@ -413,17 +525,37 @@
                         <p class="text-sm text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i> End‑to‑end encrypted · No ads · No tracking</p>
                     </div>
                 </div>
-                <!-- Right side: 16:9 frame with animated graphic (no logos inside) -->
                 <div class="relative flex justify-center items-center animate-on-scroll z-20 w-full">
                     <div class="hero-aspect-wrapper">
                         <div class="hero-graphic-container">
-                            <canvas id="heroCanvas" class="hero-canvas-layer"></canvas>
-                            <div class="director-ui-graphic">
-                                <div class="scene-graphic active" data-scene="0"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
-                                <div class="scene-graphic" data-scene="1"><h1>No SIM Communication.</h1><p>Legacy Reimagined</p></div>
-                                <div class="scene-graphic" data-scene="2"><h1>Global.</h1><p>Continental Precision</p></div>
-                                <div class="scene-graphic" data-scene="3"><h1>Synced.</h1><p>Instant Protocol</p></div>
-                                <div class="scene-graphic" data-scene="4"><h1>CauniX</h1><p>Your Voice. Your Rules.</p></div>
+                            <div id="visualMainContent">
+                                <canvas id="heroCanvas" class="hero-canvas-layer"></canvas>
+                                <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="app-logo-watermark" alt="CauniX Logo">
+                                <div class="director-ui-graphic">
+                                    <div class="scene-content active" data-scene="0"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
+                                    <div class="scene-content" data-scene="1"><h1>No SIM Communication.</h1><p>Legacy Reimagined</p></div>
+                                    <div class="scene-content" data-scene="2"><h1>Global.</h1><p>Continental Precision</p></div>
+                                    <div class="scene-content" data-scene="3"><h1>Synced.</h1><p>Instant Protocol</p></div>
+                                    <div class="scene-content" data-scene="4">
+                                        <h1>CauniX</h1>
+                                        <p>Your Voice. Your Rules.</p>
+                                        <span class="url-text">CAUNIX.COM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="finaleStage">
+                                <div class="intro-frame" id="introFrame">
+                                    <div class="guide-line" style="top: -50px;"></div>
+                                    <div class="guide-line" style="bottom: -50px;"></div>
+                                    <svg class="intro-svg" viewBox="0 0 800 200">
+                                        <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="letter-path" id="strokeLayer">CauniX</text>
+                                        <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="fill-text" id="fillLayer">CauniX</text>
+                                        <text x="50%" y="85%" text-anchor="middle" class="sub-url-path" id="urlLayer">CAUNIX.COM</text>
+                                    </svg>
+                                </div>
+                                <div class="logo-final-container" id="logoFinal">
+                                    <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" style="width:100%" alt="Final Logo">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -431,7 +563,6 @@
             </div>
         </section>
 
-        <!-- Features Section -->
         <section id="features" class="relative z-10 -mt-20 py-20 md:py-32 bg-sky-light border-t border-b border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h2 class="text-4xl font-extrabold mb-4 text-slate-800 animate-on-scroll animated">Built for Real Conversations</h2>
@@ -447,7 +578,6 @@
             </div>
         </section>
 
-        <!-- Mission / How It Works -->
         <section id="mission" class="py-20 md:py-32 bg-sky-light">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="panel rounded-3xl p-8">
@@ -459,21 +589,17 @@
             </div>
         </section>
 
-        <!-- Safety anchor -->
         <div id="safety-section" class="scroll-mt-28"></div>
 
-        <!-- NEW SECTION: Privacy Policy & Contact Info (mock) plus Pricing block -->
         <section id="privacy-contact-section" class="py-20 md:py-28 bg-sky-light/60 border-t border-slate-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid md:grid-cols-2 gap-8 mb-12">
-                    <!-- Privacy Policy mock card -->
                     <div class="info-card p-6 md:p-8">
                         <div class="flex items-center gap-3 mb-4"><i data-lucide="shield" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Privacy Policy (Mock)</h3></div>
                         <p class="text-slate-600 mb-3">CauniX values your privacy. We collect only essential data: Google account email (for identity), call metadata (duration, timestamp) — but never call audio content. End-to-end encryption ensures only participants can access conversations.</p>
                         <p class="text-slate-600 text-sm border-l-4 border-indigo-300 pl-3 italic">No voice recordings, no third-party sharing, no phone numbers stored. You control your CauniX ID and can delete your data anytime.</p>
                         <p class="text-slate-500 text-xs mt-4">Mockup — Full policy will be published soon. For questions: privacy@caunix.app</p>
                     </div>
-                    <!-- Contact Info mock card -->
                     <div class="info-card p-6 md:p-8">
                         <div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Contact & Support</h3></div>
                         <p class="text-slate-600">Our team is ready to assist you with any questions about accounts, safety, or general feedback.</p>
@@ -481,7 +607,6 @@
                         <button class="mt-6 text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition" onclick="alert('Mock contact form — real system coming soon.')">Send message ↗</button>
                     </div>
                 </div>
-                <!-- Pricing mock section (for Pricing nav link) -->
                 <div id="pricing-block" class="info-card p-6 md:p-8 text-center max-w-3xl mx-auto scroll-mt-28">
                     <h3 class="text-2xl font-bold text-slate-800 mb-2"><i data-lucide="credit-card" class="w-7 h-7 inline-block mr-2 text-indigo-500"></i>Simple, transparent pricing</h3>
                     <p class="text-slate-500">CauniX core voice calling is completely free with your Google account. No hidden fees, no ads. Premium features (cloud recording, custom voicemail) will be optional in the future — always fair.</p>
@@ -490,7 +615,6 @@
             </div>
         </section>
 
-        <!-- CTA Section unchanged -->
         <section class="py-16 md:py-20 bg-sky-light border-t border-b border-blue-200">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <div class="max-w-4xl mx-auto animate-on-scroll"><h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-slate-800">Ready to Ditch the <span class="text-gradient">Phone Number</span>?</h2><p class="text-xl text-slate-600 mb-10">Join the lightweight communication layer. Sign in with Google and start talking — free, forever.</p><div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center"><button id="final-launch-call" class="btn-google font-bold py-3 px-8 rounded-xl flex items-center justify-center shadow-xl transform hover:scale-[1.05]"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff" opacity="0.9"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity="0.7"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff" opacity="0.6"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity="0.8"/></svg>Sign In with Google — It's Free</button><button onclick="alert('Contact us: hello@caunix.app')" class="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-bold py-3 px-8 rounded-xl">Talk to the Team</button></div></div>
@@ -498,10 +622,8 @@
         </section>
     </main>
 
-    <!-- Footer with the last section placed in its own white panel -->
     <footer id="main-footer" class="py-12 bg-sky-light border-t border-slate-200 transition-opacity duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- White panel wrapping product/resources/legal/community block -->
             <div class="footer-white-panel mb-8">
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
                     <div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-3"><img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="h-8 w-auto object-contain" /><span class="text-xl font-extrabold tracking-tight text-black">CauniX</span></div><p class="text-sm text-slate-500 mt-2">Lightweight internet calling. Sign in with Google, get an identity, and talk — phone‑free.</p></div>
@@ -525,7 +647,8 @@
         }
         function scrollToMission() { document.getElementById('mission')?.scrollIntoView({ behavior: 'smooth' }); }
         document.getElementById('nav-get-started')?.addEventListener('click', scrollToMission);
-        document.getElementById('mobile-get-started')?.addEventListener('click', () => { scrollToMission(); mobileMenu?.classList.add('hidden'); });
+        document.getElementById('mobile-get-started')?.addEventListener('click', () => { scrollToMission();
+            mobileMenu?.classList.add('hidden'); });
         document.getElementById('hero-launch-call')?.addEventListener('click', scrollToMission);
         document.getElementById('final-launch-call')?.addEventListener('click', scrollToMission);
 
@@ -533,34 +656,191 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // Hero canvas particle system (preserved)
+        // === NEW HERO VISUAL GRAPHIC SYSTEM ===
         (function initHeroGraphic() {
             const canvas = document.getElementById('heroCanvas');
             if (!canvas) return;
-            let width, height, particles = [], frameCounter = 0, currentSceneIdx = 0;
-            const scenes = document.querySelectorAll('.scene-graphic');
-            let animationId;
-            function updateScenes() { if (!scenes.length) return; if (frameCounter >= 160) { frameCounter = 0; scenes[currentSceneIdx].classList.remove('active'); scenes[currentSceneIdx].classList.add('exit'); let next = (currentSceneIdx + 1) % scenes.length; setTimeout(() => { if (scenes[currentSceneIdx]) scenes[currentSceneIdx].classList.remove('exit'); }, 700); currentSceneIdx = next; scenes[currentSceneIdx].classList.add('active'); } frameCounter++; }
-            class ParticleLine { constructor(preWarm = false) { this.reset(preWarm); } reset(preWarm = false) { this.x = (Math.random() - 0.5) * 4200; this.y = (Math.random() - 0.5) * 4200; this.z = preWarm ? Math.random() * 2000 : 2000; this.pz = this.z; this.size = Math.random() * 1.2 + 0.9; } update() { this.pz = this.z; this.z -= 14; if (this.z < 1) this.reset(); } draw(ctx, w, h) { const scaleCurr = 800 / this.z, scalePrev = 800 / this.pz, x = this.x * scaleCurr + w/2, y = this.y * scaleCurr + h/2, px = this.x * scalePrev + w/2, py = this.y * scalePrev + h/2; ctx.globalAlpha = Math.min(0.35, (1600 - this.z) / 1200); ctx.strokeStyle = '#000000'; ctx.lineWidth = this.size * scaleCurr; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(px, py); ctx.stroke(); } }
-            function resizeCanvas() { const container = canvas.parentElement; if (!container) return; const rect = container.getBoundingClientRect(); width = rect.width; height = rect.height; canvas.width = width; canvas.height = height; if (particles.length) particles.forEach(p => p.reset(true)); }
-            function initParticles() { particles = []; for (let i = 0; i < 480; i++) particles.push(new ParticleLine(true)); }
-            let ctx = canvas.getContext('2d');
-            function draw() { if (!ctx || !width) return; ctx.fillStyle = 'rgba(255, 255, 255, 0.35)'; ctx.fillRect(0, 0, width, height); particles.forEach(p => { p.update(); p.draw(ctx, width, height); }); updateScenes(); animationId = requestAnimationFrame(draw); }
-            window.addEventListener('resize', () => { resizeCanvas(); particles.forEach(p => { if (p.z > 1500) p.reset(true); }); });
-            resizeCanvas(); initParticles(); draw();
+            const ctx = canvas.getContext('2d');
+            const scenes = document.querySelectorAll('.scene-content');
+            let width, height, currentScene = 0,
+                frame = 0,
+                loopActive = true;
+
+            const SPEED = 16;
+            const SCENE_DURATION = 160;
+
+            function resize() {
+                const container = canvas.parentElement;
+                if (!container) return;
+                const rect = container.getBoundingClientRect();
+                width = canvas.width = rect.width;
+                height = canvas.height = rect.height;
+            }
+            window.addEventListener('resize', () => {
+                resize();
+                particles.forEach(p => { if (p.z > 1500) p.reset(true); });
+            });
+            resize();
+
+            class Particle {
+                constructor(preWarm = false) { this.reset(preWarm); }
+                reset(preWarm = false) {
+                    this.x = (Math.random() - 0.5) * 4500;
+                    this.y = (Math.random() - 0.5) * 4500;
+                    this.z = preWarm ? Math.random() * 2000 : 2000;
+                    this.pz = this.z;
+                    this.size = Math.random() * 1.2 + 1.2;
+                }
+                update() {
+                    this.pz = this.z;
+                    this.z -= SPEED;
+                    if (this.z < 1) this.reset();
+                }
+                draw() {
+                    const s = 800 / this.z;
+                    const ps = 800 / this.pz;
+                    const x = this.x * s + width / 2;
+                    const y = this.y * s + height / 2;
+                    const px = this.x * ps + width / 2;
+                    const py = this.y * ps + height / 2;
+                    ctx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = this.size * s;
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(px, py);
+                    ctx.stroke();
+                }
+            }
+
+            const particles = Array.from({ length: 800 }, () => new Particle(true));
+
+            function runFinale() {
+                loopActive = false;
+                gsap.to("#visualMainContent", {
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => {
+                        document.getElementById('visualMainContent').style.display = 'none';
+                        document.getElementById('finaleStage').style.display = 'flex';
+                        startGSAPFinale();
+                    }
+                });
+            }
+
+            function startGSAPFinale() {
+                const tl = gsap.timeline({ defaults: { ease: "expo.inOut" } });
+                tl.set(".guide-line", { opacity: 1 });
+                tl.from("#introFrame", { width: 0, duration: 1.2, borderLeft: "2px solid #000", borderRight: "2px solid #000" });
+                tl.to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8 }, "-=0.6");
+                tl.to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8 }, "-=1.0");
+                tl.to("#urlLayer", { opacity: 1, y: "-=10", duration: 1 }, "-=0.5");
+                tl.to(".guide-line", { opacity: 0, duration: 0.3 }, "-=0.2");
+                tl.to({}, { duration: 1 });
+                tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
+                tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
+                tl.to("#logoFinal", { scale: 0.95, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
+            }
+
+            function animate() {
+                if (!loopActive) return;
+                frame++;
+                if (frame >= SCENE_DURATION) {
+                    frame = 0;
+                    if (currentScene === scenes.length - 1) {
+                        runFinale();
+                        return;
+                    }
+                    scenes[currentScene].classList.remove('active');
+                    scenes[currentScene].classList.add('exit');
+                    let prev = currentScene;
+                    setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
+                    currentScene++;
+                    scenes[currentScene].classList.add('active');
+                }
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.fillRect(0, 0, width, height);
+                particles.forEach(p => { p.update();
+                    p.draw(); });
+                requestAnimationFrame(animate);
+            }
+            animate();
         })();
 
-        // Main canvas background animation (preserved)
+        // === MAIN BACKGROUND CANVAS (preserved) ===
         (function() {
             const canvas = document.getElementById('mainCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let width, height, tick = 0, stars = [], bokeh = [];
-            function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; bokeh.length = 0; for (let i = 0; i < 12; i++) bokeh.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 100 + 50, s: Math.random() * 0.1 + 0.05 }); }
-            function createStar(isInitial = false) { let x, y, z = Math.random(); if (isInitial) { x = Math.random() * width; y = Math.random() * height; } else { if (Math.random() > 0.5) { x = -150; y = Math.random() * height - 200; } else { x = Math.random() * width - 200; y = -150; } } stars.push({ x, y, z, len: (Math.random() * 15 + 10) * (0.5 + z), width: (Math.random() * 1.5 + 1) * (0.5 + z), speed: (2 + Math.random()) * (0.5 + z * 1.5) }); stars.sort((a, b) => a.z - b.z); }
-            window.addEventListener('resize', resize); resize();
+            let width, height, tick = 0,
+                stars = [],
+                bokeh = [];
+
+            function resize() { width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                bokeh.length = 0; for (let i = 0; i < 12; i++) bokeh.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 100 + 50, s: Math.random() * 0.1 + 0.05 }); }
+
+            function createStar(isInitial = false) { let x, y, z = Math.random(); if (isInitial) { x = Math.random() * width;
+                    y = Math.random() * height; } else { if (Math.random() > 0.5) { x = -150;
+                        y = Math.random() * height - 200; } else { x = Math.random() * width - 200;
+                        y = -150; } }
+                stars.push({ x, y, z, len: (Math.random() * 15 + 10) * (0.5 + z), width: (Math.random() * 1.5 + 1) * (0.5 + z), speed: (2 + Math.random()) * (0.5 + z * 1.5) });
+                stars.sort((a, b) => a.z - b.z); }
+            window.addEventListener('resize', resize);
+            resize();
             for (let i = 0; i < 60; i++) createStar(true);
-            function drawBg() { if (!ctx) return; ctx.clearRect(0, 0, width, height); bokeh.forEach(p => { ctx.beginPath(); let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r); g.addColorStop(0, 'rgba(58, 123, 213, 0.04)'); g.addColorStop(1, 'rgba(255, 255, 255, 0)'); ctx.fillStyle = g; ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); p.y -= p.s; if (p.y + p.r < 0) p.y = height + p.r; }); const ribbonGrad = ctx.createLinearGradient(0, 0, width, 0); ribbonGrad.addColorStop(0, '#00d2ff'); ribbonGrad.addColorStop(0.5, '#3a7bd5'); ribbonGrad.addColorStop(1, '#8e44ad'); ctx.fillStyle = ribbonGrad; ctx.beginPath(); for (let x = 0; x <= width; x += 4) { const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20; if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } for (let x = width; x >= 0; x -= 4) { const thick = 90 + Math.sin(tick + x * 0.003) * 15; const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20; ctx.lineTo(x, y); } ctx.closePath(); ctx.fill(); for (let i = stars.length - 1; i >= 0; i--) { const s = stars[i]; s.x += s.speed; s.y += s.speed; const alphaHead = 0.2 + (s.z * 0.7), alphaTail = 0.1 + (s.z * 0.4); const grad = ctx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y); grad.addColorStop(0, 'rgba(142, 68, 173, 0)'); grad.addColorStop(0.5, `rgba(58, 123, 213, ${alphaTail})`); grad.addColorStop(1, `rgba(0, 210, 255, ${alphaHead})`); ctx.strokeStyle = grad; ctx.lineWidth = s.width; ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(s.x - s.len, s.y - s.len); ctx.stroke(); if (s.x > width + 100 || s.y > height + 100) { stars.splice(i, 1); createStar(); } } tick += 0.015; requestAnimationFrame(drawBg); } drawBg();
+
+            function drawBg() {
+                if (!ctx) return;
+                ctx.clearRect(0, 0, width, height);
+                bokeh.forEach(p => {
+                    ctx.beginPath();
+                    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+                    g.addColorStop(0, 'rgba(58, 123, 213, 0.04)');
+                    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = g;
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                    p.y -= p.s;
+                    if (p.y + p.r < 0) p.y = height + p.r;
+                });
+                const ribbonGrad = ctx.createLinearGradient(0, 0, width, 0);
+                ribbonGrad.addColorStop(0, '#00d2ff');
+                ribbonGrad.addColorStop(0.5, '#3a7bd5');
+                ribbonGrad.addColorStop(1, '#8e44ad');
+                ctx.fillStyle = ribbonGrad;
+                ctx.beginPath();
+                for (let x = 0; x <= width; x += 4) { const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20; if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y); }
+                for (let x = width; x >= 0; x -= 4) { const thick = 90 + Math.sin(tick + x * 0.003) * 15; const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
+                    ctx.lineTo(x, y); }
+                ctx.closePath();
+                ctx.fill();
+                for (let i = stars.length - 1; i >= 0; i--) {
+                    const s = stars[i];
+                    s.x += s.speed;
+                    s.y += s.speed;
+                    const alphaHead = 0.2 + (s.z * 0.7),
+                        alphaTail = 0.1 + (s.z * 0.4);
+                    const grad = ctx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
+                    grad.addColorStop(0, 'rgba(142, 68, 173, 0)');
+                    grad.addColorStop(0.5, `rgba(58, 123, 213, ${alphaTail})`);
+                    grad.addColorStop(1, `rgba(0, 210, 255, ${alphaHead})`);
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = s.width;
+                    ctx.beginPath();
+                    ctx.moveTo(s.x, s.y);
+                    ctx.lineTo(s.x - s.len, s.y - s.len);
+                    ctx.stroke();
+                    if (s.x > width + 100 || s.y > height + 100) { stars.splice(i, 1);
+                        createStar(); }
+                }
+                tick += 0.015;
+                requestAnimationFrame(drawBg);
+            }
+            drawBg();
         })();
     </script>
 </body>
