@@ -726,20 +726,46 @@
             }
 
             function restartLoop() {
-                if (finaleTimeline) {
-                    finaleTimeline.kill();
-                    finaleTimeline = null;
-                }
-                resetFinaleElements();
-                document.getElementById('finaleStage').style.display = 'none';
-                document.getElementById('visualMainContent').style.display = 'block';
-                gsap.set("#visualMainContent", { opacity: 1 });
-                resetAllScenes();
-                loopActive = true;
-                frame = 0;
-                currentScene = 0;
-                requestAnimationFrame(animate);
-            }
+    // 🔥 Kill ALL GSAP animations (prevents stuck infinite tweens)
+    gsap.killTweensOf("*");
+
+    // Kill timeline safely
+    if (finaleTimeline) {
+        finaleTimeline.kill();
+        finaleTimeline = null;
+    }
+
+    const finale = document.getElementById('finaleStage');
+    const visual = document.getElementById('visualMainContent');
+
+    // 🧹 Fully reset finale layer (not just display)
+    gsap.set(finale, {
+        opacity: 1,
+        scale: 1,
+        display: "none"
+    });
+
+    // 👁 Bring hero back cleanly
+    visual.style.display = "block";
+
+    gsap.fromTo(
+        visual,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8 }
+    );
+
+    // 🔁 Reset animation elements
+    resetFinaleElements();
+    resetAllScenes();
+
+    // ⚙️ Reset state
+    loopActive = true;
+    frame = 0;
+    currentScene = 0;
+
+    // 🧠 Ensure canvas loop is alive (safe restart)
+    requestAnimationFrame(animate);
+}
 
             function runFinale() {
                 loopActive = false;
