@@ -644,7 +644,7 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === LOOPING HERO GRAPHIC WITH FINALE (exact sequence) ===
+        // === LOOPING HERO GRAPHIC WITH INFINITE LOOP (scenes + finale) ===
         (function initHeroGraphic() {
             const canvas = document.getElementById('heroCanvas');
             if (!canvas) return;
@@ -654,9 +654,10 @@
                 frame = 0,
                 loopActive = true;
             let finaleTimeline = null;
+            let finaleRunning = false;   // prevents multiple finale triggers
 
             const SPEED = 16;
-            const SCENE_DURATION = 160;
+            const SCENE_DURATION = 160;  // about 2.6 seconds at 60fps (with single increment)
 
             function resize() {
                 const container = canvas.parentElement;
@@ -709,7 +710,7 @@
                 scenes.forEach(scene => {
                     scene.classList.remove('active', 'exit');
                     scene.style.transition = 'none';
-                    scene.offsetHeight;
+                    scene.offsetHeight;   // force reflow
                     scene.style.transition = '';
                 });
                 currentScene = 0;
@@ -726,49 +727,37 @@
             }
 
             function restartLoop() {
-    // 🔥 Kill ALL GSAP animations (prevents stuck infinite tweens)
-    gsap.killTweensOf("*");
+                // Kill all running GSAP tweens related to the finale
+                gsap.killTweensOf("*");
+                if (finaleTimeline) {
+                    finaleTimeline.kill();
+                    finaleTimeline = null;
+                }
 
-    // Kill timeline safely
-    if (finaleTimeline) {
-        finaleTimeline.kill();
-        finaleTimeline = null;
-    }
+                const finale = document.getElementById('finaleStage');
+                const visual = document.getElementById('visualMainContent');
 
-    const finale = document.getElementById('finaleStage');
-    const visual = document.getElementById('visualMainContent');
+                // Hide finale layer
+                gsap.set(finale, { opacity: 1, scale: 1, display: "none" });
 
-    // 🧹 Fully reset finale layer (not just display)
-    gsap.set(finale, {
-        opacity: 1,
-        scale: 1,
-        display: "none"
-    });
+                // Show hero visual again
+                visual.style.display = "block";
+                gsap.fromTo(visual, { opacity: 0 }, { opacity: 1, duration: 0.8 });
 
-    // 👁 Bring hero back cleanly
-    visual.style.display = "block";
+                // Reset all states
+                resetFinaleElements();
+                resetAllScenes();
+                finaleRunning = false;
+                loopActive = true;
+                frame = 0;
+                currentScene = 0;
 
-    gsap.fromTo(
-        visual,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.8 }
-    );
-
-    // 🔁 Reset animation elements
-    resetFinaleElements();
-    resetAllScenes();
-
-    // ⚙️ Reset state
-    loopActive = true;
-    frame = 0;
-    currentScene = 0;
-
-    // 🧠 Ensure canvas loop is alive (safe restart)
-    requestAnimationFrame(animate);
-}
+                // Resume the canvas animation loop
+                requestAnimationFrame(animate);
+            }
 
             function runFinale() {
-                loopActive = false;
+                loopActive = false;   // stop advancing scenes & canvas draw (will be restarted later)
                 gsap.to("#visualMainContent", {
                     opacity: 0,
                     duration: 1,
@@ -790,14 +779,12 @@
                 const tl = gsap.timeline({
                     defaults: { ease: "expo.inOut" },
                     onComplete: () => {
+                        // After finale, wait a bit then restart the whole loop
                         gsap.to("#finaleStage", {
                             opacity: 0,
                             duration: 0.8,
                             delay: 2.5,
-                            onComplete: () => {
-                                gsap.set("#finaleStage", { opacity: 1 });
-                                restartLoop();
-                            }
+                            onComplete: restartLoop
                         });
                     }
                 });
@@ -817,28 +804,35 @@
             }
 
             function animate() {
+                // Only run the scene logic if the loop is active and no finale is in progress
                 if (loopActive) {
-    frame++;
-}
-                frame++;
-                if (frame >= SCENE_DURATION) {
-                    frame = 0;
-                    if (currentScene === scenes.length - 1) {
-                        runFinale();
-                        return;
+                    frame++;   // single increment, correct timing
+                    if (frame >= SCENE_DURATION) {
+                        frame = 0;
+                        if (currentScene === scenes.length - 1) {
+                            if (!finaleRunning) {
+                                finaleRunning = true;
+                                runFinale();
+                            }
+                            // After launching finale, stop drawing this frame (the canvas will be hidden soon)
+                            requestAnimationFrame(animate);
+                            return;
+                        }
+                        // Advance to next scene
+                        scenes[currentScene].classList.remove('active');
+                        scenes[currentScene].classList.add('exit');
+                        let prev = currentScene;
+                        setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
+                        currentScene++;
+                        scenes[currentScene].classList.add('active');
                     }
-                    scenes[currentScene].classList.remove('active');
-                    scenes[currentScene].classList.add('exit');
-                    let prev = currentScene;
-                    setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
-                    currentScene++;
-                    scenes[currentScene].classList.add('active');
+
+                    // Draw particle background only when loopActive (i.e., before finale)
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.fillRect(0, 0, width, height);
+                    particles.forEach(p => { p.update(); p.draw(); });
                 }
 
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                ctx.fillRect(0, 0, width, height);
-                particles.forEach(p => { p.update();
-                    p.draw(); });
                 requestAnimationFrame(animate);
             }
             animate();
