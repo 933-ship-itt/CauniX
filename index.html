@@ -643,191 +643,145 @@
 
         // === LOOPING HERO GRAPHIC WITH FINALE (exact sequence) ===
         (function initHeroGraphic() {
-            const canvas = document.getElementById('heroCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const scenes = document.querySelectorAll('.scene-content');
-            let width, height, currentScene = 0,
-                frame = 0,
-                loopActive = true;
-            let finaleTimeline = null;
+    const canvas = document.getElementById('heroCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const scenes = document.querySelectorAll('.scene-content');
+    let width, height, currentScene = 0,
+        frame = 0,
+        loopActive = true;
+    let finaleTimeline = null;
 
-            const SPEED = 16;
-            const SCENE_DURATION = 160;
+    const SPEED = 16;
+    const SCENE_DURATION = 160;
 
-            function resize() {
-                const container = canvas.parentElement;
-                if (!container) return;
-                const rect = container.getBoundingClientRect();
-                width = canvas.width = rect.width;
-                height = canvas.height = rect.height;
+    function resize() {
+        const container = canvas.parentElement;
+        if (!container) return;
+        const rect = container.getBoundingClientRect();
+        width = canvas.width = rect.width;
+        height = canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        constructor(preWarm = false) { this.reset(preWarm); }
+        reset(preWarm = false) {
+            this.x = (Math.random() - 0.5) * 4500;
+            this.y = (Math.random() - 0.5) * 4500;
+            this.z = preWarm ? Math.random() * 2000 : 2000;
+            this.pz = this.z;
+            this.size = Math.random() * 1.2 + 1.2;
+        }
+        update() {
+            this.pz = this.z;
+            this.z -= SPEED;
+            if (this.z < 1) this.reset();
+        }
+        draw() {
+            const s = 800 / this.z;
+            const ps = 800 / this.pz;
+            const x = this.x * s + width / 2;
+            const y = this.y * s + height / 2;
+            const px = this.x * ps + width / 2;
+            const py = this.y * ps + height / 2;
+            ctx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = this.size * s;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(px, py);
+            ctx.stroke();
+        }
+    }
+
+    const particles = Array.from({ length: 800 }, () => new Particle(true));
+
+    function restartLoop() {
+        gsap.killTweensOf("*");
+        if (finaleTimeline) {
+            finaleTimeline.kill();
+            finaleTimeline = null;
+        }
+
+        const finale = document.getElementById('finaleStage');
+        const visual = document.getElementById('visualMainContent');
+
+        // Reset visibility and styles
+        finale.style.display = "none";
+        visual.style.display = "block";
+        gsap.set(visual, { opacity: 1 });
+
+        // Reset elements to initial states
+        gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
+        gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set("#urlLayer", { opacity: 0, y: 0 });
+        gsap.set(".guide-line", { opacity: 0 });
+        gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1, width: "auto" });
+        gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
+
+        scenes.forEach(scene => scene.classList.remove('active', 'exit'));
+        
+        // Restart state
+        currentScene = 0;
+        frame = 0;
+        loopActive = true;
+        scenes[0].classList.add('active');
+    }
+
+    function runFinale() {
+        loopActive = false;
+        gsap.to("#visualMainContent", {
+            opacity: 0,
+            duration: 1,
+            onComplete: () => {
+                document.getElementById('visualMainContent').style.display = 'none';
+                document.getElementById('finaleStage').style.display = 'flex';
+                startGSAPFinale();
             }
-            window.addEventListener('resize', () => {
-                resize();
-                particles.forEach(p => { if (p.z > 1500) p.reset(true); });
-            });
-            resize();
+        });
+    }
 
-            class Particle {
-                constructor(preWarm = false) { this.reset(preWarm); }
-                reset(preWarm = false) {
-                    this.x = (Math.random() - 0.5) * 4500;
-                    this.y = (Math.random() - 0.5) * 4500;
-                    this.z = preWarm ? Math.random() * 2000 : 2000;
-                    this.pz = this.z;
-                    this.size = Math.random() * 1.2 + 1.2;
-                }
-                update() {
-                    this.pz = this.z;
-                    this.z -= SPEED;
-                    if (this.z < 1) this.reset();
-                }
-                draw() {
-                    const s = 800 / this.z;
-                    const ps = 800 / this.pz;
-                    const x = this.x * s + width / 2;
-                    const y = this.y * s + height / 2;
-                    const px = this.x * ps + width / 2;
-                    const py = this.y * ps + height / 2;
-                    ctx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
-                    ctx.strokeStyle = '#000000';
-                    ctx.lineWidth = this.size * s;
-                    ctx.lineCap = 'round';
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(px, py);
-                    ctx.stroke();
-                }
-            }
-
-            const particles = Array.from({ length: 800 }, () => new Particle(true));
-
-            function resetAllScenes() {
-                scenes.forEach(scene => {
-                    scene.classList.remove('active', 'exit');
-                    scene.style.transition = 'none';
-                    scene.offsetHeight;
-                    scene.style.transition = '';
-                });
-                currentScene = 0;
-                scenes[0].classList.add('active');
-            }
-
-            function resetFinaleElements() {
-                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
-                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-                gsap.set("#urlLayer", { opacity: 0, y: 0 });
-                gsap.set(".guide-line", { opacity: 0 });
-                gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1, width: "auto", borderLeft: "none", borderRight: "none" });
-                gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
-            }
-
-            function restartLoop() {
-                // 🔥 Kill ALL GSAP animations (prevents stuck infinite tweens)
-                gsap.killTweensOf("*");
-
-                // Kill timeline safely
-                if (finaleTimeline) {
-                    finaleTimeline.kill();
-                    finaleTimeline = null;
-                }
-
-                const finale = document.getElementById('finaleStage');
-                const visual = document.getElementById('visualMainContent');
-
-                // 🧹 Fully reset finale layer (not just display)
-                gsap.set(finale, {
-                    opacity: 1,
-                    scale: 1,
-                    display: "none"
-                });
-
-                // 👁 Bring hero back cleanly
-                visual.style.display = "block";
-
-                gsap.fromTo(
-                    visual,
-                    { opacity: 0 },
-                    { opacity: 1, duration: 0.8 }
-                );
-
-                // 🔁 Reset animation elements
-                resetFinaleElements();
-                resetAllScenes();
-
-                // ⚙️ Reset state
-                loopActive = true;
-                frame = 0;
-                currentScene = 0;
-
-                // 🧠 Ensure canvas loop is alive (safe restart)
-                requestAnimationFrame(animate);
-            }
-
-            function runFinale() {
-                loopActive = false;
-                gsap.to("#visualMainContent", {
+    function startGSAPFinale() {
+        const tl = gsap.timeline({
+            defaults: { ease: "expo.inOut" },
+            onComplete: () => {
+                // Short delay before fading the finale and restarting the loop
+                gsap.to("#finaleStage", {
                     opacity: 0,
-                    duration: 1,
+                    duration: 0.8,
+                    delay: 2.5,
                     onComplete: () => {
-                        document.getElementById('visualMainContent').style.display = 'none';
-                        document.getElementById('finaleStage').style.display = 'flex';
-                        startGSAPFinale();
+                        gsap.set("#finaleStage", { opacity: 1 });
+                        restartLoop();
                     }
                 });
             }
+        });
 
-            function startGSAPFinale() {
-                if (finaleTimeline) {
-                    finaleTimeline.kill();
-                    finaleTimeline = null;
-                }
-                resetFinaleElements();
+        tl.set(".guide-line", { opacity: 1 });
+        tl.from("#introFrame", { width: 0, duration: 1.2, borderLeft: "2px solid #000", borderRight: "2px solid #000" });
+        tl.to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8 }, "-=0.6");
+        tl.to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8 }, "-=1.0");
+        tl.to("#urlLayer", { opacity: 1, y: "-=10", duration: 1 }, "-=0.5");
+        tl.to(".guide-line", { opacity: 0, duration: 0.3 }, "-=0.2");
+        tl.to({}, { duration: 1 });
+        tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
+        tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
+        
+        finaleTimeline = tl;
+    }
 
-                const tl = gsap.timeline({
-                    defaults: { ease: "expo.inOut" },
-                    onComplete: () => {
-                        // Start the infinite pulse OUTSIDE the timeline so the timeline actually completes
-                        gsap.to("#logoFinal", { scale: 0.95, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
-
-                        // Wait 2.5 seconds, then fade out and restart
-                        gsap.to("#finaleStage", {
-                            opacity: 0,
-                            duration: 0.8,
-                            delay: 2.5,
-                            onComplete: () => {
-                                gsap.set("#finaleStage", { opacity: 1 });
-                                restartLoop();
-                            }
-                        });
-                    }
-                });
-
-                tl.set(".guide-line", { opacity: 1 });
-                tl.from("#introFrame", { width: 0, duration: 1.2, borderLeft: "2px solid #000", borderRight: "2px solid #000" });
-                tl.to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8 }, "-=0.6");
-                tl.to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8 }, "-=1.0");
-                tl.to("#urlLayer", { opacity: 1, y: "-=10", duration: 1 }, "-=0.5");
-                tl.to(".guide-line", { opacity: 0, duration: 0.3 }, "-=0.2");
-                tl.to({}, { duration: 1 });
-                tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
-                tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
-                // The repeat: -1 tween has been moved to onComplete above.
-
-                finaleTimeline = tl;
-            }
-
-            function animate() {
-                if (loopActive) {
-                    frame++;
-                }
-                frame++; // Keeping the original double-increment from the provided code
-                if (frame >= SCENE_DURATION) {
-                    frame = 0;
-                    if (currentScene === scenes.length - 1) {
-                        runFinale();
-                        return; // This breaks the requestAnimationFrame loop, which restartLoop() will successfully re-initiate
-                    }
+    function animate() {
+        if (loopActive) {
+            frame++;
+            if (frame >= SCENE_DURATION) {
+                frame = 0;
+                if (currentScene === scenes.length - 1) {
+                    runFinale();
+                } else {
                     scenes[currentScene].classList.remove('active');
                     scenes[currentScene].classList.add('exit');
                     let prev = currentScene;
@@ -835,15 +789,19 @@
                     currentScene++;
                     scenes[currentScene].classList.add('active');
                 }
-
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                ctx.fillRect(0, 0, width, height);
-                particles.forEach(p => { p.update();
-                    p.draw(); });
-                requestAnimationFrame(animate);
             }
-            animate();
-        })();
+        }
+
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.fillRect(0, 0, width, height);
+        particles.forEach(p => { 
+            p.update();
+            p.draw(); 
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+})();
 
         // === MAIN BACKGROUND CANVAS (preserved) ===
         (function() {
