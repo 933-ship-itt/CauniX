@@ -651,6 +651,7 @@
         frame = 0,
         loopActive = true;
     let finaleTimeline = null;
+    let animationId = null; // Track the animation frame
 
     const SPEED = 16;
     const SCENE_DURATION = 160;
@@ -699,8 +700,16 @@
 
     const particles = Array.from({ length: 800 }, () => new Particle(true));
 
+    function resetFinaleElements() {
+        gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
+        gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+        gsap.set("#urlLayer", { opacity: 0, y: 0 });
+        gsap.set(".guide-line", { opacity: 0 });
+        gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1, width: "auto" });
+        gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
+    }
+
     function restartLoop() {
-        gsap.killTweensOf("*");
         if (finaleTimeline) {
             finaleTimeline.kill();
             finaleTimeline = null;
@@ -709,26 +718,20 @@
         const finale = document.getElementById('finaleStage');
         const visual = document.getElementById('visualMainContent');
 
-        // Reset visibility and styles
+        // Reset visibility
         finale.style.display = "none";
         visual.style.display = "block";
         gsap.set(visual, { opacity: 1 });
 
-        // Reset elements to initial states
-        gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
-        gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set("#urlLayer", { opacity: 0, y: 0 });
-        gsap.set(".guide-line", { opacity: 0 });
-        gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1, width: "auto" });
-        gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
-
+        // Reset text scenes
         scenes.forEach(scene => scene.classList.remove('active', 'exit'));
-        
-        // Restart state
         currentScene = 0;
-        frame = 0;
-        loopActive = true;
         scenes[0].classList.add('active');
+
+        // Reset logic state
+        resetFinaleElements();
+        frame = 0;
+        loopActive = true; 
     }
 
     function runFinale() {
@@ -748,11 +751,11 @@
         const tl = gsap.timeline({
             defaults: { ease: "expo.inOut" },
             onComplete: () => {
-                // Short delay before fading the finale and restarting the loop
+                // Wait at the final logo, then fade out and restart
                 gsap.to("#finaleStage", {
                     opacity: 0,
                     duration: 0.8,
-                    delay: 2.5,
+                    delay: 3, 
                     onComplete: () => {
                         gsap.set("#finaleStage", { opacity: 1 });
                         restartLoop();
@@ -775,6 +778,14 @@
     }
 
     function animate() {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.fillRect(0, 0, width, height);
+        
+        particles.forEach(p => { 
+            p.update();
+            p.draw(); 
+        });
+
         if (loopActive) {
             frame++;
             if (frame >= SCENE_DURATION) {
@@ -785,21 +796,18 @@
                     scenes[currentScene].classList.remove('active');
                     scenes[currentScene].classList.add('exit');
                     let prev = currentScene;
-                    setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
+                    setTimeout(() => { 
+                        if (scenes[prev]) scenes[prev].classList.remove('exit'); 
+                    }, 800);
                     currentScene++;
                     scenes[currentScene].classList.add('active');
                 }
             }
         }
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-        ctx.fillRect(0, 0, width, height);
-        particles.forEach(p => { 
-            p.update();
-            p.draw(); 
-        });
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
     }
+    
     animate();
 })();
 
