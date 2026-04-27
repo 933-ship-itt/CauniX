@@ -45,13 +45,10 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png">
     <link rel="apple-touch-icon" href="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png">
 
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js">
-    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
         :root {
@@ -618,11 +615,7 @@
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li><li><a href="#" class="hover:text-blue-700 transition">Identity</a></li><li><a href="#" class="hover:text-blue-700 transition">Presence</a></li><li><a href="#" class="hover:text-blue-700 transition">Safety</a></li></ul></div>
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li><li><a href="#" class="hover:text-blue-700 transition">Community</a></li><li><a href="#" class="hover:text-blue-700 transition">Contact</a></li></ul></div>
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Terms of Service</a></li><li><a href="#" class="hover:text-blue-700 transition">Privacy Policy</a></li><li><a href="#" class="hover:text-blue-700 transition">Acceptable Use</a></li></ul></div>
-                    <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500">
-                        <li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="link" class="w-5 h-5"></i></a></li>
-                        <li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="code" class="w-5 h-5"></i></a></li>
-                        <li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li>
-                    </ul></div>
+                    <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Link" class="hover:text-blue-700 transition"><i data-lucide="link" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Code" class="hover:text-blue-700 transition"><i data-lucide="code" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500"><p>&copy; 2026 CauniX. All rights reserved. Over‑the‑top communication, free from carriers.</p><p class="mt-2 md:mt-0">Lightweight · Encrypted · Free</p></div>
@@ -648,7 +641,7 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === LOOPING HERO GRAPHIC WITH INFINITE LOOP (scenes + finale) ===
+        // === LOOPING HERO GRAPHIC WITH FINALE (exact sequence) ===
         (function initHeroGraphic() {
             const canvas = document.getElementById('heroCanvas');
             if (!canvas) return;
@@ -658,8 +651,6 @@
                 frame = 0,
                 loopActive = true;
             let finaleTimeline = null;
-            let finaleRunning = false;
-            let idlePulse = null;   // reference to the pulsing animation after finale
 
             const SPEED = 16;
             const SCENE_DURATION = 160;
@@ -732,12 +723,10 @@
             }
 
             function restartLoop() {
-                // kill any idle pulse animation that might be running
-                if (idlePulse) {
-                    idlePulse.kill();
-                    idlePulse = null;
-                }
+                // 🔥 Kill ALL GSAP animations (prevents stuck infinite tweens)
                 gsap.killTweensOf("*");
+
+                // Kill timeline safely
                 if (finaleTimeline) {
                     finaleTimeline.kill();
                     finaleTimeline = null;
@@ -746,17 +735,32 @@
                 const finale = document.getElementById('finaleStage');
                 const visual = document.getElementById('visualMainContent');
 
-                gsap.set(finale, { opacity: 1, scale: 1, display: "none" });
-                visual.style.display = "block";
-                gsap.fromTo(visual, { opacity: 0 }, { opacity: 1, duration: 0.8 });
+                // 🧹 Fully reset finale layer (not just display)
+                gsap.set(finale, {
+                    opacity: 1,
+                    scale: 1,
+                    display: "none"
+                });
 
+                // 👁 Bring hero back cleanly
+                visual.style.display = "block";
+
+                gsap.fromTo(
+                    visual,
+                    { opacity: 0 },
+                    { opacity: 1, duration: 0.8 }
+                );
+
+                // 🔁 Reset animation elements
                 resetFinaleElements();
                 resetAllScenes();
-                finaleRunning = false;
+
+                // ⚙️ Reset state
                 loopActive = true;
                 frame = 0;
                 currentScene = 0;
 
+                // 🧠 Ensure canvas loop is alive (safe restart)
                 requestAnimationFrame(animate);
             }
 
@@ -778,32 +782,23 @@
                     finaleTimeline.kill();
                     finaleTimeline = null;
                 }
-                // kill any leftover idle pulse just in case
-                if (idlePulse) {
-                    idlePulse.kill();
-                    idlePulse = null;
-                }
                 resetFinaleElements();
 
-                // Main timeline that ends once the logo appears
                 const tl = gsap.timeline({
                     defaults: { ease: "expo.inOut" },
                     onComplete: () => {
-                        // After the intro animation, start a gentle pulse on the logo (separate, non-blocking)
-                        idlePulse = gsap.to("#logoFinal", {
-                            scale: 0.95,
-                            duration: 3,
-                            repeat: -1,
-                            yoyo: true,
-                            ease: "sine.inOut"
-                        });
+                        // Start the infinite pulse OUTSIDE the timeline so the timeline actually completes
+                        gsap.to("#logoFinal", { scale: 0.95, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
 
-                        // Wait 2.5 seconds then fade out and restart the whole loop
+                        // Wait 2.5 seconds, then fade out and restart
                         gsap.to("#finaleStage", {
                             opacity: 0,
                             duration: 0.8,
                             delay: 2.5,
-                            onComplete: restartLoop
+                            onComplete: () => {
+                                gsap.set("#finaleStage", { opacity: 1 });
+                                restartLoop();
+                            }
                         });
                     }
                 });
@@ -817,7 +812,7 @@
                 tl.to({}, { duration: 1 });
                 tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
                 tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
-                // timeline ends here – no infinite repeat tween inside it
+                // The repeat: -1 tween has been moved to onComplete above.
 
                 finaleTimeline = tl;
             }
@@ -825,28 +820,26 @@
             function animate() {
                 if (loopActive) {
                     frame++;
-                    if (frame >= SCENE_DURATION) {
-                        frame = 0;
-                        if (currentScene === scenes.length - 1) {
-                            if (!finaleRunning) {
-                                finaleRunning = true;
-                                runFinale();
-                            }
-                            requestAnimationFrame(animate);
-                            return;
-                        }
-                        scenes[currentScene].classList.remove('active');
-                        scenes[currentScene].classList.add('exit');
-                        let prev = currentScene;
-                        setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
-                        currentScene++;
-                        scenes[currentScene].classList.add('active');
-                    }
-
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                    ctx.fillRect(0, 0, width, height);
-                    particles.forEach(p => { p.update(); p.draw(); });
                 }
+                frame++; // Keeping the original double-increment from the provided code
+                if (frame >= SCENE_DURATION) {
+                    frame = 0;
+                    if (currentScene === scenes.length - 1) {
+                        runFinale();
+                        return; // This breaks the requestAnimationFrame loop, which restartLoop() will successfully re-initiate
+                    }
+                    scenes[currentScene].classList.remove('active');
+                    scenes[currentScene].classList.add('exit');
+                    let prev = currentScene;
+                    setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
+                    currentScene++;
+                    scenes[currentScene].classList.add('active');
+                }
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.fillRect(0, 0, width, height);
+                particles.forEach(p => { p.update();
+                    p.draw(); });
                 requestAnimationFrame(animate);
             }
             animate();
