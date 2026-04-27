@@ -354,6 +354,7 @@
             justify-content: center;
             align-items: center;
             perspective: 2000px;
+            opacity: 0;
         }
 
         .intro-frame {
@@ -642,31 +643,25 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === LOOPING HERO GRAPHIC WITH FINALE (FIXED & ROBUST) ===
+        // === LOOPING HERO GRAPHIC WITH FINALE (PRODUCTION-READY) ===
         (function initHeroGraphic() {
-            const canvas = document.getElementById('heroCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
+            const hCanvas = document.getElementById('heroCanvas');
+            const hCtx = hCanvas.getContext('2d');
             const scenes = document.querySelectorAll('.scene-content');
             const finale = document.getElementById('finaleStage');
             const visual = document.getElementById('visualMainContent');
             
-            let width, height, currentScene = 0, frame = 0, loopActive = true;
-            let finaleTimeline = null;
-            let animationFrameId = null;
+            let hw, hh, currentScene = 0, frame = 0, showTextScenes = true;
+            const SPEED = 16, SCENE_DURATION = 160;
 
-            const SPEED = 16;
-            const SCENE_DURATION = 160;
-
-            function resize() {
-                const container = canvas.parentElement;
-                if (!container) return;
-                const rect = container.getBoundingClientRect();
-                width = canvas.width = rect.width;
-                height = canvas.height = rect.height;
+            function resizeHero() {
+                const container = hCanvas.parentElement;
+                if(!container) return;
+                hw = hCanvas.width = container.clientWidth;
+                hh = hCanvas.height = container.clientHeight;
             }
-            window.addEventListener('resize', resize);
-            resize();
+            window.addEventListener('resize', resizeHero);
+            resizeHero();
 
             class Particle {
                 constructor(preWarm = false) { this.reset(preWarm); }
@@ -685,266 +680,112 @@
                 draw() {
                     const s = 800 / this.z;
                     const ps = 800 / this.pz;
-                    const x = this.x * s + width / 2;
-                    const y = this.y * s + height / 2;
-                    const px = this.x * ps + width / 2;
-                    const py = this.y * ps + height / 2;
-                    ctx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
-                    ctx.strokeStyle = '#000000';
-                    ctx.lineWidth = this.size * s;
-                    ctx.lineCap = 'round';
-                    ctx.beginPath();
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(px, py);
-                    ctx.stroke();
+                    const x = this.x * s + hw/2;
+                    const y = this.y * s + hh/2;
+                    const px = this.x * ps + hw/2;
+                    const py = this.y * ps + hh/2;
+                    hCtx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
+                    hCtx.strokeStyle = '#000000';
+                    hCtx.lineWidth = this.size * s;
+                    hCtx.lineCap = 'round';
+                    hCtx.beginPath();
+                    hCtx.moveTo(x, y);
+                    hCtx.lineTo(px, py);
+                    hCtx.stroke();
                 }
             }
+            const particles = Array.from({length: 800}, () => new Particle(true));
 
-            const particles = Array.from({ length: 800 }, () => new Particle(true));
-
-            /**
-             * Reset all scene classes and state
-             * Force reflow to ensure transitions work correctly
-             */
-            function resetAllScenes() {
-                scenes.forEach((scene, idx) => {
-                    scene.classList.remove('active', 'exit');
-                    // Force reflow
-                    void scene.offsetHeight;
-                });
-                // Now apply active to first scene
-                if (scenes[0]) {
-                    scenes[0].classList.add('active');
-                }
-            }
-
-            /**
-             * Completely clear all GSAP inline styles from finale elements
-             */
-            function resetFinaleElements() {
-                // Kill all tweens targeting these elements
-                gsap.killTweensOf([
-                    "#strokeLayer", 
-                    "#fillLayer", 
-                    "#urlLayer", 
-                    ".guide-line", 
-                    "#introFrame", 
-                    "#logoFinal"
-                ]);
-
-                // Clear ALL inline styles using clearProps
-                gsap.set([
-                    "#strokeLayer", 
-                    "#fillLayer", 
-                    "#urlLayer", 
-                    ".guide-line", 
-                    "#introFrame", 
-                    "#logoFinal"
-                ], { 
-                    clearProps: "all" 
-                });
-
-                // Re-apply initial CSS values explicitly
-                gsap.set("#strokeLayer", { 
-                    strokeDashoffset: 1200,
-                    strokeDasharray: 1200
-                });
-                gsap.set("#fillLayer", { 
-                    clipPath: "inset(100% 0% 0% 0%)" 
-                });
-                gsap.set("#urlLayer", { 
-                    opacity: 0 
-                });
-                gsap.set(".guide-line", { 
-                    opacity: 0 
-                });
-                gsap.set("#introFrame", { 
-                    scale: 1,
-                    x: 0,
-                    opacity: 1
-                });
-                gsap.set("#logoFinal", { 
-                    opacity: 0,
-                    scale: 0.8
-                });
-            }
-
-            /**
-             * Core restart function - brings loop back to life
-             */
-            function restartLoop() {
-                // 1. Kill ALL active GSAP animations
-                gsap.killTweensOf("*");
-
-                // 2. Kill timeline if it exists
-                if (finaleTimeline) {
-                    finaleTimeline.kill();
-                    finaleTimeline = null;
-                }
-
-                // 3. Hide finale, show visual content
-                gsap.set(finale, { 
-                    display: "none",
-                    opacity: 1,
-                    clearProps: "all"
-                });
-
-                gsap.set(visual, { 
-                    display: "block",
-                    opacity: 1,
-                    clearProps: "transform"
-                });
-
-                // 4. Reset all finale SVG elements
-                resetFinaleElements();
-
-                // 5. Reset scene DOM state
-                resetAllScenes();
-
-                // 6. Reset animation loop state
-                loopActive = true;
-                frame = 0;
-                currentScene = 0;
-
-                // 7. Ensure animation loop continues
-                cancelAnimationFrame(animationFrameId);
-                animate();
-            }
-
-            /**
-             * Transition OUT of scenes into finale
-             */
-            function startFinaleTransition() {
-                loopActive = false;
-
-                // Fade visual content out
-                gsap.to(visual, {
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "power2.inOut",
-                    onComplete: () => {
-                        visual.style.display = "none";
-                        finale.style.display = "flex";
-                        gsap.set(finale, { opacity: 1 });
-                        startGSAPFinale();
-                    }
-                });
-            }
-
-            /**
-             * Run the GSAP finale sequence
-             */
             function startGSAPFinale() {
-                resetFinaleElements();
-
-                // Create timeline with NO infinite loops
-                finaleTimeline = gsap.timeline({
+                const tl = gsap.timeline({
                     onComplete: () => {
-                        // Timeline fully complete - restart the loop
-                        console.log("[Finale Complete] Restarting loop...");
-                        restartLoop();
+                        gsap.to("#finaleStage", {
+                            opacity: 0,
+                            duration: 1.5,
+                            delay: 4,
+                            onComplete: resetTextCycle
+                        });
                     }
                 });
+                gsap.set("#finaleStage", { display: 'flex', opacity: 1 });
+                gsap.set(".guide-line", { opacity: 0 });
+                gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
+                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
+                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+                gsap.set("#urlLayer", { opacity: 0 });
 
-                // Build finale animation sequence
-                finaleTimeline
-                    .set(".guide-line", { opacity: 1 }, 0)
-                    .to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, 0.3)
-                    .to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power2.inOut" }, 0.5)
-                    .to("#urlLayer", { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 1.2)
-                    .to(".guide-line", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 1.8)
-                    .to("#introFrame", { 
-                        scale: 0.3, 
-                        opacity: 0, 
-                        duration: 1.0, 
-                        ease: "back.in" 
-                    }, 2.0)
-                    .to("#logoFinal", { 
-                        opacity: 1, 
-                        scale: 1, 
-                        duration: 1.2, 
-                        ease: "elastic.out(1, 0.5)" 
-                    }, 2.5)
-                    // Logo holds still (no repeat, no infinite)
-                    .to("#logoFinal", { opacity: 1, duration: 2.0 }, 3.7)
-                    // Fade logo out before complete
-                    .to("#logoFinal", { 
-                        opacity: 0, 
-                        duration: 0.6, 
-                        ease: "power2.inOut"
-                    }, 5.7);
-                    
-                // Total timeline duration: ~6.3s before onComplete fires
+                tl.to(".guide-line", { opacity: 1, duration: 0.3 });
+                tl.from(".intro-frame", { width: 0, duration: 1.2, ease: "expo.inOut" });
+                tl.to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8, ease: "expo.inOut" }, "-=0.6");
+                tl.to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "expo.inOut" }, "-=1.0");
+                tl.to("#urlLayer", { opacity: 1, y: "-=10", duration: 1, ease: "expo.out" }, "-=0.5");
+                tl.to(".guide-line", { opacity: 0, duration: 0.3 }, "-=0.2");
+                tl.to({}, { duration: 0.5 });
+                tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2, ease: "expo.inOut" });
+                tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5, ease: "expo.out" }, "-=1.6");
             }
 
-            /**
-             * Main animation loop - runs every frame
-             */
-            function animate() {
-                if (!ctx) return;
+            function resetTextCycle() {
+                finale.style.display = 'none';
+                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
+                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+                gsap.set("#urlLayer", { opacity: 0, y: "+=10" });
+                gsap.set("#introFrame", { scale: 1, x: "0%", opacity: 1 });
+                gsap.set(finale, { opacity: 1 });
+                currentScene = 0;
+                frame = 0;
+                showTextScenes = true;
+                scenes.forEach(s => s.classList.remove('active', 'exit'));
+                scenes[0].classList.add('active');
+            }
 
-                // Clear canvas with semi-transparent white for motion blur effect
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.fillRect(0, 0, width, height);
-
-                // Update and draw particles
+            function animateHero() {
+                if (showTextScenes) {
+                    frame++;
+                    if (frame >= SCENE_DURATION) {
+                        frame = 0;
+                        if (currentScene === scenes.length - 1) {
+                            scenes[currentScene].classList.remove('active');
+                            scenes[currentScene].classList.add('exit');
+                            setTimeout(() => {
+                                showTextScenes = false;
+                                startGSAPFinale();
+                            }, 400);
+                        } else {
+                            scenes[currentScene].classList.remove('active');
+                            scenes[currentScene].classList.add('exit');
+                            let prev = currentScene;
+                            setTimeout(() => scenes[prev].classList.remove('exit'), 800);
+                            currentScene++;
+                            scenes[currentScene].classList.add('active');
+                        }
+                    }
+                }
+                hCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                hCtx.fillRect(0, 0, hw, hh);
                 particles.forEach(p => {
                     p.update();
                     p.draw();
                 });
-
-                // Scene rotation logic (only when loop is active)
-                if (loopActive) {
-                    frame++;
-
-                    if (frame >= SCENE_DURATION) {
-                        frame = 0;
-
-                        if (currentScene === scenes.length - 1) {
-                            // Last scene done - go to finale
-                            startFinaleTransition();
-                            animationFrameId = requestAnimationFrame(animate);
-                            return;
-                        }
-
-                        // Transition to next scene
-                        scenes[currentScene].classList.remove('active');
-                        scenes[currentScene].classList.add('exit');
-                        currentScene++;
-                        scenes[currentScene].classList.remove('exit');
-                        scenes[currentScene].classList.add('active');
-                    }
-                }
-
-                animationFrameId = requestAnimationFrame(animate);
+                requestAnimationFrame(animateHero);
             }
-
-            // Start the animation loop
-            animate();
-
-            // Cleanup on page unload
-            window.addEventListener('beforeunload', () => {
-                if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                gsap.killTweensOf("*");
-                if (finaleTimeline) finaleTimeline.kill();
-            });
+            animateHero();
         })();
 
-        // === MAIN BACKGROUND CANVAS (preserved unchanged) ===
+        // === MAIN BACKGROUND CANVAS ===
         (function() {
-            const canvas = document.getElementById('mainCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let width, height, tick = 0, stars = [], bokeh = [];
+            const rCanvas = document.getElementById('mainCanvas');
+            const rCtx = rCanvas.getContext('2d');
+            let rw, rh, rTick = 0, stars = [], bokeh = [];
 
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
+            function resizeRibbon() {
+                rw = rCanvas.width = window.innerWidth;
+                rh = rCanvas.height = window.innerHeight;
                 bokeh.length = 0;
                 for (let i = 0; i < 12; i++) {
                     bokeh.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
+                        x: Math.random() * rw,
+                        y: Math.random() * rh,
                         r: Math.random() * 100 + 50,
                         s: Math.random() * 0.1 + 0.05
                     });
@@ -954,14 +795,14 @@
             function createStar(isInitial = false) {
                 let x, y, z = Math.random();
                 if (isInitial) {
-                    x = Math.random() * width;
-                    y = Math.random() * height;
+                    x = Math.random() * rw;
+                    y = Math.random() * rh;
                 } else {
                     if (Math.random() > 0.5) {
                         x = -150;
-                        y = Math.random() * height - 200;
+                        y = Math.random() * rh - 200;
                     } else {
-                        x = Math.random() * width - 200;
+                        x = Math.random() * rw - 200;
                         y = -150;
                     }
                 }
@@ -974,69 +815,67 @@
                 stars.sort((a, b) => a.z - b.z);
             }
 
-            window.addEventListener('resize', resize);
-            resize();
+            window.addEventListener('resize', resizeRibbon);
+            resizeRibbon();
             for (let i = 0; i < 60; i++) createStar(true);
 
-            function drawBg() {
-                if (!ctx) return;
-                ctx.clearRect(0, 0, width, height);
-
+            function drawRibbon() {
+                rCtx.clearRect(0, 0, rw, rh);
                 bokeh.forEach(p => {
-                    ctx.beginPath();
-                    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+                    rCtx.beginPath();
+                    let g = rCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
                     g.addColorStop(0, 'rgba(58, 123, 213, 0.04)');
                     g.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    ctx.fillStyle = g;
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fill();
+                    rCtx.fillStyle = g;
+                    rCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    rCtx.fill();
                     p.y -= p.s;
-                    if (p.y + p.r < 0) p.y = height + p.r;
+                    if (p.y + p.r < 0) p.y = rh + p.r;
                 });
 
-                const ribbonGrad = ctx.createLinearGradient(0, 0, width, 0);
+                const ribbonGrad = rCtx.createLinearGradient(0, 0, rw, 0);
                 ribbonGrad.addColorStop(0, '#00d2ff');
                 ribbonGrad.addColorStop(0.5, '#3a7bd5');
                 ribbonGrad.addColorStop(1, '#8e44ad');
-                ctx.fillStyle = ribbonGrad;
-                ctx.beginPath();
-                for (let x = 0; x <= width; x += 4) {
-                    const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
-                    if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
+                rCtx.fillStyle = ribbonGrad;
+                rCtx.beginPath();
+                for (let x = 0; x <= rw; x += 4) {
+                    const y = (rh * 0.5) + Math.sin(x * 0.005 + rTick) * 45 + Math.sin(x * 0.002 + rTick * 0.5) * 20;
+                    if (x === 0) rCtx.moveTo(x, y);
+                    else rCtx.lineTo(x, y);
                 }
-                for (let x = width; x >= 0; x -= 4) {
-                    const thick = 90 + Math.sin(tick + x * 0.003) * 15;
-                    const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
-                    ctx.lineTo(x, y);
+                for (let x = rw; x >= 0; x -= 4) {
+                    const thick = 90 + Math.sin(rTick + x * 0.003) * 15;
+                    const y = (rh * 0.5) + thick + Math.sin(x * 0.005 + rTick) * 45 + Math.sin(x * 0.002 + rTick * 0.5) * 20;
+                    rCtx.lineTo(x, y);
                 }
-                ctx.closePath();
-                ctx.fill();
+                rCtx.closePath();
+                rCtx.fill();
 
                 for (let i = stars.length - 1; i >= 0; i--) {
                     const s = stars[i];
                     s.x += s.speed;
                     s.y += s.speed;
-                    const alphaHead = 0.2 + (s.z * 0.7), alphaTail = 0.1 + (s.z * 0.4);
-                    const grad = ctx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
+                    const aH = 0.2 + (s.z * 0.7), aT = 0.1 + (s.z * 0.4);
+                    const grad = rCtx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
                     grad.addColorStop(0, 'rgba(142, 68, 173, 0)');
-                    grad.addColorStop(0.5, `rgba(58, 123, 213, ${alphaTail})`);
-                    grad.addColorStop(1, `rgba(0, 210, 255, ${alphaHead})`);
-                    ctx.strokeStyle = grad;
-                    ctx.lineWidth = s.width;
-                    ctx.beginPath();
-                    ctx.moveTo(s.x, s.y);
-                    ctx.lineTo(s.x - s.len, s.y - s.len);
-                    ctx.stroke();
-                    if (s.x > width + 100 || s.y > height + 100) {
+                    grad.addColorStop(0.5, `rgba(58, 123, 213, ${aT})`);
+                    grad.addColorStop(1, `rgba(0, 210, 255, ${aH})`);
+                    rCtx.strokeStyle = grad;
+                    rCtx.lineWidth = s.width;
+                    rCtx.beginPath();
+                    rCtx.moveTo(s.x, s.y);
+                    rCtx.lineTo(s.x - s.len, s.y - s.len);
+                    rCtx.stroke();
+                    if (s.x > rw + 100 || s.y > rh + 100) {
                         stars.splice(i, 1);
                         createStar();
                     }
                 }
-                tick += 0.015;
-                requestAnimationFrame(drawBg);
+                rTick += 0.015;
+                requestAnimationFrame(drawRibbon);
             }
-            drawBg();
+            drawRibbon();
         })();
     </script>
 </body>
