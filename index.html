@@ -738,79 +738,77 @@
             color: #1e293b;
         }
 
-        /* ===== LEGAL FULL‑SCREEN PAGE STYLES ===== */
-        #legalPageContainer {
+        /* ===== LEGAL FAQ MODAL ===== */
+        #legalModal {
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 10000;
-            background: white;
-            overflow-y: auto;
+            z-index: 9999;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
 
-        #legalPageContainer.active {
-            display: block;
+        #legalModal.active {
+            display: flex;
         }
 
-        .legal-page-header {
-            position: sticky;
-            top: 0;
+        .legal-modal-content {
             background: white;
+            border-radius: 2rem;
+            width: 100%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.25);
+        }
+
+        .legal-tabs {
+            display: flex;
             border-bottom: 1px solid #e2e8f0;
-            z-index: 10;
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .legal-back-btn {
-            display: inline-flex;
-            align-items: center;
+            padding: 1rem 1.5rem 0;
             gap: 0.5rem;
-            font-weight: 700;
-            color: #3b6ef5;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 0.9rem;
+            flex-shrink: 0;
         }
 
-        .legal-tab-nav {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .legal-tab-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+        .legal-tab {
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem 0.75rem 0 0;
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
+            transition: all 0.2s;
             background: #f1f5f9;
-            border: none;
-            color: #334155;
+            color: #475569;
+            border: 1px solid transparent;
         }
 
-        .legal-tab-btn.active {
-            background: #3b6ef5;
-            color: white;
+        .legal-tab.active {
+            background: white;
+            color: #1e293b;
+            border-color: #e2e8f0;
+            border-bottom-color: white;
         }
 
-        .legal-content {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+        .legal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 2rem;
         }
 
         .faq-item {
             border-bottom: 1px solid #f1f5f9;
-            padding: 1.5rem 0;
+            padding: 1.25rem 0;
         }
 
         .faq-question {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            color: #0f172a;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -820,10 +818,10 @@
 
         .faq-answer {
             display: none;
-            margin-top: 1rem;
-            font-size: 0.95rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
             color: #334155;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
         .faq-item.open .faq-answer {
@@ -843,11 +841,6 @@
             #signup-animation-container {
                 display: none !important;
             }
-
-            .legal-page-header {
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
         }
 
         @media (max-width: 768px) {
@@ -866,7 +859,7 @@
     </style>
 </head>
 <body class="bg-sky-light text-slate-800">
-    <!-- MAIN BACKGROUND CANVAS -->
+    <!-- MAIN CANVAS FOR BACKGROUND -->
     <canvas id="mainCanvas"></canvas>
 
     <!-- BACKGROUND LOGO PULSE -->
@@ -887,9 +880,9 @@
                         <a href="#features" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Features</a>
                         <a href="#mission" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">How It Works</a>
                         <a href="#safety-section" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Safety</a>
-                        <button onclick="navigateTo('/legal/privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Policy & Legal</button>
+                        <button onclick="openLegalTab('privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Policy & Legal</button>
                         <a href="#pricing-block" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Pricing</a>
-                        <button onclick="navigateTo('/legal/privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Contact</button>
+                        <button onclick="openLegalTab('contact')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Contact</button>
                     </nav>
                     <div>
                         <button id="nav-get-started" class="btn-get-started font-semibold py-2 px-5 rounded-lg transition duration-200 shadow-md">
@@ -903,9 +896,9 @@
                 <a href="#features" class="block text-slate-600 hover:text-blue-700 font-medium">Features</a>
                 <a href="#mission" class="block text-slate-600 hover:text-blue-700 font-medium">How It Works</a>
                 <a href="#safety-section" class="block text-slate-600 hover:text-blue-700 font-medium">Safety</a>
-                <button onclick="navigateTo('/legal/privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Policy & Legal</button>
+                <button onclick="openLegalTab('privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Policy & Legal</button>
                 <a href="#pricing-block" class="block text-slate-600 hover:text-blue-700 font-medium">Pricing</a>
-                <button onclick="navigateTo('/legal/privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Contact</button>
+                <button onclick="openLegalTab('contact')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Contact</button>
                 <button id="mobile-get-started" class="w-full btn-get-started font-semibold py-2 rounded-lg mt-2 justify-center">
                     <i data-lucide="sparkles" class="w-4 h-4"></i> Get Started
                 </button>
@@ -913,7 +906,7 @@
         </header>
 
         <main>
-            <!-- HERO SECTION (unchanged, except buttons routing) -->
+            <!-- HERO SECTION -->
             <section class="pt-20 pb-32 md:pt-32 md:pb-48 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center pt-1 lg:-mt-32 lg:pb-32 relative z-30">
                     <div class="animate-on-scroll relative p-8 lg:p-12 lg:pr-0">
@@ -936,37 +929,216 @@
                                     <canvas id="heroCanvas" class="hero-canvas-layer"></canvas>
                                     <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="app-logo-watermark" alt="CauniX Logo">
                                     <div class="director-ui-graphic">
-                                        <!-- text scenes as before -->
+                                        <div class="scene-content active"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
+                                        <div class="scene-content"><h1>No SIM Communication.</h1><p>Legacy Reimagined</p></div>
+                                        <div class="scene-content"><h1>Global.</h1><p>Continental Precision</p></div>
+                                        <div class="scene-content"><h1>Synced.</h1><p>Instant Protocol</p></div>
+                                        <div class="scene-content">
+                                            <h1>CauniX</h1>
+                                            <p>Your Voice. Your Rules.</p>
+                                            <span class="url-text">CAUNIX.COM</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div id="finaleStage">...</div>
+                                <div id="finaleStage">
+                                    <div class="intro-frame" id="introFrame">
+                                        <div class="guide-line" style="top: -50px;"></div>
+                                        <div class="guide-line" style="bottom: -50px;"></div>
+                                        <svg class="intro-svg" viewBox="0 0 800 200" aria-hidden="true">
+                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="letter-path" id="strokeLayer">CauniX</text>
+                                            <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="fill-text" id="fillLayer">CauniX</text>
+                                            <text x="50%" y="85%" text-anchor="middle" class="sub-url-path" id="urlLayer">CAUNIX.COM</text>
+                                        </svg>
+                                    </div>
+                                    <div class="logo-final-container" id="logoFinal">
+                                        <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" style="width:100%" alt="Final Logo">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- rest of landing page unchanged except pricing text and legal links -->
+
+            <!-- FEATURES SECTION -->
+            <section id="features" class="relative z-10 -mt-20 py-20 md:py-32 bg-sky-light border-t border-b border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-4xl font-extrabold mb-4 text-slate-800 animate-on-scroll animated">Built for Real Conversations</h2>
+                    <p class="text-xl text-slate-600 mb-16 max-w-3xl mx-auto animate-on-scroll animated">CauniX replaces phone numbers with a simple Google sign‑in and a lightweight identity. Talk, connect, and stay safe — all within a frictionless app.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="log-in" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Google Account Sign‑In</h3><p class="text-slate-500 text-sm">One tap to sign in. No new passwords, no phone numbers. Your Google account becomes your key to CauniX.</p></div>
+                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="fingerprint" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Unique In‑App Identity</h3><p class="text-slate-500 text-sm">After sign‑in you get a CauniX ID — your personal handle for calls. No SIM, no carrier, no phone number exposure.</p></div>
+                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="phone" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Crystal‑Clear Voice</h3><p class="text-slate-500 text-sm">Direct app‑to‑app voice calls optimized for clarity and low latency. Optional expansion to video and messaging.</p></div>
+                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="wifi" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Real‑Time Presence</h3><p class="text-slate-500 text-sm">See who's online instantly. Firebase‑powered cloud sync updates availability and call state in real time.</p></div>
+                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="shield" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Safety by Design</h3><p class="text-slate-500 text-sm">Block, report, and rate‑limited actions. Account‑based identity helps keep the platform trustworthy.</p></div>
+                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll bg-gradient-to-br from-blue-50 to-white animated"><div class="p-3 bg-blue-100 rounded-3xl inline-block mb-4"><i data-lucide="zap" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Minimal Friction</h3><p class="text-slate-500 text-sm">No setup wizards, no carrier plans. Open the app, see your people, and start talking in seconds.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOW IT WORKS SECTION -->
+            <section id="mission" class="py-20 md:py-32 bg-sky-light">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="panel rounded-3xl p-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                            <div class="animate-on-scroll"><h2 class="text-4xl font-extrabold mb-4 text-slate-800">Over‑the‑Top, <span class="text-gradient">Phone‑Free</span> Communication</h2><p class="text-xl text-slate-600 mb-6">CauniX operates completely independent of mobile carriers and traditional telephony. It's an internet‑native calling layer: log in with Google, claim your identity, and connect directly with other users — no phone numbers, no SIM cards.</p><div class="space-y-4"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><span class="text-blue-700 font-bold text-sm">1</span></div><div><h4 class="font-semibold">Sign in with Google</h4><p class="text-sm text-slate-500">Your existing Gmail or Workspace account becomes your CauniX key.</p></div></div><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><span class="text-blue-700 font-bold text-sm">2</span></div><div><h4 class="font-semibold">Receive Your CauniX ID</h4><p class="text-sm text-slate-500">A unique, lightweight identity replaces a phone number for all calls.</p></div></div><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><span class="text-blue-700 font-bold text-sm">3</span></div><div><h4 class="font-semibold">See Who's Online & Call</h4><p class="text-sm text-slate-500">Real‑time presence shows you who's available. Tap to start a voice call.</p></div></div></div></div>
+                            <div class="network-visualization p-8 rounded-3xl h-80 flex items-center justify-center relative animate-on-scroll"><i data-lucide="hexagon" class="w-16 h-16 text-blue-400 absolute top-4 left-4 opacity-40"></i><i data-lucide="hexagon" class="w-16 h-16 text-blue-600 absolute bottom-4 right-4 opacity-40"></i><div class="text-center"><div class="flex justify-center space-x-2 mb-4"><div class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div><div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div><div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div></div><p class="text-xl font-mono text-slate-800">Google → CauniX ID → Call</p><p class="text-sm text-slate-500">Over‑the‑top · No carrier · Real‑time sync</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SAFETY & PRIVACY SECTION (note: links now open modal, but we keep the section for layout) -->
+            <div id="safety-section" class="scroll-mt-28"></div>
+
+            <section id="privacy-contact-section" class="py-20 md:py-28 bg-sky-light/60 border-t border-slate-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid md:grid-cols-2 gap-8 mb-12">
+                        <div class="info-card p-6 md:p-8">
+                            <div class="flex items-center gap-3 mb-4"><i data-lucide="shield" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Privacy Policy</h3></div>
+                            <p class="text-slate-600 mb-3">CauniX values your privacy. We collect only essential data. Read the full policy to understand your rights.</p>
+                            <button onclick="openLegalTab('privacy')" class="text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition">Read Full Policy</button>
+                        </div>
+                        <div class="info-card p-6 md:p-8">
+                            <div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Contact & Support</h3></div>
+                            <p class="text-slate-600">Our team is ready to assist you with any questions about accounts, safety, or general feedback.</p>
+                            <div class="mt-5 space-y-3"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700 font-medium">support@caunix.app</span></div><div class="flex items-center gap-3"><i data-lucide="message-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Live chat: Mon-Fri 9am-6pm UTC</span></div><div class="flex items-center gap-3"><i data-lucide="twitter" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">@CauniX_help</span></div><div class="flex items-center gap-3"><i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Abuse reports: legal@caunix.app</span></div></div>
+                            <button class="mt-6 text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition" onclick="alert('Mock contact form — real system coming soon.')">Send message ↗</button>
+                        </div>
+                    </div>
+                    <div id="pricing-block" class="info-card p-6 md:p-8 text-center max-w-3xl mx-auto scroll-mt-28">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2"><i data-lucide="credit-card" class="w-7 h-7 inline-block mr-2 text-indigo-500"></i>Simple, transparent pricing</h3>
+                        <p class="text-slate-500">CauniX core voice calling is completely free with your Google account. No hidden fees, no ads. Premium features (cloud recording, custom voicemail) will be optional in the future — always fair.</p>
+                        <div class="flex flex-wrap justify-center gap-3 mt-5"><span class="bg-emerald-100 text-emerald-800 px-4 py-1 rounded-full text-sm font-semibold">✔ Free forever tier</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">Unlimited calls (fair use)</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">No ads, no tracking</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA SECTION -->
+            <section class="py-16 md:py-20 bg-sky-light border-t border-b border-blue-200">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div class="max-w-4xl mx-auto animate-on-scroll"><h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-slate-800">Ready to Ditch the <span class="text-gradient">Phone Number</span>?</h2><p class="text-xl text-slate-600 mb-10">Join the lightweight communication layer. Sign in with Google and start talking — free, forever.</p><div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center"><button id="final-launch-call" class="btn-google font-bold py-3 px-8 rounded-xl flex items-center justify-center shadow-xl transform hover:scale-[1.05]"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff" opacity="0.9"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity="0.7"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff" opacity="0.6"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity="0.8"/></svg>Sign In with Google — It's Free</button><button onclick="alert('Contact us: hello@caunix.app')" class="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-bold py-3 px-8 rounded-xl">Talk to the Team</button></div></div>
+                </div>
+            </section>
         </main>
 
-        <footer><!-- footer legal links updated --></footer>
+        <!-- FOOTER -->
+        <footer id="main-footer" class="py-12 bg-sky-light border-t border-slate-200 transition-opacity duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="footer-white-panel mb-8">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                        <div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-3"><img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="h-8 w-auto object-contain" /><span class="text-xl font-extrabold tracking-tight text-black">CauniX</span></div><p class="text-sm text-slate-500 mt-2">Lightweight internet calling. Sign in with Google, get an identity, and talk — phone‑free.</p></div>
+                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li><li><a href="#" class="hover:text-blue-700 transition">Identity</a></li><li><a href="#" class="hover:text-blue-700 transition">Presence</a></li><li><a href="#" class="hover:text-blue-700 transition">Safety</a></li></ul></div>
+                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li><li><a href="#" class="hover:text-blue-700 transition">Community</a></li><li><a href="#" class="hover:text-blue-700 transition">Contact</a></li></ul></div>
+                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><button onclick="openLegalTab('terms')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Terms of Service</button></li><li><button onclick="openLegalTab('privacy')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Privacy Policy</button></li><li><button onclick="openLegalTab('rules')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Acceptable Use</button></li></ul></div>
+                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="github" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500"><p>&copy; 2026 CauniX. All rights reserved. Over‑the‑top communication, free from carriers.</p><p class="mt-2 md:mt-0">Lightweight · Encrypted · Free</p></div>
+            </div>
+        </footer>
     </div>
 
-    <!-- ===== SIGNUP PAGE (unchanged structure) ===== -->
+    <!-- ===== SIGNUP PAGE ===== -->
+    <div id="signupPageContainer" class="signup-page-container">
+        <canvas id="signupRibbonCanvas"></canvas>
 
-    <!-- ===== LEGAL FULL‑SCREEN PAGE ===== -->
-    <div id="legalPageContainer">
-        <header class="legal-page-header">
-            <button class="legal-back-btn" onclick="history.back()">
-                <i data-lucide="arrow-left" class="w-5 h-5"></i> Back
-            </button>
-            <nav class="legal-tab-nav" id="legalTabNav">
-                <button class="legal-tab-btn active" data-tab="terms">Terms of Service</button>
-                <button class="legal-tab-btn" data-tab="privacy">Privacy Policy</button>
-                <button class="legal-tab-btn" data-tab="rules">Platform Rules</button>
-            </nav>
-        </header>
-        <div class="legal-content" id="legalContentBody">
-            <!-- FAQ accordion injected by JS -->
+        <div class="signup-led-wrapper">
+            <div class="signup-main-panel">
+                <div class="signup-left-panel">
+                    
+                    <div class="signup-panel-header">
+                        <button id="signup-back-btn" class="signup-back-button">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            Back
+                        </button>
+                    </div>
+
+                    <div class="signup-scroll-content flex flex-col">
+                        <div class="flex items-center gap-3 mb-10 mt-4">
+                            <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" alt="CauniX Logo" class="h-8 w-auto">
+                            <span style="font-family: 'DM Sans'" class="text-xl font-bold tracking-tighter">CauniX</span>
+                        </div>
+                        
+                        <div class="mb-10">
+                            <h1 class="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-4">
+                                Sign Up <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">For FREE, and start calling</span>
+                            </h1>
+                            <p class="text-slate-500 text-base mb-8 max-w-xs">Experience the no-SIM global communication protocol. Encrypted. Borderless. Create your unique internet voice identity today.</p>
+
+                            <div class="flex flex-col gap-3 mb-8">
+                                <label class="signup-checkbox-container flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="signup-tosCheck" class="rounded" aria-label="I agree to the Terms of Service">
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">I agree to the Terms of Service</span>
+                                </label>
+                                <label class="signup-checkbox-container flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="signup-privacyCheck" class="rounded" aria-label="I accept the Privacy Policy">
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">I accept the Privacy Policy</span>
+                                </label>
+                            </div>
+
+                            <div class="flex flex-col gap-4">
+                                <button id="signup-googleBtn" disabled class="signup-auth-btn w-full max-w-xs flex items-center justify-center gap-3 font-bold py-3.5 px-6 rounded-2xl" aria-label="Sign up with Google">
+                                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5" alt="Google Logo">
+                                    <span class="text-sm">Sign up with Google</span>
+                                </button>
+
+                                <button id="signup-appleBtn" disabled class="signup-auth-btn w-full max-w-xs flex items-center justify-center gap-3 font-bold py-3.5 px-6 rounded-2xl" aria-label="Sign up with Apple">
+                                    <svg class="w-5 h-5" viewBox="0 0 384 512" fill="currentColor" aria-hidden="true">
+                                        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                                    </svg>
+                                    <span class="text-sm">Sign up with Apple</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto pt-6 border-t border-slate-200">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Protocol V1.0 • Global Mesh</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="signup-animation-container">
+                    <div class="absolute inset-0 z-10">
+                        <div class="signup-scene-content active"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
+                        <div class="signup-scene-content"><h1>No SIM.</h1><p>Legacy Reimagined</p></div>
+                        <div class="signup-scene-content"><h1>Global.</h1><p>Continental Precision</p></div>
+                        <div class="signup-scene-content"><h1>CauniX</h1><p>Your Voice. Your Rules.</p></div>
+                    </div>
+
+                    <canvas id="signupHeroCanvas"></canvas>
+
+                    <div id="signup-finaleStage">
+                        <div class="signup-intro-frame" id="signup-introFrame">
+                            <div class="signup-guide-line" style="top: -40px;"></div>
+                            <div class="signup-guide-line" style="bottom: -40px;"></div>
+                            <svg class="signup-intro-svg" viewBox="0 0 800 200" aria-hidden="true">
+                                <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="signup-letter-path" id="signup-strokeLayer">CauniX</text>
+                                <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="signup-fill-text" id="signup-fillLayer">CauniX</text>
+                                <text x="50%" y="85%" text-anchor="middle" class="signup-sub-url-path" id="signup-urlLayer">CAUNIX.COM</text>
+                            </svg>
+                        </div>
+                        <div class="signup-logo-final-container" id="signup-logoFinal">
+                            <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="w-full" alt="CauniX Final Logo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEGAL FAQ MODAL -->
+    <div id="legalModal">
+        <div class="legal-modal-content">
+            <div class="legal-tabs">
+                <button class="legal-tab active" data-tab="terms">Terms of Service</button>
+                <button class="legal-tab" data-tab="privacy">Privacy Policy</button>
+                <button class="legal-tab" data-tab="rules">Platform Rules</button>
+                <button class="ml-auto text-slate-400 hover:text-slate-600 p-2" onclick="closeLegalModal()"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="legal-body" id="legalBody">
+                <!-- dynamic FAQ content injected by JS -->
+            </div>
         </div>
     </div>
 
