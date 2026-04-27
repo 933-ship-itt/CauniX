@@ -700,6 +700,12 @@
     const particles = Array.from({ length: 800 }, () => new Particle(true));
 
     function resetFinaleElements() {
+        // Clear all GSAP-applied inline styles to prevent "stuck" states
+        gsap.set(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal", "#finaleStage"], { 
+            clearProps: "all" 
+        });
+
+        // Re-initialize the starting positions for the next loop
         gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
         gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
         gsap.set("#urlLayer", { opacity: 0, y: 0 });
@@ -709,6 +715,7 @@
     }
 
     function restartLoop() {
+        // 1. Kill any existing tweens to prevent background conflicts
         gsap.killTweensOf("*");
         if (finaleTimeline) {
             finaleTimeline.kill();
@@ -718,87 +725,26 @@
         const finale = document.getElementById('finaleStage');
         const visual = document.getElementById('visualMainContent');
 
+        // 2. Toggle container visibility
         finale.style.display = "none";
+        finale.style.opacity = "1"; // Reset for the next fade-in
         visual.style.display = "block";
         gsap.set(visual, { opacity: 1 });
 
-        scenes.forEach(scene => scene.classList.remove('active', 'exit'));
-        resetFinaleElements();
+        // 3. Reset text scene classes
+        scenes.forEach(scene => {
+            scene.classList.remove('active', 'exit');
+        });
         
+        // 4. Reset core logic variables
         currentScene = 0;
         frame = 0;
         loopActive = true;
+
+        // 5. Run the property reset and start the first scene
+        resetFinaleElements();
         scenes[0].classList.add('active');
     }
-
-    function runFinale() {
-        loopActive = false;
-        gsap.to("#visualMainContent", {
-            opacity: 0,
-            duration: 1,
-            onComplete: () => {
-                document.getElementById('visualMainContent').style.display = 'none';
-                document.getElementById('finaleStage').style.display = 'flex';
-                startGSAPFinale();
-            }
-        });
-    }
-
-    function startGSAPFinale() {
-        const tl = gsap.timeline({
-            defaults: { ease: "expo.inOut" },
-            onComplete: () => {
-                // This will now fire because the infinite loop was removed
-                gsap.to("#finaleStage", {
-                    opacity: 0,
-                    duration: 0.8,
-                    delay: 2.5,
-                    onComplete: restartLoop
-                });
-            }
-        });
-
-        tl.set(".guide-line", { opacity: 1 });
-        tl.from("#introFrame", { width: 0, duration: 1.2, borderLeft: "2px solid #000", borderRight: "2px solid #000" });
-        tl.to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8 }, "-=0.6");
-        tl.to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8 }, "-=1.0");
-        tl.to("#urlLayer", { opacity: 1, y: "-=10", duration: 1 }, "-=0.5");
-        tl.to(".guide-line", { opacity: 0, duration: 0.3 }, "-=0.2");
-        tl.to({}, { duration: 1 }); // Pause to look at text
-        tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
-        tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
-        
-        // REMOVED: tl.to("#logoFinal", { scale: 0.95, repeat: -1 ... }) 
-        // This was preventing onComplete from ever happening.
-
-        finaleTimeline = tl;
-    }
-
-    function animate() {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-        ctx.fillRect(0, 0, width, height);
-        particles.forEach(p => { p.update(); p.draw(); });
-
-        if (loopActive) {
-            frame++;
-            if (frame >= SCENE_DURATION) {
-                frame = 0;
-                if (currentScene === scenes.length - 1) {
-                    runFinale();
-                } else {
-                    scenes[currentScene].classList.remove('active');
-                    scenes[currentScene].classList.add('exit');
-                    let prev = currentScene;
-                    setTimeout(() => { if (scenes[prev]) scenes[prev].classList.remove('exit'); }, 800);
-                    currentScene++;
-                    scenes[currentScene].classList.add('active');
-                }
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-    animate();
-})();
 
         // === MAIN BACKGROUND CANVAS (preserved) ===
         (function() {
