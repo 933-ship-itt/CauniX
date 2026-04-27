@@ -29,10 +29,15 @@
 
     <title>CauniX: Lightweight Internet Calling with Google Sign‑In</title>
 
+    <!-- Tailwind & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- Firebase SDK (compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -1087,11 +1092,17 @@
                             <div class="flex flex-col gap-3 mb-8">
                                 <label class="signup-checkbox-container flex items-center gap-3 cursor-pointer group">
                                     <input type="checkbox" id="signup-tosCheck" class="rounded" aria-label="I agree to the Terms of Service">
-                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">I agree to the Terms of Service</span>
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">
+                                        I agree to the 
+                                        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); navigateTo('/legal/terms');" class="underline text-blue-600 hover:text-blue-800">Terms of Service</a>
+                                    </span>
                                 </label>
                                 <label class="signup-checkbox-container flex items-center gap-3 cursor-pointer group">
                                     <input type="checkbox" id="signup-privacyCheck" class="rounded" aria-label="I accept the Privacy Policy">
-                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">I accept the Privacy Policy</span>
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">
+                                        I accept the 
+                                        <a href="#" onclick="event.preventDefault(); event.stopPropagation(); navigateTo('/legal/privacy');" class="underline text-blue-600 hover:text-blue-800">Privacy Policy</a>
+                                    </span>
                                 </label>
                             </div>
 
@@ -1163,6 +1174,18 @@
     </div>
 
     <script>
+        // --- Firebase initialisation ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
+            authDomain: "tervallx.firebaseapp.com",
+            projectId: "tervallx",
+            storageBucket: "tervallx.firebasestorage.app",
+            messagingSenderId: "1097149640832",
+            appId: "1:1097149640832:web:24205417b4f481b7523665",
+            measurementId: "G-32MMXKPB83"
+        };
+        firebase.initializeApp(firebaseConfig);
+
         // SEO - Structured Data
         (function() {
             const script = document.createElement('script');
@@ -1613,8 +1636,37 @@
         }
         tosCheck.addEventListener('change', updateSignupBtnState);
         privacyCheck.addEventListener('change', updateSignupBtnState);
-        googleBtn.addEventListener('click', () => alert('Google Sign-Up - Integration with Google OAuth coming soon'));
-        appleBtn.addEventListener('click', () => alert('Apple Sign-Up - Integration with Apple ID coming soon'));
+
+        // --- Firebase Auth Handlers ---
+        googleBtn.addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    console.log('Google sign-in success', result.user);
+                    alert(`Welcome, ${result.user.displayName || result.user.email}!`);
+                    showLandingPage(); // return to home after login
+                })
+                .catch((error) => {
+                    console.error('Google sign-in error', error);
+                    alert(`Sign-in failed: ${error.message}`);
+                });
+        });
+
+        appleBtn.addEventListener('click', () => {
+            const provider = new firebase.auth.OAuthProvider('apple.com');
+            provider.addScope('email');
+            provider.addScope('name');
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    console.log('Apple sign-in success', result.user);
+                    alert(`Welcome, ${result.user.displayName || result.user.email || 'User'}!`);
+                    showLandingPage();
+                })
+                .catch((error) => {
+                    console.error('Apple sign-in error', error);
+                    alert(`Sign-in failed: ${error.message}`);
+                });
+        });
 
         function startSignupAnimations() {
             if (signupHeroCleanup) { signupHeroCleanup(); signupHeroCleanup = null; }
