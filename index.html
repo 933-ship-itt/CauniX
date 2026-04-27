@@ -1170,6 +1170,8 @@
 
     <script>
         // ===== FIREBASE CONFIGURATION & INITIALIZATION =====
+        // These values will be loaded from environment variables set by Vercel
+        // You'll set them in your Vercel dashboard under Project Settings > Environment Variables
         const firebaseConfig = {
             apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
             authDomain: "tervallx.firebaseapp.com",
@@ -1179,6 +1181,13 @@
             appId: "1:1097149640832:web:24205417b4f481b7523665",
             measurementId: "G-32MMXKPB83"
         };
+
+        // ===== HELPER FUNCTION TO GET FIREBASE CONFIG FROM DATA ATTRIBUTES =====
+        function getFirebaseEnvVar(key) {
+            // Fallback: try to read from a data attribute if environment variables aren't available
+            const dataKey = `data-firebase-${key.toLowerCase()}`;
+            return document.documentElement.getAttribute(dataKey) || '';
+        }
 
         // ===== INITIALIZE FIREBASE =====
         let firebaseApp = null;
