@@ -589,7 +589,7 @@
                     <div class="info-card p-6 md:p-8">
                         <div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Contact & Support</h3></div>
                         <p class="text-slate-600">Our team is ready to assist you with any questions about accounts, safety, or general feedback.</p>
-                        <div class="mt-5 space-y-3"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700 font-medium">support@caunix.app</span></div><div class="flex items-center gap-3"><i data-lucide="message-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Live chat: Mon-Fri 9am-6pm UTC</span></div><div class="flex items-center gap-3"><i data-lucide="link" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">@CauniX_help</span></div><div class="flex items-center gap-3"><i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Abuse reports: legal@caunix.app</span></div></div>
+                        <div class="mt-5 space-y-3"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700 font-medium">support@caunix.app</span></div><div class="flex items-center gap-3"><i data-lucide="message-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Live chat: Mon-Fri 9am-6pm UTC</span></div><div class="flex items-center gap-3"><i data-lucide="twitter" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">@CauniX_help</span></div><div class="flex items-center gap-3"><i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Abuse reports: legal@caunix.app</span></div></div>
                         <button class="mt-6 text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition" onclick="alert('Mock contact form — real system coming soon.')">Send message ↗</button>
                     </div>
                 </div>
@@ -616,7 +616,7 @@
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li><li><a href="#" class="hover:text-blue-700 transition">Identity</a></li><li><a href="#" class="hover:text-blue-700 transition">Presence</a></li><li><a href="#" class="hover:text-blue-700 transition">Safety</a></li></ul></div>
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li><li><a href="#" class="hover:text-blue-700 transition">Community</a></li><li><a href="#" class="hover:text-blue-700 transition">Contact</a></li></ul></div>
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Terms of Service</a></li><li><a href="#" class="hover:text-blue-700 transition">Privacy Policy</a></li><li><a href="#" class="hover:text-blue-700 transition">Acceptable Use</a></li></ul></div>
-                    <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Link" class="hover:text-blue-700 transition"><i data-lucide="link" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Code" class="hover:text-blue-700 transition"><i data-lucide="code" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
+                    <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="github" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500"><p>&copy; 2026 CauniX. All rights reserved. Over‑the‑top communication, free from carriers.</p><p class="mt-2 md:mt-0">Lightweight · Encrypted · Free</p></div>
@@ -642,7 +642,7 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === LOOPING HERO GRAPHIC WITH FINALE (FIXED) ===
+        // === LOOPING HERO GRAPHIC WITH FINALE (FIXED & ROBUST) ===
         (function initHeroGraphic() {
             const canvas = document.getElementById('heroCanvas');
             if (!canvas) return;
@@ -702,215 +702,276 @@
 
             const particles = Array.from({ length: 800 }, () => new Particle(true));
 
+            /**
+             * Reset all scene classes and state
+             * Force reflow to ensure transitions work correctly
+             */
+            function resetAllScenes() {
+                scenes.forEach((scene, idx) => {
+                    scene.classList.remove('active', 'exit');
+                    // Force reflow
+                    void scene.offsetHeight;
+                });
+                // Now apply active to first scene
+                if (scenes[0]) {
+                    scenes[0].classList.add('active');
+                }
+            }
+
+            /**
+             * Completely clear all GSAP inline styles from finale elements
+             */
             function resetFinaleElements() {
-                // Kill all tweens related to finale elements
-                gsap.killTweensOf(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal"]);
-                
-                // Completely clear all inline styles
-                gsap.set(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal"], { 
+                // Kill all tweens targeting these elements
+                gsap.killTweensOf([
+                    "#strokeLayer", 
+                    "#fillLayer", 
+                    "#urlLayer", 
+                    ".guide-line", 
+                    "#introFrame", 
+                    "#logoFinal"
+                ]);
+
+                // Clear ALL inline styles using clearProps
+                gsap.set([
+                    "#strokeLayer", 
+                    "#fillLayer", 
+                    "#urlLayer", 
+                    ".guide-line", 
+                    "#introFrame", 
+                    "#logoFinal"
+                ], { 
                     clearProps: "all" 
                 });
 
-                // Reset to starting positions
-                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
-                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-                gsap.set("#urlLayer", { opacity: 0 });
-                gsap.set(".guide-line", { opacity: 0 });
-                gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1 });
-                gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
+                // Re-apply initial CSS values explicitly
+                gsap.set("#strokeLayer", { 
+                    strokeDashoffset: 1200,
+                    strokeDasharray: 1200
+                });
+                gsap.set("#fillLayer", { 
+                    clipPath: "inset(100% 0% 0% 0%)" 
+                });
+                gsap.set("#urlLayer", { 
+                    opacity: 0 
+                });
+                gsap.set(".guide-line", { 
+                    opacity: 0 
+                });
+                gsap.set("#introFrame", { 
+                    scale: 1,
+                    x: 0,
+                    opacity: 1
+                });
+                gsap.set("#logoFinal", { 
+                    opacity: 0,
+                    scale: 0.8
+                });
             }
 
+            /**
+             * Core restart function - brings loop back to life
+             */
             function restartLoop() {
-                // Kill all active tweens
+                // 1. Kill ALL active GSAP animations
                 gsap.killTweensOf("*");
+
+                // 2. Kill timeline if it exists
                 if (finaleTimeline) {
                     finaleTimeline.kill();
                     finaleTimeline = null;
                 }
 
-                // Reset container visibility
-                finale.style.display = "none";
-                finale.style.opacity = "1";
-                visual.style.display = "block";
-                visual.style.opacity = "1";
-
-                // Reset scene classes
-                scenes.forEach(scene => {
-                    scene.classList.remove('active', 'exit');
+                // 3. Hide finale, show visual content
+                gsap.set(finale, { 
+                    display: "none",
+                    opacity: 1,
+                    clearProps: "all"
                 });
-                
-                // Reset state variables
-                currentScene = 0;
-                frame = 0;
-                loopActive = true;
 
-                // Reset finale elements
+                gsap.set(visual, { 
+                    display: "block",
+                    opacity: 1,
+                    clearProps: "transform"
+                });
+
+                // 4. Reset all finale SVG elements
                 resetFinaleElements();
 
-                // Activate first scene
-                scenes[0].classList.add('active');
+                // 5. Reset scene DOM state
+                resetAllScenes();
+
+                // 6. Reset animation loop state
+                loopActive = true;
+                frame = 0;
+                currentScene = 0;
+
+                // 7. Ensure animation loop continues
+                cancelAnimationFrame(animationFrameId);
+                animate();
             }
 
-            function startFinaleSequence() {
+            /**
+             * Transition OUT of scenes into finale
+             */
+            function startFinaleTransition() {
                 loopActive = false;
-                
-                // Hide visual content, show finale stage
-                visual.style.display = "none";
-                finale.style.display = "flex";
 
-                // Reset finale elements before starting timeline
+                // Fade visual content out
+                gsap.to(visual, {
+                    opacity: 0,
+                    duration: 0.6,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        visual.style.display = "none";
+                        finale.style.display = "flex";
+                        gsap.set(finale, { opacity: 1 });
+                        startGSAPFinale();
+                    }
+                });
+            }
+
+            /**
+             * Run the GSAP finale sequence
+             */
+            function startGSAPFinale() {
                 resetFinaleElements();
 
-                // Build GSAP timeline for finale
+                // Create timeline with NO infinite loops
                 finaleTimeline = gsap.timeline({
                     onComplete: () => {
-                        // Finale complete - restart the loop
+                        // Timeline fully complete - restart the loop
+                        console.log("[Finale Complete] Restarting loop...");
                         restartLoop();
                     }
                 });
 
-                // Stroke animation (0-0.8s)
-                finaleTimeline.to("#strokeLayer", { 
-                    strokeDashoffset: 0, 
-                    duration: 0.8, 
-                    ease: "power1.inOut" 
-                }, 0);
-
-                // Fill animation overlaps (0.3-1.2s)
-                finaleTimeline.to("#fillLayer", { 
-                    clipPath: "inset(0% 0% 0% 0%)", 
-                    duration: 0.9, 
-                    ease: "power1.inOut" 
-                }, 0.3);
-
-                // Guide lines appear (0-0.5s)
-                finaleTimeline.to(".guide-line", { 
-                    opacity: 1, 
-                    duration: 0.5 
-                }, 0);
-
-                // URL text appears (0.9-1.4s)
-                finaleTimeline.to("#urlLayer", { 
-                    opacity: 1, 
-                    duration: 0.5 
-                }, 0.9);
-
-                // Intro frame scales out (1.2-2.0s)
-                finaleTimeline.to("#introFrame", { 
-                    scale: 0.5, 
-                    opacity: 0, 
-                    duration: 0.8, 
-                    ease: "back.in" 
-                }, 1.2);
-
-                // Logo fades in and scales (1.5-2.5s)
-                finaleTimeline.to("#logoFinal", { 
-                    opacity: 1, 
-                    scale: 1, 
-                    duration: 1, 
-                    ease: "elastic.out(1, 0.5)" 
-                }, 1.5);
-
-                // Logo holds for 1 second (2.5-3.5s)
-                finaleTimeline.to("#logoFinal", { 
-                    opacity: 1, 
-                    duration: 1 
-                }, 2.5);
-
-                // Logo fades out (3.5-4.0s), then onComplete triggers
-                finaleTimeline.to("#logoFinal", { 
-                    opacity: 0, 
-                    duration: 0.5 
-                }, 3.5);
+                // Build finale animation sequence
+                finaleTimeline
+                    .set(".guide-line", { opacity: 1 }, 0)
+                    .to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, 0.3)
+                    .to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power2.inOut" }, 0.5)
+                    .to("#urlLayer", { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 1.2)
+                    .to(".guide-line", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 1.8)
+                    .to("#introFrame", { 
+                        scale: 0.3, 
+                        opacity: 0, 
+                        duration: 1.0, 
+                        ease: "back.in" 
+                    }, 2.0)
+                    .to("#logoFinal", { 
+                        opacity: 1, 
+                        scale: 1, 
+                        duration: 1.2, 
+                        ease: "elastic.out(1, 0.5)" 
+                    }, 2.5)
+                    // Logo holds still (no repeat, no infinite)
+                    .to("#logoFinal", { opacity: 1, duration: 2.0 }, 3.7)
+                    // Fade logo out before complete
+                    .to("#logoFinal", { 
+                        opacity: 0, 
+                        duration: 0.6, 
+                        ease: "power2.inOut"
+                    }, 5.7);
+                    
+                // Total timeline duration: ~6.3s before onComplete fires
             }
 
+            /**
+             * Main animation loop - runs every frame
+             */
             function animate() {
                 if (!ctx) return;
 
-                ctx.clearRect(0, 0, width, height);
+                // Clear canvas with semi-transparent white for motion blur effect
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fillRect(0, 0, width, height);
 
+                // Update and draw particles
                 particles.forEach(p => {
                     p.update();
                     p.draw();
                 });
 
+                // Scene rotation logic (only when loop is active)
                 if (loopActive) {
-                    // Update scene rotation
                     frame++;
 
-                    if (frame > SCENE_DURATION) {
+                    if (frame >= SCENE_DURATION) {
+                        frame = 0;
+
+                        if (currentScene === scenes.length - 1) {
+                            // Last scene done - go to finale
+                            startFinaleTransition();
+                            animationFrameId = requestAnimationFrame(animate);
+                            return;
+                        }
+
                         // Transition to next scene
                         scenes[currentScene].classList.remove('active');
                         scenes[currentScene].classList.add('exit');
-
                         currentScene++;
-                        frame = 0;
-
-                        if (currentScene >= scenes.length) {
-                            // All scenes done - start finale
-                            startFinaleSequence();
-                        } else {
-                            // Activate next scene
-                            scenes[currentScene].classList.remove('exit');
-                            scenes[currentScene].classList.add('active');
-                        }
+                        scenes[currentScene].classList.remove('exit');
+                        scenes[currentScene].classList.add('active');
                     }
                 }
 
                 animationFrameId = requestAnimationFrame(animate);
             }
 
+            // Start the animation loop
             animate();
 
             // Cleanup on page unload
             window.addEventListener('beforeunload', () => {
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
                 gsap.killTweensOf("*");
+                if (finaleTimeline) finaleTimeline.kill();
             });
         })();
 
-        // === MAIN BACKGROUND CANVAS (unchanged) ===
+        // === MAIN BACKGROUND CANVAS (preserved unchanged) ===
         (function() {
             const canvas = document.getElementById('mainCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             let width, height, tick = 0, stars = [], bokeh = [];
 
-            function resize() { 
+            function resize() {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
-                bokeh.length = 0; 
+                bokeh.length = 0;
                 for (let i = 0; i < 12; i++) {
-                    bokeh.push({ 
-                        x: Math.random() * width, 
-                        y: Math.random() * height, 
-                        r: Math.random() * 100 + 50, 
-                        s: Math.random() * 0.1 + 0.05 
-                    }); 
+                    bokeh.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        r: Math.random() * 100 + 50,
+                        s: Math.random() * 0.1 + 0.05
+                    });
                 }
             }
 
-            function createStar(isInitial = false) { 
-                let x, y, z = Math.random(); 
-                if (isInitial) { 
+            function createStar(isInitial = false) {
+                let x, y, z = Math.random();
+                if (isInitial) {
                     x = Math.random() * width;
-                    y = Math.random() * height; 
-                } else { 
-                    if (Math.random() > 0.5) { 
+                    y = Math.random() * height;
+                } else {
+                    if (Math.random() > 0.5) {
                         x = -150;
-                        y = Math.random() * height - 200; 
-                    } else { 
+                        y = Math.random() * height - 200;
+                    } else {
                         x = Math.random() * width - 200;
-                        y = -150; 
-                    } 
+                        y = -150;
+                    }
                 }
-                stars.push({ 
-                    x, y, z, 
-                    len: (Math.random() * 15 + 10) * (0.5 + z), 
-                    width: (Math.random() * 1.5 + 1) * (0.5 + z), 
-                    speed: (2 + Math.random()) * (0.5 + z * 1.5) 
+                stars.push({
+                    x, y, z,
+                    len: (Math.random() * 15 + 10) * (0.5 + z),
+                    width: (Math.random() * 1.5 + 1) * (0.5 + z),
+                    speed: (2 + Math.random()) * (0.5 + z * 1.5)
                 });
-                stars.sort((a, b) => a.z - b.z); 
+                stars.sort((a, b) => a.z - b.z);
             }
 
             window.addEventListener('resize', resize);
@@ -920,7 +981,7 @@
             function drawBg() {
                 if (!ctx) return;
                 ctx.clearRect(0, 0, width, height);
-                
+
                 bokeh.forEach(p => {
                     ctx.beginPath();
                     let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
@@ -939,15 +1000,15 @@
                 ribbonGrad.addColorStop(1, '#8e44ad');
                 ctx.fillStyle = ribbonGrad;
                 ctx.beginPath();
-                for (let x = 0; x <= width; x += 4) { 
-                    const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20; 
+                for (let x = 0; x <= width; x += 4) {
+                    const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
                     if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y); 
+                    else ctx.lineTo(x, y);
                 }
-                for (let x = width; x >= 0; x -= 4) { 
-                    const thick = 90 + Math.sin(tick + x * 0.003) * 15; 
+                for (let x = width; x >= 0; x -= 4) {
+                    const thick = 90 + Math.sin(tick + x * 0.003) * 15;
                     const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
-                    ctx.lineTo(x, y); 
+                    ctx.lineTo(x, y);
                 }
                 ctx.closePath();
                 ctx.fill();
@@ -967,9 +1028,9 @@
                     ctx.moveTo(s.x, s.y);
                     ctx.lineTo(s.x - s.len, s.y - s.len);
                     ctx.stroke();
-                    if (s.x > width + 100 || s.y > height + 100) { 
+                    if (s.x > width + 100 || s.y > height + 100) {
                         stars.splice(i, 1);
-                        createStar(); 
+                        createStar();
                     }
                 }
                 tick += 0.015;
