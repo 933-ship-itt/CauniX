@@ -643,7 +643,7 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === LOOPING HERO GRAPHIC WITH FINALE (PRODUCTION-READY) ===
+        // === LOOPING HERO GRAPHIC WITH INSTANT RESTART (SEAMLESS CONTINUOUS LOOP) ===
         (function initHeroGraphic() {
             const hCanvas = document.getElementById('heroCanvas');
             const hCtx = hCanvas.getContext('2d');
@@ -696,18 +696,37 @@
             }
             const particles = Array.from({length: 800}, () => new Particle(true));
 
+            function resetTextCycle() {
+                // Instantly hide finale and show text scenes
+                finale.style.display = 'none';
+                visual.style.display = 'block';
+                
+                // Reset GSAP values WITHOUT delay
+                gsap.killTweensOf("*");
+                gsap.set("#strokeLayer", { strokeDashoffset: 1200, clearProps: "all" });
+                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)", clearProps: "all" });
+                gsap.set("#urlLayer", { opacity: 0, y: 0, clearProps: "all" });
+                gsap.set("#introFrame", { scale: 1, x: "0%", opacity: 1, clearProps: "all" });
+                gsap.set("#logoFinal", { opacity: 0, scale: 0.8, clearProps: "all" });
+                gsap.set(".guide-line", { opacity: 0, clearProps: "all" });
+                
+                // Reset scene state
+                currentScene = 0;
+                frame = 0;
+                showTextScenes = true;
+                scenes.forEach(s => s.classList.remove('active', 'exit'));
+                scenes[0].classList.add('active');
+            }
+
             function startGSAPFinale() {
+                // Prepare finale container
+                finale.style.display = 'flex';
+                gsap.set(finale, { opacity: 1 });
+                
                 const tl = gsap.timeline({
-                    onComplete: () => {
-                        gsap.to("#finaleStage", {
-                            opacity: 0,
-                            duration: 1.5,
-                            delay: 4,
-                            onComplete: resetTextCycle
-                        });
-                    }
+                    onComplete: resetTextCycle
                 });
-                gsap.set("#finaleStage", { display: 'flex', opacity: 1 });
+                
                 gsap.set(".guide-line", { opacity: 0 });
                 gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
                 gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
@@ -720,23 +739,11 @@
                 tl.to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "expo.inOut" }, "-=1.0");
                 tl.to("#urlLayer", { opacity: 1, y: "-=10", duration: 1, ease: "expo.out" }, "-=0.5");
                 tl.to(".guide-line", { opacity: 0, duration: 0.3 }, "-=0.2");
-                tl.to({}, { duration: 0.5 });
+                tl.to({}, { duration: 0.3 }); // SHORT hold instead of 0.5s
                 tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2, ease: "expo.inOut" });
                 tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5, ease: "expo.out" }, "-=1.6");
-            }
-
-            function resetTextCycle() {
-                finale.style.display = 'none';
-                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
-                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-                gsap.set("#urlLayer", { opacity: 0, y: "+=10" });
-                gsap.set("#introFrame", { scale: 1, x: "0%", opacity: 1 });
-                gsap.set(finale, { opacity: 1 });
-                currentScene = 0;
-                frame = 0;
-                showTextScenes = true;
-                scenes.forEach(s => s.classList.remove('active', 'exit'));
-                scenes[0].classList.add('active');
+                tl.to("#logoFinal", { opacity: 1, duration: 0.5 }); // Logo visible for only 0.5s
+                // NO DELAY - goes straight to onComplete which restarts instantly
             }
 
             function animateHero() {
@@ -749,6 +756,7 @@
                             scenes[currentScene].classList.add('exit');
                             setTimeout(() => {
                                 showTextScenes = false;
+                                visual.style.display = 'none';
                                 startGSAPFinale();
                             }, 400);
                         } else {
