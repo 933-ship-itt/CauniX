@@ -738,90 +738,105 @@
             color: #1e293b;
         }
 
-        /* ===== LEGAL FAQ MODAL ===== */
-        #legalModal {
+        /* ===== LEGAL FULL‑SCREEN PAGE STYLES ===== */
+        #legalPageContainer {
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 9999;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        #legalModal.active {
-            display: flex;
-        }
-
-        .legal-modal-content {
+            z-index: 10000;
             background: white;
-            border-radius: 2rem;
-            width: 100%;
-            max-width: 800px;
-            max-height: 85vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.25);
+            overflow-y: auto;
         }
 
-        .legal-tabs {
-            display: flex;
+        #legalPageContainer.active {
+            display: block;
+        }
+
+        .legal-page-header {
+            position: sticky;
+            top: 0;
+            background: white;
             border-bottom: 1px solid #e2e8f0;
-            padding: 1rem 1.5rem 0;
-            gap: 0.5rem;
-            flex-shrink: 0;
+            z-index: 10;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
 
-        .legal-tab {
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.75rem 0.75rem 0 0;
+        .legal-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            color: #3b6ef5;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .legal-tab-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legal-tab-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.75rem;
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
             background: #f1f5f9;
-            color: #475569;
-            border: 1px solid transparent;
+            border: none;
+            color: #334155;
+            transition: all 0.2s;
         }
 
-        .legal-tab.active {
-            background: white;
-            color: #1e293b;
-            border-color: #e2e8f0;
-            border-bottom-color: white;
+        .legal-tab-btn.active {
+            background: #3b6ef5;
+            color: white;
         }
 
-        .legal-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem 2rem;
+        .legal-content {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 2rem 4rem;
         }
 
         .faq-item {
             border-bottom: 1px solid #f1f5f9;
-            padding: 1.25rem 0;
+            padding: 1.5rem 0;
         }
 
         .faq-question {
             font-weight: 700;
-            font-size: 1rem;
-            color: #0f172a;
+            font-size: 1.1rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             user-select: none;
+            color: #0f172a;
+        }
+
+        .faq-chevron {
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
         }
 
         .faq-answer {
             display: none;
-            margin-top: 0.75rem;
-            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
             color: #334155;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         .faq-item.open .faq-answer {
@@ -841,9 +856,7 @@
             #signup-animation-container {
                 display: none !important;
             }
-        }
 
-        @media (max-width: 768px) {
             .hero-graphic-container {
                 border-radius: 1.5rem;
             }
@@ -854,6 +867,11 @@
 
             .guide-line {
                 height: 80px;
+            }
+
+            .legal-page-header {
+                gap: 1rem;
+                padding: 1rem;
             }
         }
     </style>
@@ -880,9 +898,9 @@
                         <a href="#features" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Features</a>
                         <a href="#mission" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">How It Works</a>
                         <a href="#safety-section" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Safety</a>
-                        <button onclick="openLegalTab('privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Policy & Legal</button>
+                        <button onclick="navigateTo('/legal/privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Policy & Legal</button>
                         <a href="#pricing-block" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Pricing</a>
-                        <button onclick="openLegalTab('contact')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Contact</button>
+                        <button onclick="navigateTo('/legal/privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Contact</button>
                     </nav>
                     <div>
                         <button id="nav-get-started" class="btn-get-started font-semibold py-2 px-5 rounded-lg transition duration-200 shadow-md">
@@ -896,9 +914,9 @@
                 <a href="#features" class="block text-slate-600 hover:text-blue-700 font-medium">Features</a>
                 <a href="#mission" class="block text-slate-600 hover:text-blue-700 font-medium">How It Works</a>
                 <a href="#safety-section" class="block text-slate-600 hover:text-blue-700 font-medium">Safety</a>
-                <button onclick="openLegalTab('privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Policy & Legal</button>
+                <button onclick="navigateTo('/legal/privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Policy & Legal</button>
                 <a href="#pricing-block" class="block text-slate-600 hover:text-blue-700 font-medium">Pricing</a>
-                <button onclick="openLegalTab('contact')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Contact</button>
+                <button onclick="navigateTo('/legal/privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Contact</button>
                 <button id="mobile-get-started" class="w-full btn-get-started font-semibold py-2 rounded-lg mt-2 justify-center">
                     <i data-lucide="sparkles" class="w-4 h-4"></i> Get Started
                 </button>
@@ -988,7 +1006,7 @@
                 </div>
             </section>
 
-            <!-- SAFETY & PRIVACY SECTION (note: links now open modal, but we keep the section for layout) -->
+            <!-- SAFETY & PRIVACY SECTION -->
             <div id="safety-section" class="scroll-mt-28"></div>
 
             <section id="privacy-contact-section" class="py-20 md:py-28 bg-sky-light/60 border-t border-slate-100">
@@ -997,7 +1015,7 @@
                         <div class="info-card p-6 md:p-8">
                             <div class="flex items-center gap-3 mb-4"><i data-lucide="shield" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Privacy Policy</h3></div>
                             <p class="text-slate-600 mb-3">CauniX values your privacy. We collect only essential data. Read the full policy to understand your rights.</p>
-                            <button onclick="openLegalTab('privacy')" class="text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition">Read Full Policy</button>
+                            <button onclick="navigateTo('/legal/privacy')" class="text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition">Read Full Policy</button>
                         </div>
                         <div class="info-card p-6 md:p-8">
                             <div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Contact & Support</h3></div>
@@ -1008,8 +1026,8 @@
                     </div>
                     <div id="pricing-block" class="info-card p-6 md:p-8 text-center max-w-3xl mx-auto scroll-mt-28">
                         <h3 class="text-2xl font-bold text-slate-800 mb-2"><i data-lucide="credit-card" class="w-7 h-7 inline-block mr-2 text-indigo-500"></i>Simple, transparent pricing</h3>
-                        <p class="text-slate-500">CauniX core voice calling is completely free with your Google account. No hidden fees, no ads. Premium features (cloud recording, custom voicemail) will be optional in the future — always fair.</p>
-                        <div class="flex flex-wrap justify-center gap-3 mt-5"><span class="bg-emerald-100 text-emerald-800 px-4 py-1 rounded-full text-sm font-semibold">✔ Free forever tier</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">Unlimited calls (fair use)</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">No ads, no tracking</span></div>
+                        <p class="text-slate-500">CauniX core voice calling is completely free for now. No hidden fees, no ads. Premium features (cloud recording, custom voicemail) may be introduced as optional paid add‑ons in the future — always fair and optional.</p>
+                        <div class="flex flex-wrap justify-center gap-3 mt-5"><span class="bg-emerald-100 text-emerald-800 px-4 py-1 rounded-full text-sm font-semibold">✔ Free for now</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">Unlimited calls (fair use)</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">No ads, no tracking</span></div>
                     </div>
                 </div>
             </section>
@@ -1030,7 +1048,7 @@
                         <div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-3"><img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" class="h-8 w-auto object-contain" /><span class="text-xl font-extrabold tracking-tight text-black">CauniX</span></div><p class="text-sm text-slate-500 mt-2">Lightweight internet calling. Sign in with Google, get an identity, and talk — phone‑free.</p></div>
                         <div><h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li><li><a href="#" class="hover:text-blue-700 transition">Identity</a></li><li><a href="#" class="hover:text-blue-700 transition">Presence</a></li><li><a href="#" class="hover:text-blue-700 transition">Safety</a></li></ul></div>
                         <div><h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li><li><a href="#" class="hover:text-blue-700 transition">Community</a></li><li><a href="#" class="hover:text-blue-700 transition">Contact</a></li></ul></div>
-                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><button onclick="openLegalTab('terms')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Terms of Service</button></li><li><button onclick="openLegalTab('privacy')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Privacy Policy</button></li><li><button onclick="openLegalTab('rules')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Acceptable Use</button></li></ul></div>
+                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><button onclick="navigateTo('/legal/terms')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Terms of Service</button></li><li><button onclick="navigateTo('/legal/privacy')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Privacy Policy</button></li><li><button onclick="navigateTo('/legal/rules')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Acceptable Use</button></li></ul></div>
                         <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="github" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
                     </div>
                 </div>
@@ -1127,18 +1145,20 @@
         </div>
     </div>
 
-    <!-- LEGAL FAQ MODAL -->
-    <div id="legalModal">
-        <div class="legal-modal-content">
-            <div class="legal-tabs">
-                <button class="legal-tab active" data-tab="terms">Terms of Service</button>
-                <button class="legal-tab" data-tab="privacy">Privacy Policy</button>
-                <button class="legal-tab" data-tab="rules">Platform Rules</button>
-                <button class="ml-auto text-slate-400 hover:text-slate-600 p-2" onclick="closeLegalModal()"><i data-lucide="x" class="w-6 h-6"></i></button>
-            </div>
-            <div class="legal-body" id="legalBody">
-                <!-- dynamic FAQ content injected by JS -->
-            </div>
+    <!-- ===== LEGAL FULL‑SCREEN PAGE ===== -->
+    <div id="legalPageContainer">
+        <header class="legal-page-header">
+            <button class="legal-back-btn" onclick="history.back()">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i> Back
+            </button>
+            <nav class="legal-tab-nav" id="legalTabNav">
+                <button class="legal-tab-btn active" data-tab="terms">Terms of Service</button>
+                <button class="legal-tab-btn" data-tab="privacy">Privacy Policy</button>
+                <button class="legal-tab-btn" data-tab="rules">Platform Rules</button>
+            </nav>
+        </header>
+        <div class="legal-content" id="legalContentBody">
+            <!-- FAQ accordion injected by JS -->
         </div>
     </div>
 
@@ -1161,7 +1181,7 @@
             document.head.appendChild(script);
         })();
 
-        // ===== LEGAL FAQ DATA =====
+        // ===== LEGAL CONTENT (split into three tabs) =====
         const LEGAL_CONTENT = {
             terms: [
                 { q: "1. Scope and Legal Framework", a: "This document governs access to and use of the CauniX platform, including all associated applications, features, and services (collectively, the “Service”). By accessing or using the Service, you agree to be bound by this document. If you do not agree, the Service must not be used." },
@@ -1201,52 +1221,60 @@
             ]
         };
 
-        function renderFAQ(tab) {
+        // ===== LEGAL PAGE RENDERING =====
+        function renderLegalTab(tab) {
             const items = LEGAL_CONTENT[tab] || [];
-            const container = document.getElementById('legalBody');
+            const container = document.getElementById('legalContentBody');
             container.innerHTML = items.map((item, i) => `
                 <div class="faq-item">
                     <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
                         <span>${item.q}</span>
-                        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-200 faq-chevron"></i>
+                        <i data-lucide="chevron-down" class="w-5 h-5 faq-chevron"></i>
                     </div>
                     <div class="faq-answer">${item.a.replace(/\n/g, '<br>')}</div>
                 </div>
             `).join('');
-            lucide.createIcons(); // refresh icons
+            lucide.createIcons();
         }
 
-        function openLegalTab(tab = 'terms') {
-            const modal = document.getElementById('legalModal');
-            modal.classList.add('active');
-            document.querySelectorAll('.legal-tab').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.querySelector(`.legal-tab[data-tab="${tab}"]`);
-            if (activeBtn) activeBtn.classList.add('active');
-            renderFAQ(tab);
-        }
-
-        function closeLegalModal() {
-            document.getElementById('legalModal').classList.remove('active');
-        }
-
-        document.getElementById('legalModal').addEventListener('click', function(e) {
-            if (e.target === this) closeLegalModal();
-        });
-
-        document.querySelectorAll('.legal-tab[data-tab]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tab = this.dataset.tab;
-                document.querySelectorAll('.legal-tab').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                renderFAQ(tab);
+        function openLegalPage(tab = 'terms') {
+            const legalPage = document.getElementById('legalPageContainer');
+            legalPage.classList.add('active');
+            // Highlight active tab button
+            document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
             });
-        });
+            renderLegalTab(tab);
+            window.scrollTo(0, 0);
+        }
+
+        function closeLegalPage() {
+            document.getElementById('legalPageContainer').classList.remove('active');
+        }
+
+        // ===== GLOBAL ROUTING (pushState) =====
+        function navigateTo(path) {
+            // Map paths to legal tabs
+            if (path.startsWith('/legal/')) {
+                const tab = path.split('/legal/')[1];
+                window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, path);
+                openLegalPage(tab);
+                return;
+            }
+            // For signup
+            if (path === '/signup') {
+                window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
+                showSignupPage();
+                return;
+            }
+            // Default home
+            window.history.pushState({ page: 'home' }, 'CauniX', '/');
+            showLandingPage();
+        }
 
         // ===== PAGE ROUTING WITH HISTORY API =====
         const landingPageContainer = document.getElementById('landingPageContainer');
         const signupPageContainer = document.getElementById('signupPageContainer');
-
-        // Animation lifecycle management
         let landingHeroCleanup = null;
         let signupHeroCleanup = null;
         let signupRibbonCleanup = null;
@@ -1255,16 +1283,17 @@
             landingPageContainer.classList.remove('hidden');
             signupPageContainer.classList.remove('active');
             document.documentElement.classList.remove('signup-page');
-            // Stop signup animations cleanly
+            closeLegalPage();
+            // Stop signup animations
             if (signupHeroCleanup) { signupHeroCleanup(); signupHeroCleanup = null; }
             if (signupRibbonCleanup) { signupRibbonCleanup(); signupRibbonCleanup = null; }
-            // Ensure landing hero loop is running (it auto-starts on load)
         }
 
         function showSignupPage() {
             landingPageContainer.classList.add('hidden');
             signupPageContainer.classList.add('active');
             document.documentElement.classList.add('signup-page');
+            closeLegalPage();
             // Start signup animations fresh
             startSignupAnimations();
         }
@@ -1287,7 +1316,6 @@
             }
         });
 
-        // Back button
         document.getElementById('signup-back-btn').addEventListener('click', () => {
             window.history.pushState({ page: 'home' }, 'CauniX', '/');
             showLandingPage();
@@ -1295,8 +1323,14 @@
 
         // Handle browser back/forward
         window.addEventListener('popstate', (event) => {
-            if (event.state && event.state.page === 'signup') {
-                showSignupPage();
+            if (event.state) {
+                if (event.state.page === 'signup') {
+                    showSignupPage();
+                } else if (event.state.page === 'legal') {
+                    openLegalPage(event.state.tab || 'terms');
+                } else {
+                    showLandingPage();
+                }
             } else {
                 showLandingPage();
             }
@@ -1379,7 +1413,7 @@
             const particles = Array.from({length: 800}, () => new Particle(true));
 
             function resetAllScenes() {
-                scenes.forEach((scene, idx) => {
+                scenes.forEach((scene) => {
                     scene.classList.remove('active', 'exit');
                 });
                 if (scenes[0]) {
@@ -1400,7 +1434,7 @@
 
             function restartLoop() {
                 if (finaleTimeline) { finaleTimeline.kill(); finaleTimeline = null; }
-                gsap.killTweensOf("*"); // safety
+                gsap.killTweensOf("*");
                 gsap.set(finale, { display: "none", opacity: 1, clearProps: "all" });
                 gsap.set(visual, { display: "block", opacity: 1, clearProps: "transform" });
                 resetFinaleElements();
@@ -1408,7 +1442,6 @@
                 showTextScenes = true;
                 frame = 0;
                 currentScene = 0;
-                // No need to cancel if we're inside the loop; just continue
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
                 animate();
             }
@@ -1468,7 +1501,6 @@
 
             animate();
 
-            // Provide cleanup for page switches
             landingHeroCleanup = () => {
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
                 if (finaleTimeline) finaleTimeline.kill();
@@ -1476,7 +1508,7 @@
             };
         })();
 
-        // Main background canvas (global, always runs)
+        // Main background canvas
         (function() {
             const canvas = document.getElementById('mainCanvas');
             if (!canvas) return;
@@ -1585,7 +1617,6 @@
         appleBtn.addEventListener('click', () => alert('Apple Sign-Up - Integration with Apple ID coming soon'));
 
         function startSignupAnimations() {
-            // Clean up previous signup animations before starting new ones
             if (signupHeroCleanup) { signupHeroCleanup(); signupHeroCleanup = null; }
             if (signupRibbonCleanup) { signupRibbonCleanup(); signupRibbonCleanup = null; }
             initSignupRibbonCanvas();
@@ -1732,7 +1763,7 @@
             const particles = Array.from({length: 800}, () => new Particle(true));
 
             function resetAllScenes() {
-                scenes.forEach((scene, idx) => {
+                scenes.forEach((scene) => {
                     scene.classList.remove('active', 'exit');
                 });
                 if (scenes[0]) scenes[0].classList.add('active');
@@ -1824,6 +1855,17 @@
                 gsap.killTweensOf("*");
             };
         }
+
+        // Legal page tab switching
+        document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderLegalTab(tab);
+                window.history.replaceState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, `/legal/${tab}`);
+            });
+        });
     </script>
 </body>
 </html>
