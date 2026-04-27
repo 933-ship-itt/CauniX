@@ -591,7 +591,7 @@
                     <div class="info-card p-6 md:p-8">
                         <div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Contact & Support</h3></div>
                         <p class="text-slate-600">Our team is ready to assist you with any questions about accounts, safety, or general feedback.</p>
-                        <div class="mt-5 space-y-3"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700 font-medium">support@caunix.app</span></div><div class="flex items-center gap-3"><i data-lucide="message-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Live chat: Mon-Fri 9am-6pm UTC</span></div><div class="flex items-center gap-3"><i data-lucide="twitter" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">@CauniX_help</span></div><div class="flex items-center gap-3"><i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Abuse reports: legal@caunix.app</span></div></div>
+                        <div class="mt-5 space-y-3"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700 font-medium">support@caunix.app</span></div><div class="flex items-center gap-3"><i data-lucide="message-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Live chat: Mon-Fri 9am-6pm UTC</span></div><div class="flex items-center gap-3"><i data-lucide="link" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">@CauniX_help</span></div><div class="flex items-center gap-3"><i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Abuse reports: legal@caunix.app</span></div></div>
                         <button class="mt-6 text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition" onclick="alert('Mock contact form — real system coming soon.')">Send message ↗</button>
                     </div>
                 </div>
@@ -618,7 +618,11 @@
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li><li><a href="#" class="hover:text-blue-700 transition">Identity</a></li><li><a href="#" class="hover:text-blue-700 transition">Presence</a></li><li><a href="#" class="hover:text-blue-700 transition">Safety</a></li></ul></div>
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li><li><a href="#" class="hover:text-blue-700 transition">Community</a></li><li><a href="#" class="hover:text-blue-700 transition">Contact</a></li></ul></div>
                     <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Terms of Service</a></li><li><a href="#" class="hover:text-blue-700 transition">Privacy Policy</a></li><li><a href="#" class="hover:text-blue-700 transition">Acceptable Use</a></li></ul></div>
-                    <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="github" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
+                    <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500">
+                        <li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="link" class="w-5 h-5"></i></a></li>
+                        <li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="code" class="w-5 h-5"></i></a></li>
+                        <li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li>
+                    </ul></div>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500"><p>&copy; 2026 CauniX. All rights reserved. Over‑the‑top communication, free from carriers.</p><p class="mt-2 md:mt-0">Lightweight · Encrypted · Free</p></div>
@@ -654,10 +658,11 @@
                 frame = 0,
                 loopActive = true;
             let finaleTimeline = null;
-            let finaleRunning = false;   // prevents multiple finale triggers
+            let finaleRunning = false;
+            let idlePulse = null;   // reference to the pulsing animation after finale
 
             const SPEED = 16;
-            const SCENE_DURATION = 160;  // about 2.6 seconds at 60fps (with single increment)
+            const SCENE_DURATION = 160;
 
             function resize() {
                 const container = canvas.parentElement;
@@ -710,7 +715,7 @@
                 scenes.forEach(scene => {
                     scene.classList.remove('active', 'exit');
                     scene.style.transition = 'none';
-                    scene.offsetHeight;   // force reflow
+                    scene.offsetHeight;
                     scene.style.transition = '';
                 });
                 currentScene = 0;
@@ -727,7 +732,11 @@
             }
 
             function restartLoop() {
-                // Kill all running GSAP tweens related to the finale
+                // kill any idle pulse animation that might be running
+                if (idlePulse) {
+                    idlePulse.kill();
+                    idlePulse = null;
+                }
                 gsap.killTweensOf("*");
                 if (finaleTimeline) {
                     finaleTimeline.kill();
@@ -737,14 +746,10 @@
                 const finale = document.getElementById('finaleStage');
                 const visual = document.getElementById('visualMainContent');
 
-                // Hide finale layer
                 gsap.set(finale, { opacity: 1, scale: 1, display: "none" });
-
-                // Show hero visual again
                 visual.style.display = "block";
                 gsap.fromTo(visual, { opacity: 0 }, { opacity: 1, duration: 0.8 });
 
-                // Reset all states
                 resetFinaleElements();
                 resetAllScenes();
                 finaleRunning = false;
@@ -752,12 +757,11 @@
                 frame = 0;
                 currentScene = 0;
 
-                // Resume the canvas animation loop
                 requestAnimationFrame(animate);
             }
 
             function runFinale() {
-                loopActive = false;   // stop advancing scenes & canvas draw (will be restarted later)
+                loopActive = false;
                 gsap.to("#visualMainContent", {
                     opacity: 0,
                     duration: 1,
@@ -774,12 +778,27 @@
                     finaleTimeline.kill();
                     finaleTimeline = null;
                 }
+                // kill any leftover idle pulse just in case
+                if (idlePulse) {
+                    idlePulse.kill();
+                    idlePulse = null;
+                }
                 resetFinaleElements();
 
+                // Main timeline that ends once the logo appears
                 const tl = gsap.timeline({
                     defaults: { ease: "expo.inOut" },
                     onComplete: () => {
-                        // After finale, wait a bit then restart the whole loop
+                        // After the intro animation, start a gentle pulse on the logo (separate, non-blocking)
+                        idlePulse = gsap.to("#logoFinal", {
+                            scale: 0.95,
+                            duration: 3,
+                            repeat: -1,
+                            yoyo: true,
+                            ease: "sine.inOut"
+                        });
+
+                        // Wait 2.5 seconds then fade out and restart the whole loop
                         gsap.to("#finaleStage", {
                             opacity: 0,
                             duration: 0.8,
@@ -798,15 +817,14 @@
                 tl.to({}, { duration: 1 });
                 tl.to("#introFrame", { scale: 30, x: "32.5%", opacity: 0, duration: 2 });
                 tl.to("#logoFinal", { opacity: 1, scale: 1, duration: 1.5 }, "-=1.6");
-                tl.to("#logoFinal", { scale: 0.95, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
+                // timeline ends here – no infinite repeat tween inside it
 
                 finaleTimeline = tl;
             }
 
             function animate() {
-                // Only run the scene logic if the loop is active and no finale is in progress
                 if (loopActive) {
-                    frame++;   // single increment, correct timing
+                    frame++;
                     if (frame >= SCENE_DURATION) {
                         frame = 0;
                         if (currentScene === scenes.length - 1) {
@@ -814,11 +832,9 @@
                                 finaleRunning = true;
                                 runFinale();
                             }
-                            // After launching finale, stop drawing this frame (the canvas will be hidden soon)
                             requestAnimationFrame(animate);
                             return;
                         }
-                        // Advance to next scene
                         scenes[currentScene].classList.remove('active');
                         scenes[currentScene].classList.add('exit');
                         let prev = currentScene;
@@ -827,12 +843,10 @@
                         scenes[currentScene].classList.add('active');
                     }
 
-                    // Draw particle background only when loopActive (i.e., before finale)
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                     ctx.fillRect(0, 0, width, height);
                     particles.forEach(p => { p.update(); p.draw(); });
                 }
-
                 requestAnimationFrame(animate);
             }
             animate();
