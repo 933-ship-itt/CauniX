@@ -261,6 +261,7 @@
             width: 100%;
             height: 100%;
             z-index: 10;
+            display: block;
         }
 
         .hero-canvas-layer {
@@ -641,130 +642,277 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('animated'); }); }, { threshold: 0.1 });
         animatedElements.forEach(el => observer.observe(el));
 
-        // === LOOPING HERO GRAPHIC WITH FINALE (exact sequence) ===
+        // === LOOPING HERO GRAPHIC WITH FINALE (FIXED) ===
         (function initHeroGraphic() {
-    const canvas = document.getElementById('heroCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const scenes = document.querySelectorAll('.scene-content');
-    let width, height, currentScene = 0,
-        frame = 0,
-        loopActive = true;
-    let finaleTimeline = null;
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const scenes = document.querySelectorAll('.scene-content');
+            const finale = document.getElementById('finaleStage');
+            const visual = document.getElementById('visualMainContent');
+            
+            let width, height, currentScene = 0, frame = 0, loopActive = true;
+            let finaleTimeline = null;
+            let animationFrameId = null;
 
-    const SPEED = 16;
-    const SCENE_DURATION = 160;
+            const SPEED = 16;
+            const SCENE_DURATION = 160;
 
-    function resize() {
-        const container = canvas.parentElement;
-        if (!container) return;
-        const rect = container.getBoundingClientRect();
-        width = canvas.width = rect.width;
-        height = canvas.height = rect.height;
-    }
-    window.addEventListener('resize', resize);
-    resize();
+            function resize() {
+                const container = canvas.parentElement;
+                if (!container) return;
+                const rect = container.getBoundingClientRect();
+                width = canvas.width = rect.width;
+                height = canvas.height = rect.height;
+            }
+            window.addEventListener('resize', resize);
+            resize();
 
-    class Particle {
-        constructor(preWarm = false) { this.reset(preWarm); }
-        reset(preWarm = false) {
-            this.x = (Math.random() - 0.5) * 4500;
-            this.y = (Math.random() - 0.5) * 4500;
-            this.z = preWarm ? Math.random() * 2000 : 2000;
-            this.pz = this.z;
-            this.size = Math.random() * 1.2 + 1.2;
-        }
-        update() {
-            this.pz = this.z;
-            this.z -= SPEED;
-            if (this.z < 1) this.reset();
-        }
-        draw() {
-            const s = 800 / this.z;
-            const ps = 800 / this.pz;
-            const x = this.x * s + width / 2;
-            const y = this.y * s + height / 2;
-            const px = this.x * ps + width / 2;
-            const py = this.y * ps + height / 2;
-            ctx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = this.size * s;
-            ctx.lineCap = 'round';
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(px, py);
-            ctx.stroke();
-        }
-    }
+            class Particle {
+                constructor(preWarm = false) { this.reset(preWarm); }
+                reset(preWarm = false) {
+                    this.x = (Math.random() - 0.5) * 4500;
+                    this.y = (Math.random() - 0.5) * 4500;
+                    this.z = preWarm ? Math.random() * 2000 : 2000;
+                    this.pz = this.z;
+                    this.size = Math.random() * 1.2 + 1.2;
+                }
+                update() {
+                    this.pz = this.z;
+                    this.z -= SPEED;
+                    if (this.z < 1) this.reset();
+                }
+                draw() {
+                    const s = 800 / this.z;
+                    const ps = 800 / this.pz;
+                    const x = this.x * s + width / 2;
+                    const y = this.y * s + height / 2;
+                    const px = this.x * ps + width / 2;
+                    const py = this.y * ps + height / 2;
+                    ctx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = this.size * s;
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(px, py);
+                    ctx.stroke();
+                }
+            }
 
-    const particles = Array.from({ length: 800 }, () => new Particle(true));
+            const particles = Array.from({ length: 800 }, () => new Particle(true));
 
-    function resetFinaleElements() {
-        // Clear all GSAP-applied inline styles to prevent "stuck" states
-        gsap.set(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal", "#finaleStage"], { 
-            clearProps: "all" 
-        });
+            function resetFinaleElements() {
+                // Kill all tweens related to finale elements
+                gsap.killTweensOf(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal"]);
+                
+                // Completely clear all inline styles
+                gsap.set(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal"], { 
+                    clearProps: "all" 
+                });
 
-        // Re-initialize the starting positions for the next loop
-        gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
-        gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-        gsap.set("#urlLayer", { opacity: 0, y: 0 });
-        gsap.set(".guide-line", { opacity: 0 });
-        gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1, width: "auto" });
-        gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
-    }
+                // Reset to starting positions
+                gsap.set("#strokeLayer", { strokeDashoffset: 1200 });
+                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+                gsap.set("#urlLayer", { opacity: 0 });
+                gsap.set(".guide-line", { opacity: 0 });
+                gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1 });
+                gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
+            }
 
-    function restartLoop() {
-        // 1. Kill any existing tweens to prevent background conflicts
-        gsap.killTweensOf("*");
-        if (finaleTimeline) {
-            finaleTimeline.kill();
-            finaleTimeline = null;
-        }
+            function restartLoop() {
+                // Kill all active tweens
+                gsap.killTweensOf("*");
+                if (finaleTimeline) {
+                    finaleTimeline.kill();
+                    finaleTimeline = null;
+                }
 
-        const finale = document.getElementById('finaleStage');
-        const visual = document.getElementById('visualMainContent');
+                // Reset container visibility
+                finale.style.display = "none";
+                finale.style.opacity = "1";
+                visual.style.display = "block";
+                visual.style.opacity = "1";
 
-        // 2. Toggle container visibility
-        finale.style.display = "none";
-        finale.style.opacity = "1"; // Reset for the next fade-in
-        visual.style.display = "block";
-        gsap.set(visual, { opacity: 1 });
+                // Reset scene classes
+                scenes.forEach(scene => {
+                    scene.classList.remove('active', 'exit');
+                });
+                
+                // Reset state variables
+                currentScene = 0;
+                frame = 0;
+                loopActive = true;
 
-        // 3. Reset text scene classes
-        scenes.forEach(scene => {
-            scene.classList.remove('active', 'exit');
-        });
-        
-        // 4. Reset core logic variables
-        currentScene = 0;
-        frame = 0;
-        loopActive = true;
+                // Reset finale elements
+                resetFinaleElements();
 
-        // 5. Run the property reset and start the first scene
-        resetFinaleElements();
-        scenes[0].classList.add('active');
-    }
+                // Activate first scene
+                scenes[0].classList.add('active');
+            }
 
-        // === MAIN BACKGROUND CANVAS (preserved) ===
+            function startFinaleSequence() {
+                loopActive = false;
+                
+                // Hide visual content, show finale stage
+                visual.style.display = "none";
+                finale.style.display = "flex";
+
+                // Reset finale elements before starting timeline
+                resetFinaleElements();
+
+                // Build GSAP timeline for finale
+                finaleTimeline = gsap.timeline({
+                    onComplete: () => {
+                        // Finale complete - restart the loop
+                        restartLoop();
+                    }
+                });
+
+                // Stroke animation (0-0.8s)
+                finaleTimeline.to("#strokeLayer", { 
+                    strokeDashoffset: 0, 
+                    duration: 0.8, 
+                    ease: "power1.inOut" 
+                }, 0);
+
+                // Fill animation overlaps (0.3-1.2s)
+                finaleTimeline.to("#fillLayer", { 
+                    clipPath: "inset(0% 0% 0% 0%)", 
+                    duration: 0.9, 
+                    ease: "power1.inOut" 
+                }, 0.3);
+
+                // Guide lines appear (0-0.5s)
+                finaleTimeline.to(".guide-line", { 
+                    opacity: 1, 
+                    duration: 0.5 
+                }, 0);
+
+                // URL text appears (0.9-1.4s)
+                finaleTimeline.to("#urlLayer", { 
+                    opacity: 1, 
+                    duration: 0.5 
+                }, 0.9);
+
+                // Intro frame scales out (1.2-2.0s)
+                finaleTimeline.to("#introFrame", { 
+                    scale: 0.5, 
+                    opacity: 0, 
+                    duration: 0.8, 
+                    ease: "back.in" 
+                }, 1.2);
+
+                // Logo fades in and scales (1.5-2.5s)
+                finaleTimeline.to("#logoFinal", { 
+                    opacity: 1, 
+                    scale: 1, 
+                    duration: 1, 
+                    ease: "elastic.out(1, 0.5)" 
+                }, 1.5);
+
+                // Logo holds for 1 second (2.5-3.5s)
+                finaleTimeline.to("#logoFinal", { 
+                    opacity: 1, 
+                    duration: 1 
+                }, 2.5);
+
+                // Logo fades out (3.5-4.0s), then onComplete triggers
+                finaleTimeline.to("#logoFinal", { 
+                    opacity: 0, 
+                    duration: 0.5 
+                }, 3.5);
+            }
+
+            function animate() {
+                if (!ctx) return;
+
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                if (loopActive) {
+                    // Update scene rotation
+                    frame++;
+
+                    if (frame > SCENE_DURATION) {
+                        // Transition to next scene
+                        scenes[currentScene].classList.remove('active');
+                        scenes[currentScene].classList.add('exit');
+
+                        currentScene++;
+                        frame = 0;
+
+                        if (currentScene >= scenes.length) {
+                            // All scenes done - start finale
+                            startFinaleSequence();
+                        } else {
+                            // Activate next scene
+                            scenes[currentScene].classList.remove('exit');
+                            scenes[currentScene].classList.add('active');
+                        }
+                    }
+                }
+
+                animationFrameId = requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', () => {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                gsap.killTweensOf("*");
+            });
+        })();
+
+        // === MAIN BACKGROUND CANVAS (unchanged) ===
         (function() {
             const canvas = document.getElementById('mainCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let width, height, tick = 0,
-                stars = [],
-                bokeh = [];
+            let width, height, tick = 0, stars = [], bokeh = [];
 
-            function resize() { width = canvas.width = window.innerWidth;
+            function resize() { 
+                width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
-                bokeh.length = 0; for (let i = 0; i < 12; i++) bokeh.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 100 + 50, s: Math.random() * 0.1 + 0.05 }); }
+                bokeh.length = 0; 
+                for (let i = 0; i < 12; i++) {
+                    bokeh.push({ 
+                        x: Math.random() * width, 
+                        y: Math.random() * height, 
+                        r: Math.random() * 100 + 50, 
+                        s: Math.random() * 0.1 + 0.05 
+                    }); 
+                }
+            }
 
-            function createStar(isInitial = false) { let x, y, z = Math.random(); if (isInitial) { x = Math.random() * width;
-                    y = Math.random() * height; } else { if (Math.random() > 0.5) { x = -150;
-                        y = Math.random() * height - 200; } else { x = Math.random() * width - 200;
-                        y = -150; } }
-                stars.push({ x, y, z, len: (Math.random() * 15 + 10) * (0.5 + z), width: (Math.random() * 1.5 + 1) * (0.5 + z), speed: (2 + Math.random()) * (0.5 + z * 1.5) });
-                stars.sort((a, b) => a.z - b.z); }
+            function createStar(isInitial = false) { 
+                let x, y, z = Math.random(); 
+                if (isInitial) { 
+                    x = Math.random() * width;
+                    y = Math.random() * height; 
+                } else { 
+                    if (Math.random() > 0.5) { 
+                        x = -150;
+                        y = Math.random() * height - 200; 
+                    } else { 
+                        x = Math.random() * width - 200;
+                        y = -150; 
+                    } 
+                }
+                stars.push({ 
+                    x, y, z, 
+                    len: (Math.random() * 15 + 10) * (0.5 + z), 
+                    width: (Math.random() * 1.5 + 1) * (0.5 + z), 
+                    speed: (2 + Math.random()) * (0.5 + z * 1.5) 
+                });
+                stars.sort((a, b) => a.z - b.z); 
+            }
+
             window.addEventListener('resize', resize);
             resize();
             for (let i = 0; i < 60; i++) createStar(true);
@@ -772,6 +920,7 @@
             function drawBg() {
                 if (!ctx) return;
                 ctx.clearRect(0, 0, width, height);
+                
                 bokeh.forEach(p => {
                     ctx.beginPath();
                     let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
@@ -783,24 +932,31 @@
                     p.y -= p.s;
                     if (p.y + p.r < 0) p.y = height + p.r;
                 });
+
                 const ribbonGrad = ctx.createLinearGradient(0, 0, width, 0);
                 ribbonGrad.addColorStop(0, '#00d2ff');
                 ribbonGrad.addColorStop(0.5, '#3a7bd5');
                 ribbonGrad.addColorStop(1, '#8e44ad');
                 ctx.fillStyle = ribbonGrad;
                 ctx.beginPath();
-                for (let x = 0; x <= width; x += 4) { const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20; if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y); }
-                for (let x = width; x >= 0; x -= 4) { const thick = 90 + Math.sin(tick + x * 0.003) * 15; const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
-                    ctx.lineTo(x, y); }
+                for (let x = 0; x <= width; x += 4) { 
+                    const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20; 
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y); 
+                }
+                for (let x = width; x >= 0; x -= 4) { 
+                    const thick = 90 + Math.sin(tick + x * 0.003) * 15; 
+                    const y = (height * 0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
+                    ctx.lineTo(x, y); 
+                }
                 ctx.closePath();
                 ctx.fill();
+
                 for (let i = stars.length - 1; i >= 0; i--) {
                     const s = stars[i];
                     s.x += s.speed;
                     s.y += s.speed;
-                    const alphaHead = 0.2 + (s.z * 0.7),
-                        alphaTail = 0.1 + (s.z * 0.4);
+                    const alphaHead = 0.2 + (s.z * 0.7), alphaTail = 0.1 + (s.z * 0.4);
                     const grad = ctx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
                     grad.addColorStop(0, 'rgba(142, 68, 173, 0)');
                     grad.addColorStop(0.5, `rgba(58, 123, 213, ${alphaTail})`);
@@ -811,8 +967,10 @@
                     ctx.moveTo(s.x, s.y);
                     ctx.lineTo(s.x - s.len, s.y - s.len);
                     ctx.stroke();
-                    if (s.x > width + 100 || s.y > height + 100) { stars.splice(i, 1);
-                        createStar(); }
+                    if (s.x > width + 100 || s.y > height + 100) { 
+                        stars.splice(i, 1);
+                        createStar(); 
+                    }
                 }
                 tick += 0.015;
                 requestAnimationFrame(drawBg);
