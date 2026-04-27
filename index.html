@@ -33,10 +33,6 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
 
     <style>
         :root {
@@ -156,14 +152,9 @@
             cursor: pointer;
         }
 
-        .btn-google:hover:not(:disabled) {
+        .btn-google:hover {
             background: linear-gradient(135deg, #1a2a6c, #2343b8);
             box-shadow: 0 6px 20px rgba(27, 40, 180, 0.45);
-        }
-
-        .btn-google:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
         }
 
         .animate-on-scroll {
@@ -650,9 +641,6 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             cursor: pointer;
-            font-weight: 600;
-            padding: 0.875rem 1rem;
-            border-radius: 0.75rem;
         }
 
         .signup-auth-btn:not(:disabled):hover {
@@ -665,24 +653,6 @@
             opacity: 0.5;
             cursor: not-allowed;
             filter: grayscale(1);
-        }
-
-        .signup-auth-btn.loading {
-            pointer-events: none;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-top-color: #000;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
 
         .signup-intro-frame { 
@@ -740,42 +710,11 @@
             transform: scale(0.8); 
         }
 
-        .signup-checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            cursor: pointer;
-            margin-bottom: 1rem;
-        }
-
         .signup-checkbox-container input {
             cursor: pointer;
             width: 1.1rem;
             height: 1.1rem;
-            min-width: 1.1rem;
             accent-color: #3b82f6;
-            margin-top: 0.1rem;
-        }
-
-        .signup-checkbox-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #475569;
-            line-height: 1.4;
-        }
-
-        .signup-checkbox-label a {
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.2s ease;
-        }
-
-        .signup-checkbox-label a:hover {
-            color: #2563eb;
-            text-decoration: underline;
         }
 
         .signup-back-button {
@@ -797,160 +736,6 @@
 
         .signup-back-button:hover {
             color: #1e293b;
-        }
-
-        /* ===== AUTH STATUS MESSAGE ===== */
-        .auth-message {
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .auth-message.show {
-            display: block;
-        }
-
-        .auth-message.error {
-            background-color: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-
-        .auth-message.success {
-            background-color: #dcfce7;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-        }
-
-        .auth-message.info {
-            background-color: #dbeafe;
-            color: #0284c7;
-            border: 1px solid #bfdbfe;
-        }
-
-        /* ===== DASHBOARD/MOCK LANDING PAGE ===== */
-        .dashboard-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2000;
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            overflow-y: auto;
-        }
-
-        .dashboard-container.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .dashboard-header {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .dashboard-user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .dashboard-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3b6ef5, #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .dashboard-user-details h3 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .dashboard-user-details p {
-            margin: 0.25rem 0 0;
-            font-size: 0.875rem;
-            color: #64748b;
-        }
-
-        .dashboard-logout-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .dashboard-logout-btn:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        .dashboard-content {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .dashboard-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            margin-bottom: 1.5rem;
-        }
-
-        .dashboard-card h2 {
-            margin: 0 0 1rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .dashboard-card p {
-            margin: 0.5rem 0;
-            color: #475569;
-            line-height: 1.6;
-        }
-
-        .dashboard-cta-btn {
-            background: linear-gradient(135deg, #3b6ef5, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-
-        .dashboard-cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(59, 110, 245, 0.3);
         }
 
         /* ===== LEGAL FULL‑SCREEN PAGE STYLES ===== */
@@ -1087,12 +872,6 @@
             .legal-page-header {
                 gap: 1rem;
                 padding: 1rem;
-            }
-
-            .dashboard-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
             }
         }
     </style>
@@ -1305,16 +1084,14 @@
                             </h1>
                             <p class="text-slate-500 text-base mb-8 max-w-xs">Experience the no-SIM global communication protocol. Encrypted. Borderless. Create your unique internet voice identity today.</p>
 
-                            <div id="auth-message" class="auth-message"></div>
-
-                            <div class="flex flex-col gap-4 mb-8">
-                                <label class="signup-checkbox-container">
-                                    <input type="checkbox" id="signup-tosCheck" aria-label="I agree to the Terms of Service">
-                                    <span class="signup-checkbox-label">I agree to the <a href="javascript:navigateTo('/legal/terms')">Terms of Service</a></span>
+                            <div class="flex flex-col gap-3 mb-8">
+                                <label class="signup-checkbox-container flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="signup-tosCheck" class="rounded" aria-label="I agree to the Terms of Service">
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">I agree to the Terms of Service</span>
                                 </label>
-                                <label class="signup-checkbox-container">
-                                    <input type="checkbox" id="signup-privacyCheck" aria-label="I accept the Privacy Policy">
-                                    <span class="signup-checkbox-label">I accept the <a href="javascript:navigateTo('/legal/privacy')">Privacy Policy</a></span>
+                                <label class="signup-checkbox-container flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="signup-privacyCheck" class="rounded" aria-label="I accept the Privacy Policy">
+                                    <span class="text-xs font-bold text-slate-500 group-hover:text-slate-800 transition-colors uppercase tracking-wider">I accept the Privacy Policy</span>
                                 </label>
                             </div>
 
@@ -1368,68 +1145,6 @@
         </div>
     </div>
 
-    <!-- ===== DASHBOARD/MOCK LANDING PAGE ===== -->
-    <div id="dashboardContainer" class="dashboard-container">
-        <header class="dashboard-header">
-            <div class="flex items-center justify-between w-full">
-                <div class="dashboard-user-info">
-                    <div class="dashboard-avatar" id="userAvatar">U</div>
-                    <div class="dashboard-user-details">
-                        <h3 id="userName">Loading...</h3>
-                        <p id="userEmail">user@example.com</p>
-                    </div>
-                </div>
-                <button id="logout-btn" class="dashboard-logout-btn">Logout</button>
-            </div>
-        </header>
-
-        <div class="dashboard-content">
-            <div class="dashboard-card">
-                <h2>Welcome to CauniX, <span id="welcomeName">User</span>!</h2>
-                <p>You've successfully created your CauniX account. Your unique internet voice identity is now active and ready to use.</p>
-                <p><strong>Your CauniX ID:</strong> <code id="caunixId" style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: 'JetBrains Mono';">caunix_user</code></p>
-                <button class="dashboard-cta-btn" onclick="alert('Voice calling interface coming soon!')">Start Making Calls</button>
-            </div>
-
-            <div class="dashboard-card">
-                <h2>Your Account Overview</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div style="background: #f1f5f9; padding: 1rem; border-radius: 0.75rem; text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 700; color: #3b6ef5;">0</div>
-                        <p style="margin: 0.5rem 0 0; font-size: 0.875rem; color: #64748b;">Total Calls</p>
-                    </div>
-                    <div style="background: #f1f5f9; padding: 1rem; border-radius: 0.75rem; text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 700; color: #3b6ef5;">0</div>
-                        <p style="margin: 0.5rem 0 0; font-size: 0.875rem; color: #64748b;">Call Duration</p>
-                    </div>
-                    <div style="background: #f1f5f9; padding: 1rem; border-radius: 0.75rem; text-align: center;">
-                        <div style="font-size: 2rem; font-weight: 700; color: #3b6ef5;">0</div>
-                        <p style="margin: 0.5rem 0 0; font-size: 0.875rem; color: #64748b;">Contacts</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="dashboard-card">
-                <h2>Getting Started</h2>
-                <p>Here are some next steps to get the most out of CauniX:</p>
-                <ul style="margin-top: 1rem; padding-left: 1.5rem;">
-                    <li style="margin-bottom: 0.75rem;">Add contacts to your CauniX network</li>
-                    <li style="margin-bottom: 0.75rem;">Enable push notifications for incoming calls</li>
-                    <li style="margin-bottom: 0.75rem;">Customize your privacy and safety settings</li>
-                    <li>Read our <a href="javascript:navigateTo('/legal/privacy')" style="color: #3b82f6; text-decoration: none;">Privacy Policy</a> and <a href="javascript:navigateTo('/legal/terms')" style="color: #3b82f6; text-decoration: none;">Terms of Service</a></li>
-                </ul>
-            </div>
-
-            <div class="dashboard-card">
-                <h2>Support & Feedback</h2>
-                <p>Have questions or need help? Our support team is here for you.</p>
-                <p style="margin-top: 1rem;"><strong>Email:</strong> support@caunix.app</p>
-                <p><strong>Hours:</strong> Mon-Fri 9am-6pm UTC</p>
-                <button class="dashboard-cta-btn" onclick="alert('Contact form coming soon!')">Contact Support</button>
-            </div>
-        </div>
-    </div>
-
     <!-- ===== LEGAL FULL‑SCREEN PAGE ===== -->
     <div id="legalPageContainer">
         <header class="legal-page-header">
@@ -1448,179 +1163,7 @@
     </div>
 
     <script>
-        // ===== FIREBASE INITIALIZATION =====
-        const firebaseConfig = {
-            apiKey: window.FIREBASE_API_KEY || process.env.REACT_APP_FIREBASE_API_KEY,
-            authDomain: window.FIREBASE_AUTH_DOMAIN || process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-            projectId: window.FIREBASE_PROJECT_ID || process.env.REACT_APP_FIREBASE_PROJECT_ID,
-            storageBucket: window.FIREBASE_STORAGE_BUCKET || process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: window.FIREBASE_MESSAGING_SENDER_ID || process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-            appId: window.FIREBASE_APP_ID || process.env.REACT_APP_FIREBASE_APP_ID,
-        };
-
-        let firebaseInitialized = false;
-        let auth = null;
-        let db = null;
-
-        function initFirebase() {
-            if (firebaseInitialized) return;
-            try {
-                firebase.initializeApp(firebaseConfig);
-                auth = firebase.auth();
-                db = firebase.database();
-                firebaseInitialized = true;
-                console.log('Firebase initialized successfully');
-            } catch (error) {
-                console.error('Firebase initialization error:', error);
-                showAuthMessage('Firebase configuration error. Please check environment variables.', 'error');
-            }
-        }
-
-        // Initialize on load
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initFirebase);
-        } else {
-            initFirebase();
-        }
-
-        // ===== AUTH MESSAGE HELPER =====
-        function showAuthMessage(message, type = 'info') {
-            const messageEl = document.getElementById('auth-message');
-            messageEl.textContent = message;
-            messageEl.className = `auth-message show ${type}`;
-            setTimeout(() => messageEl.classList.remove('show'), 5000);
-        }
-
-        // ===== GOOGLE AUTH HANDLER =====
-        async function handleGoogleSignUp() {
-            if (!auth) {
-                showAuthMessage('Firebase not initialized. Please refresh the page.', 'error');
-                return;
-            }
-
-            const googleBtn = document.getElementById('signup-googleBtn');
-            googleBtn.disabled = true;
-            const originalText = googleBtn.innerHTML;
-            googleBtn.innerHTML = '<div class="loading-spinner"></div><span>Signing in...</span>';
-            googleBtn.classList.add('loading');
-
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'consent' });
-                const result = await auth.signInWithPopup(provider);
-                await saveUserToDatabase(result.user);
-                showAuthMessage('Sign up successful! Redirecting...', 'success');
-                setTimeout(() => redirectToDashboard(result.user), 1500);
-            } catch (error) {
-                console.error('Google sign-up error:', error);
-                showAuthMessage(`Error: ${error.message}`, 'error');
-                googleBtn.disabled = false;
-                googleBtn.innerHTML = originalText;
-                googleBtn.classList.remove('loading');
-            }
-        }
-
-        // ===== APPLE AUTH HANDLER =====
-        async function handleAppleSignUp() {
-            if (!auth) {
-                showAuthMessage('Firebase not initialized. Please refresh the page.', 'error');
-                return;
-            }
-
-            const appleBtn = document.getElementById('signup-appleBtn');
-            appleBtn.disabled = true;
-            const originalText = appleBtn.innerHTML;
-            appleBtn.innerHTML = '<div class="loading-spinner"></div><span>Signing in...</span>';
-            appleBtn.classList.add('loading');
-
-            try {
-                const provider = new firebase.auth.OAuthProvider('apple.com');
-                provider.addScope('email');
-                provider.addScope('name');
-                const result = await auth.signInWithPopup(provider);
-                await saveUserToDatabase(result.user);
-                showAuthMessage('Sign up successful! Redirecting...', 'success');
-                setTimeout(() => redirectToDashboard(result.user), 1500);
-            } catch (error) {
-                console.error('Apple sign-up error:', error);
-                showAuthMessage(`Error: ${error.message}`, 'error');
-                appleBtn.disabled = false;
-                appleBtn.innerHTML = originalText;
-                appleBtn.classList.remove('loading');
-            }
-        }
-
-        // ===== SAVE USER TO DATABASE =====
-        async function saveUserToDatabase(user) {
-            if (!db) return;
-            const caunixId = `user_${user.uid.substring(0, 12)}`;
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName || 'CauniX User',
-                photoURL: user.photoURL || '',
-                caunixId: caunixId,
-                createdAt: new Date().toISOString(),
-                provider: user.providerData[0]?.providerId || 'unknown',
-            };
-            await db.ref(`users/${user.uid}`).set(userData);
-            localStorage.setItem('caunixUser', JSON.stringify(userData));
-        }
-
-        // ===== REDIRECT TO DASHBOARD =====
-        function redirectToDashboard(user) {
-            showLandingPage = false;
-            showDashboard(user);
-            window.history.pushState({ page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-        }
-
-        // ===== LOGOUT HANDLER =====
-        async function handleLogout() {
-            if (!auth) return;
-            try {
-                await auth.signOut();
-                localStorage.removeItem('caunixUser');
-                showAuthMessage('Logged out successfully', 'success');
-                closeDashboard();
-                window.history.pushState({ page: 'home' }, 'CauniX', '/');
-                setTimeout(() => location.reload(), 1000);
-            } catch (error) {
-                console.error('Logout error:', error);
-                showAuthMessage(`Error: ${error.message}`, 'error');
-            }
-        }
-
-        // ===== DASHBOARD PAGE FUNCTIONS =====
-        function showDashboard(user) {
-            const dashboard = document.getElementById('dashboardContainer');
-            const avatar = document.getElementById('userAvatar');
-            const userName = document.getElementById('userName');
-            const userEmail = document.getElementById('userEmail');
-            const welcomeName = document.getElementById('welcomeName');
-            const caunixId = document.getElementById('caunixId');
-
-            const displayName = user.displayName || 'User';
-            const initials = displayName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-
-            avatar.textContent = initials;
-            userName.textContent = displayName;
-            userEmail.textContent = user.email;
-            welcomeName.textContent = displayName.split(' ')[0];
-            caunixId.textContent = `user_${user.uid.substring(0, 12)}`;
-
-            dashboard.classList.add('active');
-            landingPageContainer.classList.add('hidden');
-            signupPageContainer.classList.remove('active');
-            document.documentElement.classList.remove('signup-page');
-            closeLegalPage();
-        }
-
-        function closeDashboard() {
-            const dashboard = document.getElementById('dashboardContainer');
-            dashboard.classList.remove('active');
-        }
-
-        // ===== SEO - STRUCTURED DATA =====
+        // SEO - Structured Data
         (function() {
             const script = document.createElement('script');
             script.type = 'application/ld+json';
@@ -1641,7 +1184,7 @@
         // ===== LEGAL CONTENT (split into three tabs) =====
         const LEGAL_CONTENT = {
             terms: [
-                { q: "1. Scope and Legal Framework", a: "This document governs access to and use of the CauniX platform, including all associated applications, features, and services (collectively, the "Service"). By accessing or using the Service, you agree to be bound by this document. If you do not agree, the Service must not be used." },
+                { q: "1. Scope and Legal Framework", a: "This document governs access to and use of the CauniX platform, including all associated applications, features, and services (collectively, the “Service”). By accessing or using the Service, you agree to be bound by this document. If you do not agree, the Service must not be used." },
                 { q: "2. Nature of the Service", a: "CauniX is an internet-based communication platform enabling real-time voice communication and Direct Messages. It operates as an over-the-top (OTT) software layer and is not a telecommunications carrier, network operator, or regulated voice service." },
                 { q: "3. Eligibility and Age", a: "Use is restricted to individuals at least 13 years old (or minimum age by local law) with legal capacity. Minors must have parent/guardian authorization." },
                 { q: "4. Authentication and Identity", a: "Access is via Google or Apple authentication. A unique CauniX ID is generated; no KYC, government ID, legal name, or address is collected. The Service does not verify real-world identity." },
@@ -1653,9 +1196,9 @@
                 { q: "10. Data Retention and Deletion", a: "Data retained only as needed. Upon account deletion, the auth-ID link is severed and active data removed within a reasonable time. Some data may be kept for legal/abuse prevention." },
                 { q: "11. Security", a: "Reasonable safeguards are implemented, but no system is fully secure. Use is at your own risk." },
                 { q: "12. Third-Party Services", a: "We rely on third-party auth and cloud providers that process data per their policies. We do not control those providers." },
-                { q: "13. Service Availability", a: "The Service is 'as-is' and 'as-available'. No guarantees of uptime, reliability, or continuity. It may be modified, suspended, or discontinued without notice." },
+                { q: "13. Service Availability", a: "The Service is ‘as-is’ and ‘as-available’. No guarantees of uptime, reliability, or continuity. It may be modified, suspended, or discontinued without notice." },
                 { q: "14. Limitation of Liability", a: "To the maximum extent permitted by law, we are not liable for indirect, incidental, or consequential damages, data loss, user conduct, or disputes." },
-                { q: "15. Indemnification", a: "You agree to indemnify us from any claims arising from your use of the Service, violation of these terms, or infringement of others' rights." },
+                { q: "15. Indemnification", a: "You agree to indemnify us from any claims arising from your use of the Service, violation of these terms, or infringement of others’ rights." },
                 { q: "16. Global Use and Compliance", a: "The Service is accessible globally. You must ensure your use complies with local laws." },
                 { q: "17. Regional Provisions", a: "EEA users may have additional GDPR rights (access, correction, deletion, restriction). Other regions may have similar local requirements." },
                 { q: "18. Governing Law", a: "Governed by the laws of Kenya, unless mandatory local laws apply." },
@@ -1697,6 +1240,7 @@
         function openLegalPage(tab = 'terms') {
             const legalPage = document.getElementById('legalPageContainer');
             legalPage.classList.add('active');
+            // Highlight active tab button
             document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.tab === tab);
             });
@@ -1710,17 +1254,20 @@
 
         // ===== GLOBAL ROUTING (pushState) =====
         function navigateTo(path) {
+            // Map paths to legal tabs
             if (path.startsWith('/legal/')) {
                 const tab = path.split('/legal/')[1];
                 window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, path);
                 openLegalPage(tab);
                 return;
             }
+            // For signup
             if (path === '/signup') {
                 window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
                 showSignupPage();
                 return;
             }
+            // Default home
             window.history.pushState({ page: 'home' }, 'CauniX', '/');
             showLandingPage();
         }
@@ -1735,9 +1282,9 @@
         function showLandingPage() {
             landingPageContainer.classList.remove('hidden');
             signupPageContainer.classList.remove('active');
-            closeDashboard();
             document.documentElement.classList.remove('signup-page');
             closeLegalPage();
+            // Stop signup animations
             if (signupHeroCleanup) { signupHeroCleanup(); signupHeroCleanup = null; }
             if (signupRibbonCleanup) { signupRibbonCleanup(); signupRibbonCleanup = null; }
         }
@@ -1745,9 +1292,9 @@
         function showSignupPage() {
             landingPageContainer.classList.add('hidden');
             signupPageContainer.classList.add('active');
-            closeDashboard();
             document.documentElement.classList.add('signup-page');
             closeLegalPage();
+            // Start signup animations fresh
             startSignupAnimations();
         }
 
@@ -1774,19 +1321,13 @@
             showLandingPage();
         });
 
-        // Logout button
-        document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
-
-        // Browser back/forward
+        // Handle browser back/forward
         window.addEventListener('popstate', (event) => {
             if (event.state) {
                 if (event.state.page === 'signup') {
                     showSignupPage();
                 } else if (event.state.page === 'legal') {
                     openLegalPage(event.state.tab || 'terms');
-                } else if (event.state.page === 'dashboard') {
-                    const user = JSON.parse(localStorage.getItem('caunixUser') || 'null');
-                    if (user) showDashboard({ displayName: user.displayName, email: user.email, uid: user.uid });
                 } else {
                     showLandingPage();
                 }
@@ -2072,8 +1613,8 @@
         }
         tosCheck.addEventListener('change', updateSignupBtnState);
         privacyCheck.addEventListener('change', updateSignupBtnState);
-        googleBtn.addEventListener('click', handleGoogleSignUp);
-        appleBtn.addEventListener('click', handleAppleSignUp);
+        googleBtn.addEventListener('click', () => alert('Google Sign-Up - Integration with Google OAuth coming soon'));
+        appleBtn.addEventListener('click', () => alert('Apple Sign-Up - Integration with Apple ID coming soon'));
 
         function startSignupAnimations() {
             if (signupHeroCleanup) { signupHeroCleanup(); signupHeroCleanup = null; }
@@ -2191,4 +1732,140 @@
                 constructor(preWarm = false) { this.reset(preWarm); }
                 reset(preWarm = false) {
                     this.x = (Math.random() - 0.5) * 4500;
-                    this.
+                    this.y = (Math.random() - 0.5) * 4500;
+                    this.z = preWarm ? Math.random() * 2000 : 2000;
+                    this.pz = this.z;
+                    this.size = Math.random() * 1.2 + 1.2;
+                }
+                update() {
+                    this.pz = this.z;
+                    this.z -= SPEED;
+                    if (this.z < 1) this.reset();
+                }
+                draw() {
+                    const s = 800 / this.z;
+                    const ps = 800 / this.pz;
+                    const x = this.x * s + hw/2;
+                    const y = this.y * s + hh/2;
+                    const px = this.x * ps + hw/2;
+                    const py = this.y * ps + hh/2;
+                    hCtx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
+                    hCtx.strokeStyle = '#000000';
+                    hCtx.lineWidth = this.size * s;
+                    hCtx.lineCap = 'round';
+                    hCtx.beginPath();
+                    hCtx.moveTo(x, y);
+                    hCtx.lineTo(px, py);
+                    hCtx.stroke();
+                }
+            }
+
+            const particles = Array.from({length: 800}, () => new Particle(true));
+
+            function resetAllScenes() {
+                scenes.forEach((scene) => {
+                    scene.classList.remove('active', 'exit');
+                });
+                if (scenes[0]) scenes[0].classList.add('active');
+            }
+
+            function resetFinaleElements() {
+                gsap.killTweensOf(["#signup-strokeLayer", "#signup-fillLayer", "#signup-urlLayer", ".signup-guide-line", "#signup-introFrame", "#signup-logoFinal"]);
+                gsap.set(["#signup-strokeLayer", "#signup-fillLayer", "#signup-urlLayer", ".signup-guide-line", "#signup-introFrame", "#signup-logoFinal"], { clearProps: "all" });
+                gsap.set("#signup-strokeLayer", { strokeDashoffset: 1200, strokeDasharray: 1200 });
+                gsap.set("#signup-fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
+                gsap.set("#signup-urlLayer", { opacity: 0 });
+                gsap.set(".signup-guide-line", { opacity: 0 });
+                gsap.set("#signup-introFrame", { scale: 1, x: 0, opacity: 1 });
+                gsap.set("#signup-logoFinal", { opacity: 0, scale: 0.8 });
+            }
+
+            function restartLoop() {
+                if (finaleTimeline) { finaleTimeline.kill(); finaleTimeline = null; }
+                gsap.killTweensOf("*");
+                gsap.set(finale, { display: "none", opacity: 1, clearProps: "all" });
+                gsap.set(visual, { display: "flex", opacity: 1, clearProps: "transform" });
+                resetFinaleElements();
+                resetAllScenes();
+                showTextScenes = true;
+                frame = 0;
+                currentScene = 0;
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                animate();
+            }
+
+            function startFinaleTransition() {
+                showTextScenes = false;
+                gsap.to(visual, {
+                    opacity: 0, duration: 0.6, ease: "power2.inOut",
+                    onComplete: () => {
+                        visual.style.display = "none";
+                        finale.style.display = "flex";
+                        gsap.set(finale, { opacity: 1 });
+                        startGSAPFinale();
+                    }
+                });
+            }
+
+            function startGSAPFinale() {
+                resetFinaleElements();
+                finaleTimeline = gsap.timeline({ onComplete: restartLoop });
+                finaleTimeline
+                    .set(".signup-guide-line", { opacity: 1 }, 0)
+                    .to("#signup-strokeLayer", { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, 0.3)
+                    .to("#signup-fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power2.inOut" }, 0.5)
+                    .to("#signup-urlLayer", { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 1.2)
+                    .to(".signup-guide-line", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 1.8)
+                    .to("#signup-introFrame", { scale: 0.3, opacity: 0, duration: 1.0, ease: "back.in" }, 2.0)
+                    .to("#signup-logoFinal", { opacity: 1, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.5)" }, 2.5)
+                    .to("#signup-logoFinal", { opacity: 1, duration: 2.0 }, 3.7)
+                    .to("#signup-logoFinal", { opacity: 0, duration: 0.6, ease: "power2.inOut" }, 5.7);
+            }
+
+            function animate() {
+                if (!hCtx) return;
+                hCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                hCtx.fillRect(0, 0, hw, hh);
+                particles.forEach(p => { p.update(); p.draw(); });
+
+                if (showTextScenes) {
+                    frame++;
+                    if (frame >= SCENE_DURATION) {
+                        frame = 0;
+                        if (currentScene === scenes.length - 1) {
+                            startFinaleTransition();
+                            animationFrameId = requestAnimationFrame(animate);
+                            return;
+                        }
+                        scenes[currentScene].classList.remove('active');
+                        scenes[currentScene].classList.add('exit');
+                        currentScene++;
+                        scenes[currentScene].classList.remove('exit');
+                        scenes[currentScene].classList.add('active');
+                    }
+                }
+                animationFrameId = requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            signupHeroCleanup = () => {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                if (finaleTimeline) finaleTimeline.kill();
+                gsap.killTweensOf("*");
+            };
+        }
+
+        // Legal page tab switching
+        document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderLegalTab(tab);
+                window.history.replaceState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, `/legal/${tab}`);
+            });
+        });
+    </script>
+</body>
+</html>
