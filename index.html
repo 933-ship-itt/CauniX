@@ -1445,58 +1445,49 @@
         // ===== FIREBASE INITIALIZATION =====
         // Fix: remove process.env references and use window variables or empty string
         // ===== FIREBASE INITIALIZATION =====
-const firebaseConfig = {
-    apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
-    authDomain: "tervallx.firebaseapp.com",
-    projectId: "tervallx",
-    storageBucket: "tervallx.firebasestorage.app",
-    messagingSenderId: "1097149640832",
-    appId: "1:1097149640832:web:24205417b4f481b7523665",
-    measurementId: "G-32MMXKPB83"
-};
+<script>
+    // Firebase configuration – replace with your own, but ensure the domain is authorised
+    const firebaseConfig = {
+        apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
+        authDomain: "tervallx.firebaseapp.com",
+        projectId: "tervallx",
+        storageBucket: "tervallx.appspot.com",   // corrected bucket name
+        messagingSenderId: "1097149640832",
+        appId: "1:1097149640832:web:24205417b4f481b7523665"
+    };
 
-let firebaseInitialized = false;
-let auth = null;
-let db = null;
+    let auth = null;
+    let db = null;
 
-function initFirebase() {
-    if (firebaseInitialized) return;
-
-    // 1. Verify the SDK is loaded from your CDN scripts
-    if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
-        console.warn('Firebase SDK components not fully loaded, retrying...');
-        setTimeout(initFirebase, 100);
-        return;
-    }
-
-    try {
-        // 2. Prevent multiple initializations
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log('Firebase App initialized');
+    // Wait until the Firebase compat scripts are loaded
+    function waitForFirebase(callback) {
+        if (typeof firebase !== 'undefined' && firebase.apps) {
+            callback();
         } else {
-            firebase.app(); // Use already initialized app
-        }
-        
-        // 3. Set global references
-        auth = firebase.auth();
-        db = firebase.database();
-        firebaseInitialized = true;
-        
-        console.log('Firebase services (Auth & Database) connected successfully');
-    } catch (error) {
-        console.error('Firebase initialization error:', error);
-        if (typeof showAuthMessage === 'function') {
-            showAuthMessage('Configuration error. Please check your internet connection.', 'error');
+            setTimeout(() => waitForFirebase(callback), 50);
         }
     }
-}
 
-// Call initialization immediately
-initFirebase();
+    function initializeFirebase() {
+        try {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.database();
+            console.log('Firebase initialised successfully');
+        } catch (error) {
+            console.error('Firebase init error:', error);
+            if (typeof showAuthMessage === 'function') {
+                showAuthMessage('Firebase configuration error. Please check the console for details.', 'error');
+            }
+        }
+    }
 
-// Ensure the scripts are loaded by waiting for the window load event
-window.addEventListener('load', initFirebase);
+    // Start initialisation when the page is ready
+    window.addEventListener('DOMContentLoaded', () => {
+        waitForFirebase(initializeFirebase);
+    });
+
+    // ... the rest of your existing functions (showAuthMessage, handleGoogleSignUp, etc.) remain unchange
         // ===== AUTH MESSAGE HELPER =====
         function showAuthMessage(message, type = 'info') {
             const messageEl = document.getElementById('auth-message');
