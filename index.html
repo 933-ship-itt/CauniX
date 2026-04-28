@@ -1445,49 +1445,61 @@
         // ===== FIREBASE INITIALIZATION =====
         // Fix: remove process.env references and use window variables or empty string
         // ===== FIREBASE INITIALIZATION =====
-<script>
-    // Firebase configuration – replace with your own, but ensure the domain is authorised
-    const firebaseConfig = {
-        apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
-        authDomain: "tervallx.firebaseapp.com",
-        projectId: "tervallx",
-        storageBucket: "tervallx.appspot.com",   // corrected bucket name
-        messagingSenderId: "1097149640832",
-        appId: "1:1097149640832:web:24205417b4f481b7523665"
-    };
+const firebaseConfig = {
+    apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
+    authDomain: "tervallx.firebaseapp.com",
+    projectId: "tervallx",
+    storageBucket: "tervallx.firebasestorage.app",
+    messagingSenderId: "1097149640832",
+    appId: "1:1097149640832:web:24205417b4f481b7523665",
+    measurementId: "G-32MMXKPB83"
+};
 
-    let auth = null;
-    let db = null;
+let firebaseInitialized = false;
+let auth = null;
+let db = null;
 
-    // Wait until the Firebase compat scripts are loaded
-    function waitForFirebase(callback) {
-        if (typeof firebase !== 'undefined' && firebase.apps) {
-            callback();
-        } else {
-            setTimeout(() => waitForFirebase(callback), 50);
-        }
+function initFirebase() {
+    if (firebaseInitialized) return;
+
+    // Check if the firebase core AND specific modules are loaded
+    // When using CDNs, firebase.auth and firebase.database load as separate scripts
+    if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
+        console.warn('Firebase SDK or modules not ready, retrying...');
+        setTimeout(initFirebase, 50); // Faster retry for smoother experience
+        return;
     }
 
-    function initializeFirebase() {
-        try {
+    try {
+        // Initialize Firebase if no app exists
+        if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.database();
-            console.log('Firebase initialised successfully');
-        } catch (error) {
-            console.error('Firebase init error:', error);
-            if (typeof showAuthMessage === 'function') {
-                showAuthMessage('Firebase configuration error. Please check the console for details.', 'error');
-            }
+        }
+        
+        // Use the compat-style accessor
+        auth = firebase.auth();
+        db = firebase.database();
+        
+        firebaseInitialized = true;
+        console.log('Firebase initialized successfully');
+        
+        // Manually trigger any login-check logic here if needed
+    } catch (error) {
+        console.error('Firebase initialization error:', error);
+        if (typeof showAuthMessage === 'function') {
+            showAuthMessage('System connection error. Please refresh.', 'error');
         }
     }
+}
 
-    // Start initialisation when the page is ready
-    window.addEventListener('DOMContentLoaded', () => {
-        waitForFirebase(initializeFirebase);
-    });
-
-    // ... the rest of your existing functions (showAuthMessage, handleGoogleSignUp, etc.) remain unchange
+// Instead of waiting for the full window 'load' (which waits for all images/videos),
+// use DOMContentLoaded or just call it. This helps prevent the 404 if a user 
+// clicks "Sign In" before the window is fully loaded.
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFirebase);
+} else {
+    initFirebase();
+}
         // ===== AUTH MESSAGE HELPER =====
         function showAuthMessage(message, type = 'info') {
             const messageEl = document.getElementById('auth-message');
