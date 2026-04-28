@@ -1444,7 +1444,8 @@
     <script>
         // ===== FIREBASE INITIALIZATION =====
         // Fix: remove process.env references and use window variables or empty string
-        const firebaseConfig = {
+        // ===== FIREBASE INITIALIZATION =====
+const firebaseConfig = {
     apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
     authDomain: "tervallx.firebaseapp.com",
     projectId: "tervallx",
@@ -1461,31 +1462,38 @@ let db = null;
 function initFirebase() {
     if (firebaseInitialized) return;
 
-    // Check if the firebase object is available from the CDN scripts
-    if (typeof firebase === 'undefined') {
-        console.warn('Firebase SDK not loaded yet, retrying in 100ms...');
+    // 1. Verify the SDK is loaded from your CDN scripts
+    if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
+        console.warn('Firebase SDK components not fully loaded, retrying...');
         setTimeout(initFirebase, 100);
         return;
     }
 
     try {
-        // Initialize Firebase
+        // 2. Prevent multiple initializations
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
+            console.log('Firebase App initialized');
+        } else {
+            firebase.app(); // Use already initialized app
         }
         
+        // 3. Set global references
         auth = firebase.auth();
         db = firebase.database();
         firebaseInitialized = true;
-        console.log('Firebase initialized successfully');
+        
+        console.log('Firebase services (Auth & Database) connected successfully');
     } catch (error) {
         console.error('Firebase initialization error:', error);
-        // Ensure showAuthMessage function exists in your code to avoid another error
         if (typeof showAuthMessage === 'function') {
-            showAuthMessage('Firebase configuration error. Please check your setup.', 'error');
+            showAuthMessage('Configuration error. Please check your internet connection.', 'error');
         }
     }
 }
+
+// Call initialization immediately
+initFirebase();
 
 // Ensure the scripts are loaded by waiting for the window load event
 window.addEventListener('load', initFirebase);
