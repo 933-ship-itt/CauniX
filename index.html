@@ -1445,6 +1445,7 @@
         // ===== FIREBASE INITIALIZATION =====
         // Fix: remove process.env references and use window variables or empty string
         // ===== FIREBASE INITIALIZATION =====
+// ===== FIREBASE INITIALIZATION =====
 const firebaseConfig = {
     apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
     authDomain: "tervallx.firebaseapp.com",
@@ -1462,44 +1463,30 @@ let db = null;
 function initFirebase() {
     if (firebaseInitialized) return;
 
-    // Check if the firebase core AND specific modules are loaded
-    // When using CDNs, firebase.auth and firebase.database load as separate scripts
+    // Check for both the base object and the specific auth/db methods
     if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
-        console.warn('Firebase SDK or modules not ready, retrying...');
-        setTimeout(initFirebase, 50); // Faster retry for smoother experience
+        console.warn('Firebase components not yet available, retrying...');
+        setTimeout(initFirebase, 50); 
         return;
     }
 
     try {
-        // Initialize Firebase if no app exists
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         
-        // Use the compat-style accessor
         auth = firebase.auth();
         db = firebase.database();
-        
         firebaseInitialized = true;
-        console.log('Firebase initialized successfully');
-        
-        // Manually trigger any login-check logic here if needed
+        console.log('Firebase ready.');
     } catch (error) {
-        console.error('Firebase initialization error:', error);
-        if (typeof showAuthMessage === 'function') {
-            showAuthMessage('System connection error. Please refresh.', 'error');
-        }
+        console.error('Initialization failed:', error);
     }
 }
 
-// Instead of waiting for the full window 'load' (which waits for all images/videos),
-// use DOMContentLoaded or just call it. This helps prevent the 404 if a user 
-// clicks "Sign In" before the window is fully loaded.
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFirebase);
-} else {
-    initFirebase();
-}
+// Start initialization immediately and on DOM load
+initFirebase();
+document.addEventListener('DOMContentLoaded', initFirebase);
         // ===== AUTH MESSAGE HELPER =====
         function showAuthMessage(message, type = 'info') {
             const messageEl = document.getElementById('auth-message');
