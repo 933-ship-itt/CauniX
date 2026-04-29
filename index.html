@@ -3,65 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta name="description" content="CauniX is a lightweight SIM-free communication app. Sign in with Google, get your own in-app identity, and start voice calls instantly — no phone number needed. Free global internet calling.">
-    <meta name="keywords" content="free calling app, SIM-free calling, internet voice calls, Google Sign-In, global communication, no phone number needed, encrypted calling">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="description" content="CauniX is a lightweight SIM-free communication app — currently under construction. The future of internet voice calls, completely phone-number-free.">
+    <meta name="keywords" content="free calling app, SIM-free calling, internet voice calls, coming soon, under construction, global communication">
+    <meta name="robots" content="index, follow">
     <meta name="author" content="CauniX">
     <meta name="theme-color" content="#e0f2fe">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://caunix.app/">
-    <meta property="og:title" content="CauniX: Lightweight Internet Calling with Google Sign‑In">
-    <meta property="og:description" content="Lightweight, real‑time voice calls with just a Google account. No SIM, no carrier — just your CauniX identity.">
+    <meta property="og:title" content="CauniX — Next‑gen internet calling (Coming Soon)">
+    <meta property="og:description" content="Lightweight, real‑time voice calls with zero phone numbers. Our platform is under construction — be the first to know.">
     <meta property="og:image" content="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png">
     <meta property="og:site_name" content="CauniX">
-    <meta property="og:locale" content="en_US">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://caunix.app/">
-    <meta name="twitter:title" content="CauniX: Google‑Based Voice Calls Without a Phone Number">
-    <meta name="twitter:description" content="Lightweight, real‑time voice calls with just a Google account. No SIM, no carrier — just your CauniX identity.">
-    <meta name="twitter:image" content="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png">
     <link rel="canonical" href="https://caunix.app/">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png">
-    <title>CauniX: Lightweight Internet Calling with Google Sign‑In</title>
+    <title>CauniX — Internet voice identity · Under construction</title>
 
-    <script src="https://cdn.tailwindcss.com">
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js">
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
         :root {
             --color-primary: #3b6ef5;
             --color-primary-dark: #2351d0;
-            --color-secondary: #5f6b7a;
-            --color-success: #10b981;
-            --color-danger: #ef4444;
-            --color-warning: #f59e0b;
             --color-bg-light: #f0f2f9;
             --color-card-bg: #ffffff;
             --color-text-primary: #0f172a;
-            --color-text-secondary: #475569;
             --color-border: #dde3f0;
-            --color-accent: #6366f1;
-            --pure-white: #ffffff;
-            --pure-black: #000000;
-            --accent-gray: #e0e0e0;
-            --sidebar-collapsed: 72px;
-            --sidebar-expanded: 260px;
-            --gradient-main: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
-            --chat-bg: #f3f4f6;
         }
 
         * {
@@ -72,12 +41,7 @@
             font-family: 'DM Sans', sans-serif;
             color: var(--color-text-primary);
             scroll-behavior: smooth;
-            min-height: 100vh;
             background-color: #e0f2fe;
-        }
-
-        html.signup-page body {
-            overflow: hidden;
         }
 
         #mainCanvas {
@@ -109,34 +73,23 @@
             max-width: 700px;
             opacity: 0.12;
             filter: blur(0.5px);
-            transform: scale(0.96);
         }
+
         @keyframes bgLogoPulse {
-            0% {
-                opacity: 0.1;
-            }
-            50% {
-                opacity: 0.32;
-            }
-            100% {
-                opacity: 0.1;
-            }
+            0% { opacity: 0.1; }
+            50% { opacity: 0.32; }
+            100% { opacity: 0.1; }
         }
 
         .landing-page {
             display: block;
         }
-        .landing-page.hidden {
-            display: none;
-        }
 
         .tech-card {
             border: 1px solid var(--color-border);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
             background-color: var(--color-card-bg);
-            color: var(--color-text-primary);
+            border-radius: 1.5rem;
         }
         .tech-card:hover {
             border-color: var(--color-primary);
@@ -149,27 +102,25 @@
             background-image: radial-gradient(var(--color-primary) 0.8px, #f0f4fe 0.8px);
             background-size: 20px 20px;
             border: 1px solid var(--color-primary);
-            box-shadow: 0 0 30px rgba(59, 110, 245, 0.2);
+            border-radius: 1.5rem;
         }
 
-        .btn-google {
+        .btn-coming-soon {
             background: linear-gradient(135deg, #2343b8, #3b6ef5);
             color: white;
             border: none;
-            padding: 0.85rem 1.5rem;
-            border-radius: 0.85rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            box-shadow: 0 4px 16px rgba(59, 110, 245, 0.35);
+            padding: 0.85rem 1.8rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(59, 110, 245, 0.3);
         }
-        .btn-google:hover:not(:disabled) {
+        .btn-coming-soon:hover {
             background: linear-gradient(135deg, #1a2a6c, #2343b8);
-            box-shadow: 0 6px 20px rgba(27, 40, 180, 0.45);
-        }
-        .btn-google:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(59, 110, 245, 0.4);
         }
 
         .animate-on-scroll {
@@ -182,25 +133,6 @@
             transform: translateY(0);
         }
 
-        .panel {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 18px 48px rgba(16, 24, 40, 0.06);
-            padding: 28px;
-        }
-
-        .landing-cta-btn {
-            padding: 0.75rem 1.25rem;
-            font-weight: 700;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.15s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            border: none;
-        }
         .landing-cta-primary {
             background: linear-gradient(135deg, #3b6ef5, #7c3aed);
             color: white;
@@ -217,34 +149,12 @@
         }
         .landing-cta-secondary:hover {
             border-color: #c7d2fe;
-            transform: translateY(-1px);
-        }
-
-        .btn-get-started {
-            background: linear-gradient(135deg, #3b6ef5, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(59, 110, 245, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-        .btn-get-started:hover {
-            background: linear-gradient(135deg, #2a5ad9, #7c3aed);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(59, 110, 245, 0.4);
         }
 
         .hero-aspect-wrapper {
             aspect-ratio: 16 / 9;
             width: 100%;
             max-width: 100%;
-            margin: 0 auto;
         }
         .hero-graphic-container {
             position: relative;
@@ -254,13 +164,6 @@
             border-radius: 2rem;
             overflow: hidden;
             box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.25);
-        }
-        #visualMainContent {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            display: block;
         }
         .hero-canvas-layer {
             position: absolute;
@@ -306,17 +209,10 @@
             filter: blur(0px);
             visibility: visible;
         }
-        .scene-content.exit {
-            opacity: 0;
-            transform: scale(1.05);
-            filter: blur(15px);
-            visibility: visible;
-        }
         .scene-content h1 {
             font-size: clamp(2rem, 5vw, 3.5rem);
             margin: 0;
             color: #000000;
-            line-height: 1.1;
             font-weight: 900;
             letter-spacing: -0.04em;
             font-family: 'Inter', 'DM Sans', sans-serif;
@@ -330,15 +226,7 @@
             text-transform: uppercase;
             opacity: 0.75;
         }
-        .scene-content .url-text {
-            font-weight: 900;
-            letter-spacing: 0.1em;
-            margin-top: 20px;
-            display: block;
-            color: #000000;
-            opacity: 0.6;
-            font-size: clamp(0.6rem, 1.8vw, 0.9rem);
-        }
+
         #finaleStage {
             position: absolute;
             inset: 0;
@@ -347,15 +235,13 @@
             display: none;
             justify-content: center;
             align-items: center;
-            perspective: 2000px;
-            opacity: 0;
+            background: #ffffff;
         }
         .intro-frame {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            transform-origin: 82.5% 50%;
         }
         .intro-svg {
             width: min(600px, 80vw);
@@ -364,7 +250,7 @@
         }
         .letter-path {
             fill: transparent;
-            stroke: var(--pure-black);
+            stroke: #000;
             stroke-width: 2px;
             stroke-dasharray: 1200;
             stroke-dashoffset: 1200;
@@ -375,23 +261,21 @@
         .fill-text {
             font-size: clamp(60px, 10vw, 120px);
             font-weight: 900;
-            fill: var(--pure-black);
+            fill: #000;
             clip-path: inset(100% 0% 0% 0%);
             font-family: 'Inter', 'DM Sans', sans-serif;
         }
         .sub-url-path {
             font-size: clamp(16px, 2.5vw, 30px);
             font-weight: 700;
-            fill: var(--pure-black);
+            fill: #000;
             letter-spacing: 0.3em;
             opacity: 0;
-            font-family: 'Inter', 'DM Sans', sans-serif;
         }
         .guide-line {
             position: absolute;
-            background: var(--accent-gray);
+            background: #ccc;
             opacity: 0;
-            z-index: -1;
             width: 1px;
             height: 120px;
             left: 50%;
@@ -399,13 +283,10 @@
         .logo-final-container {
             position: absolute;
             width: clamp(180px, 30vw, 350px);
-            height: clamp(180px, 30vw, 350px);
             opacity: 0;
             transform: scale(0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
+
         .footer-white-panel {
             background: #ffffff;
             border-radius: 2rem;
@@ -415,773 +296,41 @@
         .info-card {
             background: #fff;
             border-radius: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s;
             border: 1px solid #eef2ff;
+            transition: all 0.2s;
         }
         .info-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 20px 30px -12px rgba(59, 110, 245, 0.12);
-            border-color: #cbd5e1;
         }
-
-        /* ===== SIGNUP PAGE STYLES ===== */
-        .signup-page-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2.5vh 2.5vw;
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        .signup-page-container.active {
-            display: flex;
-        }
-        #signupRibbonCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            display: block;
-        }
-        .signup-led-wrapper {
-            position: relative;
-            max-width: 1200px;
-            width: 100%;
-            height: 90vh;
-            max-height: 800px;
-            min-height: 600px;
-            padding: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25);
-            z-index: 1;
-            backdrop-filter: blur(10px);
-        }
-        .signup-led-wrapper::before {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            background: conic-gradient(from 0deg, transparent 0%, #3b82f6 10%, #8b5cf6 25%, #3b82f6 40%, transparent 50%);
-            animation: rotateLED 4s linear infinite;
-            filter: blur(8px);
-        }
-        @keyframes rotateLED {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .signup-main-panel {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: white;
-            border-radius: 3rem;
-            overflow: hidden;
-            display: flex;
-            z-index: 1;
-        }
-        .signup-left-panel {
-            background-color: #f1f5f9;
-            border-right: 2px solid #e2e8f0;
-            box-shadow: inset -10px 0 15px -10px rgba(0, 0, 0, 0.05);
-            position: relative;
-            z-index: 20;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-        @media (min-width: 1024px) {
-            .signup-left-panel {
-                width: 41.666667%;
-            }
-        }
-        .signup-panel-header {
-            padding: 2rem 2.5rem 1rem 2.5rem;
-            background: #f1f5f9;
-            z-index: 40;
-        }
-        .signup-scroll-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0 2.5rem 2.5rem 2.5rem;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
-        }
-        .signup-scroll-content::-webkit-scrollbar {
-            width: 6px;
-        }
-        .signup-scroll-content::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1;
-            border-radius: 10px;
-        }
-        #signup-animation-container {
-            position: relative;
-            background: #ffffff;
-            overflow: hidden;
-            flex: 1;
-            display: none;
-        }
-        @media (min-width: 1024px) {
-            #signup-animation-container {
-                display: flex;
-            }
-        }
-        #signupHeroCanvas {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 5;
-        }
-        .signup-scene-content {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 10;
-            opacity: 0;
-            transform: translateY(20px);
-            filter: blur(8px);
-            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-            pointer-events: none;
-        }
-        .signup-scene-content.active {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0px);
-        }
-        .signup-scene-content.exit {
-            opacity: 0;
-            transform: scale(1.05);
-            filter: blur(15px);
-        }
-        .signup-scene-content h1 {
-            font-size: clamp(2rem, 4vw, 4rem);
-            font-weight: 900;
-            color: #000;
-            line-height: 1;
-            letter-spacing: -0.05em;
-        }
-        .signup-scene-content p {
-            font-size: 0.75rem;
-            color: #000;
-            margin-top: 1rem;
-            font-weight: 700;
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
-            opacity: 0.6;
-        }
-        #signup-finaleStage {
-            position: absolute;
-            inset: 0;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.98);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            perspective: 2000px;
-            opacity: 0;
-        }
-        .signup-auth-btn {
-            background: #ffffff;
-            color: #000;
-            border: 1px solid #cbd5e1;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            font-weight: 600;
-            padding: 0.875rem 1rem;
-            border-radius: 0.75rem;
-        }
-        .signup-auth-btn:not(:disabled):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            background: #fafafa;
-        }
-        .signup-auth-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            filter: grayscale(1);
-        }
-        .signup-auth-btn.loading {
-            pointer-events: none;
-        }
-        .loading-spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-top-color: #000;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .signup-intro-frame {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-origin: 82.5% 50%;
-        }
-        .signup-intro-svg {
-            width: 500px;
-            overflow: visible;
-        }
-        .signup-letter-path {
-            fill: transparent;
-            stroke: #000;
-            stroke-width: 2px;
-            stroke-dasharray: 1200;
-            stroke-dashoffset: 1200;
-            font-size: 110px;
-            font-weight: 900;
-        }
-        .signup-fill-text {
-            font-size: 110px;
-            font-weight: 900;
-            fill: #000;
-            clip-path: inset(100% 0% 0% 0%);
-        }
-        .signup-sub-url-path {
-            font-size: 28px;
-            font-weight: 700;
-            fill: #000;
-            letter-spacing: 0.3em;
-            opacity: 0;
-        }
-        .signup-guide-line {
-            position: absolute;
-            background: #cbd5e1;
-            opacity: 0;
-            z-index: -1;
-            width: 1px;
-            height: 150px;
-            left: 50%;
-        }
-        .signup-logo-final-container {
-            position: absolute;
-            width: 200px;
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        .signup-checkbox-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            cursor: pointer;
-            margin-bottom: 1rem;
-        }
-        .signup-checkbox-container input {
-            cursor: pointer;
-            width: 1.1rem;
-            height: 1.1rem;
-            min-width: 1.1rem;
-            accent-color: #3b82f6;
-            margin-top: 0.1rem;
-        }
-        .signup-checkbox-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #475569;
-            line-height: 1.4;
-        }
-        .signup-checkbox-label a {
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.2s ease;
-        }
-        .signup-checkbox-label a:hover {
-            color: #2563eb;
-            text-decoration: underline;
-        }
-        .signup-back-button {
-            color: #94a3b8;
-            transition: color 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-decoration: none;
-            border: none;
-            background: none;
-            padding: 0;
-            cursor: pointer;
-        }
-        .signup-back-button:hover {
-            color: #1e293b;
-        }
-
-        .auth-message {
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
-        .auth-message.show {
-            display: block;
-        }
-        .auth-message.error {
-            background-color: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-        }
-        .auth-message.success {
-            background-color: #dcfce7;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-        }
-        .auth-message.info {
-            background-color: #dbeafe;
-            color: #0284c7;
-            border: 1px solid #bfdbfe;
-        }
-
-        /* ===== NEW DASHBOARD STYLES (SCOPED) ===== */
-        #dashboardContainer {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2000;
-            background: #ffffff;
-            overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", 'DM Sans', sans-serif;
-        }
-        #dashboardContainer.active {
-            display: flex;
-        }
-
-        #dashboardContainer .dashboard-sidebar {
-            width: var(--sidebar-collapsed);
-            height: 100%;
-            background: var(--gradient-main);
-            display: flex;
-            flex-direction: column;
-            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
-            white-space: nowrap;
-            border-radius: 0 40px 40px 0;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        #dashboardContainer .dashboard-sidebar:hover {
-            width: var(--sidebar-expanded);
-            box-shadow: 15px 0 30px rgba(59, 130, 246, 0.2);
-        }
-        #dashboardContainer .brand-container {
-            height: 100px;
-            display: flex;
-            align-items: center;
-            padding-left: 16px;
-            margin-bottom: 20px;
-        }
-        #dashboardContainer .logo-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        #dashboardContainer .brand-name {
-            opacity: 0;
-            margin-left: 15px;
-            color: white;
+        .construction-badge {
+            background: #fef9c3;
+            color: #854d0e;
             font-weight: 800;
-            font-size: 20px;
-            letter-spacing: -0.5px;
-            transition: opacity 0.3s ease;
-        }
-        #dashboardContainer .dashboard-sidebar:hover .brand-name {
-            opacity: 1;
-        }
-        #dashboardContainer .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 16px 0;
-            color: rgba(255, 255, 255, 0.8);
-            transition: all 0.2s;
-            cursor: pointer;
-            width: 100%;
-            background: none;
-            border: none;
-            font-family: inherit;
-            font-size: inherit;
-        }
-        #dashboardContainer .nav-link:hover,
-        #dashboardContainer .nav-link.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-        }
-        #dashboardContainer .icon-box {
-            min-width: var(--sidebar-collapsed);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #dashboardContainer .nav-label {
-            opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 15px;
-            color: white;
-        }
-        #dashboardContainer .dashboard-sidebar:hover .nav-label {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        #dashboardContainer .list-panel {
-            width: 340px;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            border-right: 2px solid #eef2f6;
-            flex-shrink: 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
-        #dashboardContainer .list-panel-hidden {
-            width: 0 !important;
-            opacity: 0;
-            border-right-width: 0;
-            pointer-events: none;
-        }
-        #dashboardContainer .search-container {
-            background: #f3f4f6;
-            border-radius: 14px;
-        }
-        #dashboardContainer .main-container {
-            flex: 1;
-            position: relative;
-            background: var(--chat-bg);
-            overflow: hidden;
-            display: flex;
-        }
-        #dashboardContainer .chat-canvas,
-        #dashboardContainer .account-fullscreen {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        #dashboardContainer .account-fullscreen {
-            background: #f8fafc;
-            z-index: 50;
-            padding: 40px;
-            overflow-y: auto;
-            transform: translateY(30px);
-            opacity: 0;
-            pointer-events: none;
-        }
-        #dashboardContainer .account-fullscreen.active-view {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        #dashboardContainer .text-gradient {
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        #dashboardContainer .create-group-btn {
-            background: var(--gradient-main);
-            color: white;
-            padding: 12px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 12px;
-            cursor: pointer;
-            border: none;
-            width: 100%;
-        }
-        #dashboardContainer .input-wrapper {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        }
-        #dashboardContainer .hidden-panel {
-            display: none !important;
-        }
-        #dashboardContainer .account-card {
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        #dashboardContainer .stat-pill {
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 18px;
-            text-align: center;
-        }
-        #dashboardContainer .toggle-switch {
-            width: 44px;
-            height: 24px;
-            background: #cbd5e1;
-            border-radius: 12px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            flex-shrink: 0;
-        }
-        #dashboardContainer .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        #dashboardContainer .toggle-active {
-            background: #3b82f6;
-        }
-        #dashboardContainer .toggle-active::after {
-            left: 22px;
-        }
-
-        /* ===== LEGAL FULL‑SCREEN PAGE STYLES ===== */
-        #legalPageContainer {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            background: white;
-            overflow-y: auto;
-        }
-        #legalPageContainer.active {
-            display: block;
-        }
-        .legal-page-header {
-            position: sticky;
-            top: 0;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            z-index: 10;
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        .legal-back-btn {
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            font-weight: 700;
-            color: #3b6ef5;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 0.9rem;
+            gap: 6px;
         }
-        .legal-tab-nav {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .legal-tab-btn {
-            padding: 0.5rem 1.25rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            background: #f1f5f9;
-            border: none;
-            color: #334155;
-            transition: all 0.2s;
-        }
-        .legal-tab-btn.active {
-            background: #3b6ef5;
-            color: white;
-        }
-        .legal-content {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 2rem 4rem;
-        }
-        .faq-item {
-            border-bottom: 1px solid #f1f5f9;
-            padding: 1.5rem 0;
-        }
-        .faq-question {
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            user-select: none;
-            color: #0f172a;
-        }
-        .faq-chevron {
-            transition: transform 0.2s;
-            flex-shrink: 0;
-        }
-        .faq-item.open .faq-chevron {
-            transform: rotate(180deg);
-        }
-        .faq-answer {
-            display: none;
-            margin-top: 1rem;
-            font-size: 0.95rem;
-            color: #334155;
-            line-height: 1.7;
-        }
-        .faq-item.open .faq-answer {
-            display: block;
-        }
-        .faq-answer ul {
-            padding-left: 1.5rem;
-            list-style: disc;
-        }
-
-        /* ===== AUTH LOADING OVERLAY (anti-flicker) ===== */
-        #auth-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: #e0f2fe;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.35s ease;
-        }
-        #auth-loader.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #auth-loader.hidden {
-            display: none;
-        }
-        .auth-loader-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        .auth-loader-logo {
-            width: 72px;
-            height: 72px;
-            border-radius: 18px;
-            object-fit: cover;
-            animation: loaderPulse 1.6s ease-in-out infinite;
-        }
-        @keyframes loaderPulse {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.08); opacity: 1; }
-        }
-        .auth-loader-bar {
-            width: 160px;
-            height: 3px;
-            background: rgba(59, 110, 245, 0.15);
-            border-radius: 99px;
-            overflow: hidden;
-        }
-        .auth-loader-bar-fill {
-            height: 100%;
-            width: 40%;
-            background: linear-gradient(90deg, #3b6ef5, #8b5cf6);
-            border-radius: 99px;
-            animation: loaderSlide 1.4s ease-in-out infinite;
-        }
-        @keyframes loaderSlide {
-            0%   { transform: translateX(-100%); }
-            50%  { transform: translateX(150%); }
-            100% { transform: translateX(350%); }
-        }
-
         @media (max-width: 768px) {
-            .landing-page.hidden-mobile {
-                display: none !important;
-            }
-            #signup-animation-container {
-                display: none !important;
-            }
-            .hero-graphic-container {
-                border-radius: 1.5rem;
-            }
-            .scene-content p {
-                letter-spacing: 0.2em;
-            }
-            .guide-line {
-                height: 80px;
-            }
-            .legal-page-header {
-                gap: 1rem;
-                padding: 1rem;
-            }
-            #dashboardContainer .list-panel {
-                width: 280px;
-            }
-            #dashboardContainer .list-panel-hidden {
-                width: 0 !important;
-            }
+            .hero-graphic-container { border-radius: 1.5rem; }
+            .guide-line { height: 80px; }
         }
     </style>
 </head>
 <body class="bg-sky-light text-slate-800">
-    <!-- ===== AUTH LOADING OVERLAY (prevents landing-page flicker) ===== -->
-    <div id="auth-loader">
-        <div class="auth-loader-inner">
-            <img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" class="auth-loader-logo" alt="CauniX">
-            <div class="auth-loader-bar"><div class="auth-loader-bar-fill"></div></div>
-        </div>
-    </div>
 
     <canvas id="mainCanvas"></canvas>
-
     <div class="bg-main-logo">
-        <img src="https://i.postimg.cc/WbDd0yZz/Gemini-Generated-Image-qnvgp1qnvgp1qnvg-removebg-preview.png" alt="CauniX background emblem">
+        <img src="https://i.postimg.cc/WbDd0yZz/Gemini-Generated-Image-qnvgp1qnvgp1qnvg-removebg-preview.png" alt="CauniX emblem">
     </div>
 
-    <!-- ===== LANDING PAGE ===== -->
+    <!-- LANDING PAGE (ONLY ACTIVE SECTION) -->
     <div id="landingPageContainer" class="landing-page">
-        <header id="main-header" class="sticky top-0 z-40 backdrop-blur-md bg-sky-light/80 border-b border-slate-200 transition-opacity duration-300">
+        <header id="main-header" class="sticky top-0 z-40 backdrop-blur-md bg-sky-light/80 border-b border-slate-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-20">
                     <div class="flex items-center gap-2">
@@ -1189,69 +338,66 @@
                         <span class="text-2xl font-extrabold tracking-tight text-black">CauniX</span>
                     </div>
                     <nav class="hidden md:flex space-x-6 lg:space-x-7">
-                        <a href="#features" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Features</a>
-                        <a href="#mission" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">How It Works</a>
-                        <a href="#safety-section" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Safety</a>
-                        <button onclick="navigateTo('/legal/privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Policy & Legal</button>
-                        <a href="#pricing-block" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600">Pricing</a>
-                        <button onclick="navigateTo('/legal/privacy')" class="text-slate-600 hover:text-blue-700 font-medium transition duration-150 border-b-2 border-transparent hover:border-blue-600 bg-transparent border-0 cursor-pointer">Contact</button>
+                        <a href="#features" class="text-slate-600 hover:text-blue-700 font-medium transition">Features</a>
+                        <a href="#mission" class="text-slate-600 hover:text-blue-700 font-medium transition">How It Works</a>
+                        <a href="#safety-section" class="text-slate-600 hover:text-blue-700 font-medium transition">Safety</a>
+                        <button onclick="openLegalPage('privacy')" class="text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Policy & Legal</button>
+                        <a href="#pricing-block" class="text-slate-600 hover:text-blue-700 font-medium transition">Pricing</a>
                     </nav>
                     <div>
-                        <button id="nav-get-started" class="btn-get-started font-semibold py-2 px-5 rounded-lg transition duration-200 shadow-md">
-                            <i data-lucide="sparkles" class="w-4 h-4"></i> Get Started
+                        <button class="btn-coming-soon" id="global-coming-soon-btn">
+                            <i data-lucide="construction" class="w-4 h-4 inline mr-1"></i> Under Construction
                         </button>
                     </div>
-                    <button id="menu-button" class="md:hidden text-slate-600 hover:text-blue-700"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                    <button id="menu-button" class="md:hidden text-slate-600"><i data-lucide="menu" class="w-6 h-6"></i></button>
                 </div>
             </div>
-            <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-slate-200 bg-sky-light">
-                <a href="#features" class="block text-slate-600 hover:text-blue-700 font-medium">Features</a>
-                <a href="#mission" class="block text-slate-600 hover:text-blue-700 font-medium">How It Works</a>
-                <a href="#safety-section" class="block text-slate-600 hover:text-blue-700 font-medium">Safety</a>
-                <button onclick="navigateTo('/legal/privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Policy & Legal</button>
-                <a href="#pricing-block" class="block text-slate-600 hover:text-blue-700 font-medium">Pricing</a>
-                <button onclick="navigateTo('/legal/privacy')" class="block w-full text-left text-slate-600 hover:text-blue-700 font-medium bg-transparent border-0 cursor-pointer">Contact</button>
-                <button id="mobile-get-started" class="w-full btn-get-started font-semibold py-2 rounded-lg mt-2 justify-center">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i> Get Started
-                </button>
+            <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 bg-sky-light border-t">
+                <a href="#features" class="block text-slate-600">Features</a>
+                <a href="#mission" class="block text-slate-600">How It Works</a>
+                <a href="#safety-section" class="block text-slate-600">Safety</a>
+                <button onclick="openLegalPage('privacy')" class="block w-full text-left text-slate-600 bg-transparent border-0">Policy & Legal</button>
+                <a href="#pricing-block" class="block text-slate-600">Pricing</a>
+                <button id="mobile-coming-soon" class="w-full btn-coming-soon text-center mt-2">Under Construction</button>
             </div>
         </header>
 
         <main>
             <section class="pt-20 pb-32 md:pt-32 md:pb-48 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center pt-1 lg:-mt-32 lg:pb-32 relative z-30">
-                    <div class="animate-on-scroll relative p-8 lg:p-12 lg:pr-0">
-                        <div class="absolute top-0 bottom-0 left-0 right-0 lg:right-[-45vw] bg-sky-light rounded-3xl border border-slate-100 shadow-xl -z-10"></div>
-                        <div class="relative z-10">
-                            <p class="text-blue-700 text-lg font-semibold mb-4 uppercase tracking-widest">CauniX — Lightweight voice, real‑time connection</p>
-                            <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight mb-6 text-slate-900">Global, SIM-free<br><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">internet communication platform</span></h1>
-                            <p class="text-xl text-slate-600 mb-10 max-w-xl">Sign in with Google, get your unique CauniX identity, and start voice calls with anyone on the app. No SIM, no carrier — just pure internet communication.</p>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <button id="hero-launch-call" class="landing-cta-btn landing-cta-primary flex-1 sm:flex-none justify-center"><i data-lucide="mic" class="w-5 h-5"></i> Start Talking Free</button>
-                                <button onclick="document.getElementById('features')?.scrollIntoView({behavior:'smooth'})" class="landing-cta-btn landing-cta-secondary flex-1 sm:flex-none justify-center"><i data-lucide="info" class="w-5 h-5"></i> How It Works</button>
-                            </div>
-                            <p class="text-sm text-slate-400 mt-4 flex items-center gap-1"><i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i> End‑to‑end encrypted · No ads · No tracking</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="animate-on-scroll relative">
+                        <div class="mb-6">
+                            <span class="construction-badge"><i data-lucide="hammer" class="w-3 h-3"></i> BETA · UNDER CONSTRUCTION</span>
                         </div>
+                        <p class="text-blue-700 text-lg font-semibold mb-4 uppercase tracking-widest">CauniX — Lightweight voice, real‑time connection</p>
+                        <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight mb-6 text-slate-900">Global, SIM-free<br><span class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent">internet communication platform</span></h1>
+                        <p class="text-xl text-slate-600 mb-8 max-w-xl">Sign in with Google, get your unique CauniX identity, and start voice calls with anyone on the app. The future of calling is being built — stay tuned.</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="hero-construction" class="landing-cta-primary landing-cta-btn px-6 py-3 rounded-xl font-bold flex items-center gap-2"><i data-lucide="hard-drive" class="w-5 h-5"></i> Launching Soon</button>
+                            <button onclick="document.getElementById('features')?.scrollIntoView({behavior:'smooth'})" class="landing-cta-secondary landing-cta-btn px-6 py-3 rounded-xl font-bold"><i data-lucide="info" class="w-5 h-5"></i> Learn More</button>
+                        </div>
+                        <p class="text-sm text-slate-400 mt-6 flex items-center gap-1"><i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i> End‑to‑end encrypted · No ads · No tracking (coming in early access)</p>
                     </div>
-                    <div class="relative flex justify-center items-center animate-on-scroll z-20 w-full">
+
+                    <div class="relative flex justify-center items-center w-full">
                         <div class="hero-aspect-wrapper">
                             <div class="hero-graphic-container">
                                 <div id="visualMainContent">
                                     <canvas id="heroCanvas" class="hero-canvas-layer"></canvas>
-                                    <img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" class="app-logo-watermark" alt="CauniX Logo">
+                                    <img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" class="app-logo-watermark" alt="CauniX">
                                     <div class="director-ui-graphic">
                                         <div class="scene-content active"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
-                                        <div class="scene-content"><h1>No SIM Communication.</h1><p>Legacy Reimagined</p></div>
+                                        <div class="scene-content"><h1>No SIM.</h1><p>Legacy Reimagined</p></div>
                                         <div class="scene-content"><h1>Global.</h1><p>Continental Precision</p></div>
                                         <div class="scene-content"><h1>Synced.</h1><p>Instant Protocol</p></div>
-                                        <div class="scene-content"><h1>CauniX</h1><p>Your Voice. Your Rules.</p><span class="url-text">CAUNIX.COM</span></div>
+                                        <div class="scene-content"><h1>CauniX</h1><p>Your Voice. Your Rules.</p><span class="url-text" style="font-size:0.7rem;">CAUNIX.COM</span></div>
                                     </div>
                                 </div>
                                 <div id="finaleStage">
                                     <div class="intro-frame" id="introFrame">
                                         <div class="guide-line" style="top: -50px;"></div>
                                         <div class="guide-line" style="bottom: -50px;"></div>
-                                        <svg class="intro-svg" viewBox="0 0 800 200" aria-hidden="true">
+                                        <svg class="intro-svg" viewBox="0 0 800 200">
                                             <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="letter-path" id="strokeLayer">CauniX</text>
                                             <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="fill-text" id="fillLayer">CauniX</text>
                                             <text x="50%" y="85%" text-anchor="middle" class="sub-url-path" id="urlLayer">CAUNIX.COM</text>
@@ -1267,1479 +413,182 @@
                 </div>
             </section>
 
-            <section id="features" class="relative z-10 -mt-20 py-20 md:py-32 bg-sky-light border-t border-b border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden">
+            <section id="features" class="relative z-10 -mt-20 py-20 md:py-32 bg-sky-light border-t border-b border-slate-200 rounded-[3rem] shadow-2xl">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 class="text-4xl font-extrabold mb-4 text-slate-800 animate-on-scroll animated">Built for Real Conversations</h2>
-                    <p class="text-xl text-slate-600 mb-16 max-w-3xl mx-auto animate-on-scroll animated">CauniX replaces phone numbers with a simple Google sign‑in and a lightweight identity. Talk, connect, and stay safe — all within a frictionless app.</p>
+                    <h2 class="text-4xl font-extrabold mb-4 text-slate-800 animate-on-scroll">Built for Real Conversations</h2>
+                    <p class="text-xl text-slate-600 mb-16 max-w-3xl mx-auto animate-on-scroll">CauniX replaces phone numbers with a simple identity layer. Talk, connect, and stay safe — all within a frictionless app. Our team is preparing the first release.</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="log-in" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Google Account Sign‑In</h3><p class="text-slate-500 text-sm">One tap to sign in. No new passwords, no phone numbers. Your Google account becomes your key to CauniX.</p></div>
-                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="fingerprint" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Unique In‑App Identity</h3><p class="text-slate-500 text-sm">After sign‑in you get a CauniX ID — your personal handle for calls. No SIM, no carrier, no phone number exposure.</p></div>
-                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="phone" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Crystal‑Clear Voice</h3><p class="text-slate-500 text-sm">Direct app‑to‑app voice calls optimized for clarity and low latency. Optional expansion to video and messaging.</p></div>
-                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="wifi" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Real‑Time Presence</h3><p class="text-slate-500 text-sm">See who's online instantly. Firebase‑powered cloud sync updates availability and call state in real time.</p></div>
-                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll animated"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="shield" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Safety by Design</h3><p class="text-slate-500 text-sm">Block, report, and rate‑limited actions. Account‑based identity helps keep the platform trustworthy.</p></div>
-                        <div class="tech-card p-6 rounded-3xl text-left animate-on-scroll bg-gradient-to-br from-blue-50 to-white animated"><div class="p-3 bg-blue-100 rounded-3xl inline-block mb-4"><i data-lucide="zap" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2 text-slate-800">Minimal Friction</h3><p class="text-slate-500 text-sm">No setup wizards, no carrier plans. Open the app, see your people, and start talking in seconds.</p></div>
+                        <div class="tech-card p-6 text-left animate-on-scroll"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="log-in" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2">Google Account Sign‑In</h3><p class="text-slate-500 text-sm">One tap sign‑in — no phone number, no new passwords.</p></div>
+                        <div class="tech-card p-6 text-left animate-on-scroll"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="fingerprint" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2">Unique In‑App Identity</h3><p class="text-slate-500 text-sm">CauniX ID becomes your handle for global calls. No carrier.</p></div>
+                        <div class="tech-card p-6 text-left animate-on-scroll"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="phone" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2">Crystal‑Clear Voice</h3><p class="text-slate-500 text-sm">High‑fidelity, low‑latency calls over pure internet.</p></div>
+                        <div class="tech-card p-6 text-left animate-on-scroll"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="wifi" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2">Real‑Time Presence</h3><p class="text-slate-500 text-sm">See who's online instantly — encrypted sync.</p></div>
+                        <div class="tech-card p-6 text-left animate-on-scroll"><div class="p-3 bg-blue-50 rounded-3xl inline-block mb-4"><i data-lucide="shield" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2">Safety by Design</h3><p class="text-slate-500 text-sm">Block, report, and account‑based moderation.</p></div>
+                        <div class="tech-card p-6 text-left bg-gradient-to-br from-blue-50 to-white animate-on-scroll"><div class="p-3 bg-blue-100 rounded-3xl inline-block mb-4"><i data-lucide="zap" class="w-7 h-7 text-blue-700"></i></div><h3 class="text-xl font-bold mb-2">Minimal Friction</h3><p class="text-slate-500 text-sm">No setup wizards. See your people and talk in seconds.</p></div>
                     </div>
                 </div>
             </section>
 
             <section id="mission" class="py-20 md:py-32 bg-sky-light">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="panel rounded-3xl p-8">
+                    <div class="bg-white rounded-3xl p-8 shadow-xl">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            <div class="animate-on-scroll"><h2 class="text-4xl font-extrabold mb-4 text-slate-800">Over‑the‑Top, <span class="text-gradient">Phone‑Free</span> Communication</h2><p class="text-xl text-slate-600 mb-6">CauniX operates completely independent of mobile carriers and traditional telephony. It's an internet‑native calling layer: log in with Google, claim your identity, and connect directly with other users — no phone numbers, no SIM cards.</p><div class="space-y-4"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><span class="text-blue-700 font-bold text-sm">1</span></div><div><h4 class="font-semibold">Sign in with Google</h4><p class="text-sm text-slate-500">Your existing Gmail or Workspace account becomes your CauniX key.</p></div></div><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><span class="text-blue-700 font-bold text-sm">2</span></div><div><h4 class="font-semibold">Receive Your CauniX ID</h4><p class="text-sm text-slate-500">A unique, lightweight identity replaces a phone number for all calls.</p></div></div><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center"><span class="text-blue-700 font-bold text-sm">3</span></div><div><h4 class="font-semibold">See Who's Online & Call</h4><p class="text-sm text-slate-500">Real‑time presence shows you who's available. Tap to start a voice call.</p></div></div></div></div>
-                            <div class="network-visualization p-8 rounded-3xl h-80 flex items-center justify-center relative animate-on-scroll"><i data-lucide="hexagon" class="w-16 h-16 text-blue-400 absolute top-4 left-4 opacity-40"></i><i data-lucide="hexagon" class="w-16 h-16 text-blue-600 absolute bottom-4 right-4 opacity-40"></i><div class="text-center"><div class="flex justify-center space-x-2 mb-4"><div class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div><div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div><div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div></div><p class="text-xl font-mono text-slate-800">Google → CauniX ID → Call</p><p class="text-sm text-slate-500">Over‑the‑top · No carrier · Real‑time sync</p></div></div>
+                            <div class="animate-on-scroll"><h2 class="text-4xl font-extrabold mb-4">Over‑the‑Top, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">Phone‑Free</span> Communication</h2><p class="text-xl text-slate-600 mb-6">CauniX is internet‑native: log in with Google, claim your identity, and connect directly — no SIM, no phone number. First release is currently in internal testing.</p>
+                            <div class="space-y-4"><div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">1</div><div><h4 class="font-semibold">Sign in with Google</h4><p class="text-sm text-slate-500">Your existing account becomes the key.</p></div></div><div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">2</div><div><h4 class="font-semibold">Receive Your CauniX ID</h4><p class="text-sm text-slate-500">Unique identity for all calls.</p></div></div><div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">3</div><div><h4 class="font-semibold">See Who's Online & Call</h4><p class="text-sm text-slate-500">Real‑time presence and voice.</p></div></div></div>
+                            </div>
+                            <div class="network-visualization p-8 h-80 flex items-center justify-center relative animate-on-scroll"><div class="text-center"><div class="flex justify-center gap-2 mb-4"><div class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div><div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay:0.2s"></div><div class="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style="animation-delay:0.4s"></div></div><p class="text-xl font-mono font-bold">Google → CauniX ID → Call</p><p class="text-sm text-slate-500 mt-2">Encrypted · No carrier · Real‑time</p></div></div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <div id="safety-section" class="scroll-mt-28"></div>
-            <section id="privacy-contact-section" class="py-20 md:py-28 bg-sky-light/60 border-t border-slate-100">
+            <section class="py-20 bg-sky-light/60 border-t">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid md:grid-cols-2 gap-8 mb-12">
-                        <div class="info-card p-6 md:p-8"><div class="flex items-center gap-3 mb-4"><i data-lucide="shield" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Privacy Policy</h3></div><p class="text-slate-600 mb-3">CauniX values your privacy. We collect only essential data. Read the full policy to understand your rights.</p><button onclick="navigateTo('/legal/privacy')" class="text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition">Read Full Policy</button></div>
-                        <div class="info-card p-6 md:p-8"><div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold text-slate-800">Contact & Support</h3></div><p class="text-slate-600">Our team is ready to assist you with any questions about accounts, safety, or general feedback.</p><div class="mt-5 space-y-3"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700 font-medium">support@caunix.app</span></div><div class="flex items-center gap-3"><i data-lucide="message-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Live chat: Mon-Fri 9am-6pm UTC</span></div><div class="flex items-center gap-3"><i data-lucide="twitter" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">@CauniX_help</span></div><div class="flex items-center gap-3"><i data-lucide="alert-circle" class="w-5 h-5 text-indigo-500"></i><span class="text-slate-700">Abuse reports: legal@caunix.app</span></div></div><button class="mt-6 text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100 transition" onclick="alert('Mock contact form — real system coming soon.')">Send message ↗</button></div>
+                        <div class="info-card p-6 md:p-8"><div class="flex items-center gap-3 mb-4"><i data-lucide="shield" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold">Privacy Policy</h3></div><p class="text-slate-600 mb-3">CauniX values your privacy. Read our full policy to understand data handling during early access.</p><button onclick="openLegalPage('privacy')" class="text-indigo-700 bg-indigo-50 px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-100">Read Policy</button></div>
+                        <div class="info-card p-6 md:p-8"><div class="flex items-center gap-3 mb-4"><i data-lucide="mail" class="w-8 h-8 text-indigo-600"></i><h3 class="text-2xl font-bold">Contact & Support</h3></div><p class="text-slate-600">Our team is getting ready. For early inquiries:</p><div class="mt-5 space-y-2"><div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-indigo-500"></i><span>builders@caunix.app</span></div><div><i data-lucide="bell" class="w-5 h-5 text-indigo-500 inline mr-3"></i><span class="text-sm font-semibold">Launch notifications soon</span></div></div></div>
                     </div>
-                    <div id="pricing-block" class="info-card p-6 md:p-8 text-center max-w-3xl mx-auto scroll-mt-28"><h3 class="text-2xl font-bold text-slate-800 mb-2"><i data-lucide="credit-card" class="w-7 h-7 inline-block mr-2 text-indigo-500"></i>Simple, transparent pricing</h3><p class="text-slate-500">CauniX core voice calling is completely free for now. No hidden fees, no ads. Premium features (cloud recording, custom voicemail) may be introduced as optional paid add‑ons in the future — always fair and optional.</p><div class="flex flex-wrap justify-center gap-3 mt-5"><span class="bg-emerald-100 text-emerald-800 px-4 py-1 rounded-full text-sm font-semibold">✔ Free for now</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">Unlimited calls (fair use)</span><span class="bg-slate-100 text-slate-700 px-4 py-1 rounded-full text-sm">No ads, no tracking</span></div></div>
+                    <div id="pricing-block" class="info-card p-6 md:p-8 text-center max-w-3xl mx-auto"><h3 class="text-2xl font-bold mb-2"><i data-lucide="credit-card" class="w-7 h-7 inline mr-2 text-indigo-500"></i>Simple, transparent pricing</h3><p class="text-slate-500">CauniX core voice calling will be completely free. No hidden fees, no ads. Stay tuned for early access.</p><div class="flex flex-wrap justify-center gap-3 mt-5"><span class="bg-emerald-100 text-emerald-800 px-4 py-1 rounded-full text-sm font-semibold">✔ Free forever plan</span><span class="bg-slate-100 px-4 py-1 rounded-full text-sm">Unlimited calls (fair use)</span><span class="bg-slate-100 px-4 py-1 rounded-full text-sm">No tracking</span></div></div>
                 </div>
             </section>
 
-            <section class="py-16 md:py-20 bg-sky-light border-t border-b border-blue-200">
-                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <div class="max-w-4xl mx-auto animate-on-scroll"><h2 class="text-4xl sm:text-5xl font-extrabold mb-4 text-slate-800">Ready to Ditch the <span class="text-gradient">Phone Number</span>?</h2><p class="text-xl text-slate-600 mb-10">Join the lightweight communication layer. Sign in with Google and start talking — free, forever.</p><div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center"><button id="final-launch-call" class="btn-google font-bold py-3 px-8 rounded-xl flex items-center justify-center shadow-xl transform hover:scale-[1.05]"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff" opacity="0.9"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity="0.7"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#fff" opacity="0.6"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#fff" opacity="0.8"/></svg>Sign In with Google — It's Free</button><button onclick="alert('Contact us: hello@caunix.app')" class="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-bold py-3 px-8 rounded-xl">Talk to the Team</button></div></div>
+            <section class="py-16 md:py-20 bg-sky-light border-t border-blue-200 text-center">
+                <div class="max-w-4xl mx-auto px-4">
+                    <h2 class="text-4xl font-extrabold mb-4">🚧 Platform in Active Development</h2>
+                    <p class="text-xl text-slate-600 mb-8">The full CauniX experience — including Google sign‑in, voice calls, and your unique identity — is launching soon. Join the waitlist or check back later.</p>
+                    <button id="footer-construction-btn" class="btn-coming-soon px-10 py-4 text-lg"><i data-lucide="hard-drive" class="w-5 h-5 mr-2"></i> Under Construction / Early Access</button>
                 </div>
             </section>
         </main>
 
-        <footer id="main-footer" class="py-12 bg-sky-light border-t border-slate-200 transition-opacity duration-300">
+        <footer class="py-12 bg-sky-light border-t border-slate-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="footer-white-panel mb-8">
+                <div class="footer-white-panel">
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                        <div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-3"><img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" class="h-8 w-auto object-contain" /><span class="text-xl font-extrabold tracking-tight text-black">CauniX</span></div><p class="text-sm text-slate-500 mt-2">Lightweight internet calling. Sign in with Google, get an identity, and talk — phone‑free.</p></div>
-                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Product</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Voice Calls</a></li><li><a href="#" class="hover:text-blue-700 transition">Identity</a></li><li><a href="#" class="hover:text-blue-700 transition">Presence</a></li><li><a href="#" class="hover:text-blue-700 transition">Safety</a></li></ul></div>
-                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Resources</h4><ul class="space-y-3 text-slate-500 text-sm"><li><a href="#" class="hover:text-blue-700 transition">Help Center</a></li><li><a href="#" class="hover:text-blue-700 transition">Community</a></li><li><a href="#" class="hover:text-blue-700 transition">Contact</a></li></ul></div>
-                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Legal</h4><ul class="space-y-3 text-slate-500 text-sm"><li><button onclick="navigateTo('/legal/terms')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Terms of Service</button></li><li><button onclick="navigateTo('/legal/privacy')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Privacy Policy</button></li><li><button onclick="navigateTo('/legal/rules')" class="hover:text-blue-700 transition bg-transparent border-0 cursor-pointer text-slate-500 text-sm p-0">Acceptable Use</button></li></ul></div>
-                        <div><h4 class="text-lg font-bold mb-4 text-slate-800">Community</h4><ul class="flex space-x-4 text-slate-500"><li><a href="#" aria-label="Twitter" class="hover:text-blue-700 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="GitHub" class="hover:text-blue-700 transition"><i data-lucide="github" class="w-5 h-5"></i></a></li><li><a href="#" aria-label="Discord" class="hover:text-blue-700 transition"><i data-lucide="message-circle" class="w-5 h-5"></i></a></li></ul></div>
+                        <div class="col-span-2 md:col-span-1"><div class="flex items-center gap-2 mb-3"><img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" class="h-8"><span class="text-xl font-extrabold">CauniX</span></div><p class="text-sm text-slate-500">Lightweight internet calling — coming soon.</p></div>
+                        <div><h4 class="font-bold mb-4">Product</h4><ul class="space-y-2 text-slate-500 text-sm"><li>Voice Calls</li><li>Identity</li><li>Presence</li></ul></div>
+                        <div><h4 class="font-bold mb-4">Resources</h4><ul class="space-y-2 text-slate-500 text-sm"><li>Help Center</li><li>Contact</li></ul></div>
+                        <div><h4 class="font-bold mb-4">Legal</h4><ul class="space-y-2 text-slate-500 text-sm"><li><button onclick="openLegalPage('terms')" class="bg-transparent border-0 text-slate-500 hover:text-blue-700 cursor-pointer">Terms</button></li><li><button onclick="openLegalPage('privacy')" class="bg-transparent border-0 text-slate-500 hover:text-blue-700 cursor-pointer">Privacy</button></li><li><button onclick="openLegalPage('rules')" class="bg-transparent border-0 text-slate-500 hover:text-blue-700 cursor-pointer">Rules</button></li></ul></div>
+                        <div><h4 class="font-bold mb-4">Community</h4><div class="flex gap-4 text-slate-500"><i data-lucide="twitter" class="w-5 h-5"></i><i data-lucide="github" class="w-5 h-5"></i></div></div>
                     </div>
                 </div>
-                <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500"><p>&copy; 2026 CauniX. All rights reserved. Over‑the‑top communication, free from carriers.</p><p class="mt-2 md:mt-0">Lightweight · Encrypted · Free</p></div>
+                <div class="text-center text-sm text-slate-500 mt-6">&copy; 2026 CauniX. All rights reserved. Lightweight · Encrypted · Free (coming soon)</div>
             </div>
         </footer>
     </div>
 
-    <!-- ===== SIGNUP PAGE ===== -->
-    <div id="signupPageContainer" class="signup-page-container">
-        <canvas id="signupRibbonCanvas"></canvas>
-        <div class="signup-led-wrapper">
-            <div class="signup-main-panel">
-                <div class="signup-left-panel">
-                    <div class="signup-panel-header">
-                        <button id="signup-back-btn" class="signup-back-button">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                            Back
-                        </button>
-                    </div>
-                    <div class="signup-scroll-content flex flex-col">
-                        <div class="flex items-center gap-3 mb-10 mt-4">
-                            <img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" alt="CauniX Logo" class="h-8 w-auto">
-                            <span style="font-family: 'DM Sans'" class="text-xl font-bold tracking-tighter">CauniX</span>
-                        </div>
-                        <div class="mb-10">
-                            <h1 class="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-4">Sign Up <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">For FREE, and start calling</span></h1>
-                            <p class="text-slate-500 text-base mb-8 max-w-xs">Experience the no-SIM global communication protocol. Encrypted. Borderless. Create your unique internet voice identity today.</p>
-                            <div id="auth-message" class="auth-message"></div>
-                            <div class="flex flex-col gap-4 mb-8">
-                                <label class="signup-checkbox-container"><input type="checkbox" id="signup-tosCheck" aria-label="I agree to the Terms of Service"><span class="signup-checkbox-label">I agree to the <a href="javascript:navigateTo('/legal/terms')">Terms of Service</a></span></label>
-                                <label class="signup-checkbox-container"><input type="checkbox" id="signup-privacyCheck" aria-label="I accept the Privacy Policy"><span class="signup-checkbox-label">I accept the <a href="javascript:navigateTo('/legal/privacy')">Privacy Policy</a></span></label>
-                            </div>
-                            <div class="flex flex-col gap-4">
-                                <button id="signup-googleBtn" disabled class="signup-auth-btn w-full max-w-xs flex items-center justify-center gap-3 font-bold py-3.5 px-6 rounded-2xl" aria-label="Sign up with Google">
-                                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-5 h-5" alt="Google Logo">
-                                    <span class="text-sm">Sign up with Google</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="mt-auto pt-6 border-t border-slate-200"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Protocol V1.0 • Global Mesh</p></div>
-                    </div>
-                </div>
-                <div id="signup-animation-container">
-                    <div class="absolute inset-0 z-10">
-                        <div class="signup-scene-content active"><h1>CauniX</h1><p>Internet Voice Identity</p></div>
-                        <div class="signup-scene-content"><h1>No SIM.</h1><p>Legacy Reimagined</p></div>
-                        <div class="signup-scene-content"><h1>Global.</h1><p>Continental Precision</p></div>
-                        <div class="signup-scene-content"><h1>CauniX</h1><p>Your Voice. Your Rules.</p></div>
-                    </div>
-                    <canvas id="signupHeroCanvas"></canvas>
-                    <div id="signup-finaleStage">
-                        <div class="signup-intro-frame" id="signup-introFrame">
-                            <div class="signup-guide-line" style="top: -40px;"></div>
-                            <div class="signup-guide-line" style="bottom: -40px;"></div>
-                            <svg class="signup-intro-svg" viewBox="0 0 800 200" aria-hidden="true">
-                                <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="signup-letter-path" id="signup-strokeLayer">CauniX</text>
-                                <text x="50%" y="45%" text-anchor="middle" dominant-baseline="middle" class="signup-fill-text" id="signup-fillLayer">CauniX</text>
-                                <text x="50%" y="85%" text-anchor="middle" class="signup-sub-url-path" id="signup-urlLayer">CAUNIX.COM</text>
-                            </svg>
-                        </div>
-                        <div class="signup-logo-final-container" id="signup-logoFinal">
-                            <img src="https://i.postimg.cc/6qNT7fbr/Gemini-Generated-Image-t3di8pt3di8pt3di.png" class="w-full" alt="CauniX Final Logo">
-                        </div>
-                    </div>
-                </div>
+    <!-- LEGAL FULLSCREEN PAGE (NO AUTH) -->
+    <div id="legalPageContainer" style="display: none; position: fixed; inset: 0; z-index: 11000; background: white; overflow-y: auto;">
+        <div class="sticky top-0 bg-white border-b border-slate-200 p-4 flex items-center gap-5 flex-wrap">
+            <button class="legal-back-btn flex items-center gap-1 font-bold text-blue-600 bg-transparent border-0 cursor-pointer" onclick="closeLegalPage()"><i data-lucide="arrow-left" class="w-5 h-5"></i> Back</button>
+            <div class="flex gap-3 flex-wrap">
+                <button class="legal-tab-btn px-4 py-2 rounded-xl font-semibold bg-slate-100" data-tab="terms">Terms of Service</button>
+                <button class="legal-tab-btn px-4 py-2 rounded-xl font-semibold bg-slate-100" data-tab="privacy">Privacy Policy</button>
+                <button class="legal-tab-btn px-4 py-2 rounded-xl font-semibold bg-slate-100" data-tab="rules">Platform Rules</button>
             </div>
         </div>
-    </div>
-
-    <!-- ===== NEW DASHBOARD ===== -->
-    <div id="dashboardContainer">
-        <aside class="dashboard-sidebar">
-            <div class="brand-container">
-                <img src="https://i.postimg.cc/1zL2dLd1/Gemini-Generated-Image-5187pg5187pg5187.png" alt="Logo" class="logo-img">
-                <span class="brand-name">CauniX</span>
-            </div>
-            <nav class="flex-1 mt-4">
-                <button id="nav-chat" class="nav-link active" onclick="dashboardSwitchTab('chat')">
-                    <div class="icon-box"><i data-lucide="message-square"></i></div>
-                    <span class="nav-label">Chat</span>
-                </button>
-                <button id="nav-groups" class="nav-link" onclick="dashboardSwitchTab('groups')">
-                    <div class="icon-box"><i data-lucide="users"></i></div>
-                    <span class="nav-label">Groups</span>
-                </button>
-            </nav>
-            <div class="pb-6">
-                <button class="nav-link" onclick="alert('Settings coming soon!')">
-                    <div class="icon-box"><i data-lucide="settings"></i></div>
-                    <span class="nav-label">Settings</span>
-                </button>
-                <button id="nav-account" class="nav-link" onclick="dashboardOpenAccount()">
-                    <div class="icon-box"><i data-lucide="user-circle"></i></div>
-                    <span class="nav-label">Account</span>
-                </button>
-            </div>
-        </aside>
-
-        <section id="chat-list" class="list-panel">
-            <div class="p-8 pb-4">
-                <div class="search-container relative mb-3">
-                    <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-slate-400"></i>
-                    <input type="text" placeholder="Identity or name..." class="w-full bg-transparent border-none py-3.5 pl-12 pr-4 text-sm outline-none font-medium">
-                </div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Recent Chats</p>
-            </div>
-            <div class="flex-1 overflow-y-auto px-4 mt-2 space-y-2">
-                <div class="flex items-center gap-4 p-4 rounded-[20px] bg-slate-50 border-l-4 border-blue-500 shadow-sm cursor-pointer hover:bg-slate-100 transition-all">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="w-12 h-12 rounded-full" alt="Avatar">
-                    <div class="flex-1">
-                        <h4 class="text-sm font-bold text-slate-800">alex_vibe.caunix</h4>
-                        <p class="text-xs text-blue-600 font-bold italic">Typing...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="group-list" class="list-panel hidden-panel">
-            <div class="p-8 pb-4">
-                <div class="search-container relative mb-1">
-                    <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-slate-400"></i>
-                    <input type="text" placeholder="Find a group..." class="w-full bg-transparent border-none py-3.5 pl-12 pr-4 text-sm outline-none font-medium">
-                </div>
-                <button class="create-group-btn w-full"><i data-lucide="plus-circle" class="w-4 h-4"></i>Create Group</button>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mt-6">My Communities</p>
-            </div>
-            <div class="px-4 mt-2">
-                <div onclick="dashboardSwitchToGroupChat()" class="flex items-center gap-4 p-4 rounded-[20px] bg-slate-50 border-l-4 border-purple-500 shadow-sm cursor-pointer hover:bg-slate-100 transition-colors">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">CX</div>
-                    <div class="flex-1 min-w-0">
-                        <h4 class="text-sm font-bold text-slate-800">CauniX Global</h4>
-                        <p class="text-xs text-slate-500 truncate">Official announcement channel.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="main-container">
-            <main id="chat-canvas" class="chat-canvas">
-                <header class="px-10 py-10 flex items-center justify-between">
-                    <div class="flex flex-col">
-                        <h2 id="chat-title" class="text-3xl font-black text-gradient mb-2">Conversations</h2>
-                        <div id="chat-subtitle" class="flex items-center gap-3">
-                            <img id="header-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="w-8 h-8 rounded-full" alt="Header Avatar">
-                            <p id="header-name" class="text-sm font-bold text-slate-500">alex_vibe.caunix</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <button class="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-sm text-slate-500 hover:text-blue-500 transition-colors"><i data-lucide="phone" class="w-5 h-5"></i></button>
-                        <button class="w-10 h-10 flex items-center justify-center bg-white rounded-xl shadow-sm text-slate-500 hover:text-blue-500 transition-colors"><i data-lucide="video" class="w-5 h-5"></i></button>
-                    </div>
-                </header>
-                <div class="flex-1 overflow-y-auto px-10 space-y-6" id="message-area">
-                    <div class="bg-white p-6 rounded-3xl rounded-bl-none text-sm font-medium shadow-sm text-slate-800 max-w-[60%]">
-                        Welcome back! Select a chat or group to start communicating.
-                    </div>
-                </div>
-                <footer class="p-10">
-                    <div class="input-wrapper flex items-center gap-3 max-w-5xl mx-auto p-2">
-                        <button class="p-4 text-slate-400 hover:text-blue-500"><i data-lucide="paperclip" class="w-6 h-6"></i></button>
-                        <input type="text" placeholder="Send an encrypted packet..." class="flex-1 bg-transparent border-none py-4 px-2 text-base outline-none">
-                        <button class="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-2xl flex items-center justify-center shadow-lg hover:brightness-110 transition-all"><i data-lucide="send" class="w-6 h-6"></i></button>
-                    </div>
-                </footer>
-            </main>
-
-            <div id="account-view" class="account-fullscreen">
-                <div class="max-w-5xl mx-auto w-full">
-                    <div class="flex justify-between items-center mb-10">
-                        <div>
-                            <h1 class="text-4xl font-black text-slate-800 tracking-tight">Account Settings</h1>
-                            <p class="text-slate-500 font-medium">Manage your decentralized identity and security</p>
-                        </div>
-                        <button onclick="dashboardCloseAccount()" class="w-12 h-12 bg-white shadow-md rounded-2xl flex items-center justify-center text-slate-500 hover:text-red-500 transition-all"><i data-lucide="x"></i></button>
-                    </div>
-                    <div class="grid grid-cols-12 gap-8">
-                        <div class="col-span-12 lg:col-span-4 space-y-6">
-                            <div class="account-card p-8 flex flex-col items-center text-center">
-                                <div class="relative group">
-                                    <div class="w-40 h-40 rounded-[40px] overflow-hidden border-8 border-slate-50 shadow-2xl mb-6">
-                                        <img id="account-avatar-img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" class="w-full h-full object-cover" alt="User Avatar">
-                                    </div>
-                                    <button class="absolute bottom-4 right-0 w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"><i data-lucide="camera" class="w-5 h-5"></i></button>
-                                </div>
-                                <h3 class="text-2xl font-bold text-slate-800" id="account-display-name">User Main</h3>
-                                <p class="text-blue-600 font-bold text-sm mb-6" id="account-caunix-id">@user_main.caunix</p>
-                                <div class="grid grid-cols-2 gap-3 w-full">
-                                    <div class="stat-pill"><p class="text-[10px] uppercase font-black text-slate-400">Trust</p><p class="text-lg font-bold text-slate-700">99.2%</p></div>
-                                    <div class="stat-pill"><p class="text-[10px] uppercase font-black text-slate-400">Tier</p><p class="text-lg font-bold text-slate-700">Gold</p></div>
-                                </div>
-                            </div>
-                            <div class="account-card p-6">
-                                <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="shield-check" class="w-5 h-5 text-green-500"></i> Identity Verified</h4>
-                                <p class="text-xs text-slate-500 leading-relaxed">Your identity is cryptographically secured on the CauniX mesh network.</p>
-                            </div>
-                        </div>
-                        <div class="col-span-12 lg:col-span-8 space-y-6">
-                            <div class="account-card p-8">
-                                <label class="text-[10px] uppercase font-black text-slate-400 tracking-widest block mb-4">Account Email</label>
-                                <div class="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600"><i data-lucide="mail"></i></div>
-                                        <div>
-                                            <p class="text-sm font-mono font-bold text-slate-700" id="account-email">user@example.com</p>
-                                            <p class="text-[10px] text-slate-400 font-bold uppercase">Google Authenticated</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="account-card p-6">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center mb-4"><i data-lucide="bell"></i></div>
-                                        <div class="toggle-switch toggle-active" onclick="this.classList.toggle('toggle-active')"></div>
-                                    </div>
-                                    <h4 class="font-bold text-slate-800">Push Notifications</h4>
-                                    <p class="text-xs text-slate-500">Get alerts for new packets</p>
-                                </div>
-                                <div class="account-card p-6">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <div class="w-10 h-10 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center mb-4"><i data-lucide="eye-off"></i></div>
-                                        <div class="toggle-switch" onclick="this.classList.toggle('toggle-active')"></div>
-                                    </div>
-                                    <h4 class="font-bold text-slate-800">Stealth Mode</h4>
-                                    <p class="text-xs text-slate-500">Hide your online presence</p>
-                                </div>
-                            </div>
-                            <div class="pt-4">
-                                <button id="dashboard-logout-btn" class="flex items-center gap-2 text-red-500 font-bold text-sm opacity-60 hover:opacity-100 transition-opacity bg-transparent border-0 cursor-pointer">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i> Sign Out (Disconnect Identity)
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== LEGAL FULL‑SCREEN PAGE ===== -->
-    <div id="legalPageContainer">
-        <header class="legal-page-header">
-            <button class="legal-back-btn" onclick="history.back()"><i data-lucide="arrow-left" class="w-5 h-5"></i> Back</button>
-            <nav class="legal-tab-nav" id="legalTabNav">
-                <button class="legal-tab-btn active" data-tab="terms">Terms of Service</button>
-                <button class="legal-tab-btn" data-tab="privacy">Privacy Policy</button>
-                <button class="legal-tab-btn" data-tab="rules">Platform Rules</button>
-            </nav>
-        </header>
-        <div class="legal-content" id="legalContentBody"></div>
+        <div class="max-w-3xl mx-auto p-8" id="legalContentBody"></div>
     </div>
 
     <script>
-        // ===== FIREBASE CONFIGURATION =====
-        const firebaseConfig = {
-            apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
-            authDomain: "tervallx.firebaseapp.com",
-            projectId: "tervallx",
-            storageBucket: "tervallx.firebasestorage.app",
-            messagingSenderId: "1097149640832",
-            appId: "1:1097149640832:web:24205417b4f481b7523665",
-            measurementId: "G-32MMXKPB83"
-        };
-
-        let firebaseInitialized = false;
-        let auth = null;
-        let db = null;
-        let authStateResolved = false; // track when onAuthStateChanged fires first time
-
-        // ─── Path helpers (robust for local dev, file:// & prod) ───────────────
-        function isDashboardPath(p) {
-            p = p || window.location.pathname;
-            return /\/dashboard(\/|$)/.test(p) || p.endsWith('dashboard');
-        }
-        function isSignupPath(p) {
-            p = p || window.location.pathname;
-            return /\/signup(\/|$)/.test(p) || p.endsWith('signup');
-        }
-
-        // ─── Auth loading overlay helpers ───────────────────────────────────────
-        function hideAuthLoader() {
-            const loader = document.getElementById('auth-loader');
-            if (!loader || loader.classList.contains('hidden')) return;
-            loader.classList.add('fade-out');
-            setTimeout(() => loader.classList.add('hidden'), 380);
-        }
-
-        async function initFirebase() {
-    if (firebaseInitialized) return;
-
-    if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
-        setTimeout(initFirebase, 50);
-        return;
-    }
-
-    try {
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
-        db   = firebase.database();
-        firebaseInitialized = true;
-
-        // ── Step 1: consume any pending OAuth redirect ───────────────────
-        let redirectUser = null;
-        try {
-            const result = await auth.getRedirectResult();
-            if (result && result.user) {
-                redirectUser = result.user;
-                saveUserToDatabase(result.user).catch(e =>
-                    console.error('DB save error:', e));
-            }
-        } catch (redirectError) {
-            console.error('Redirect result error:', redirectError);
-            if (redirectError.code === 'auth/credential-already-in-use') {
-                showAuthMessage('Account already linked — please try again.', 'error');
-            }
-        } finally {
-            localStorage.removeItem('caunixAuthPending');
-        }
-
-        // ── Step 2: fast-path for fresh redirect ─────────────────────────
-        if (redirectUser) {
-            window.history.replaceState(
-                { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-            showDashboard(redirectUser);
-            authStateResolved = true;
-            hideAuthLoader();
-        }
-
-        // ── Step 3: set up the auth state listener ────────────────────────
-        // We will NOT accept a 'null' user as the final answer until
-        // `authStateResolved` becomes true.  That flag will be set either:
-        //   • immediately by a successful `getRedirectResult`
-        //   • when the observer fires with a `user`
-        //   • after a 1‑second grace period (safety net inside the observer)
-        auth.onAuthStateChanged((user) => {
-            const path = window.location.pathname;
-
-            if (user) {
-                // user present → dashboard
-                if (!isDashboardPath(path)) {
-                    window.history.replaceState(
-                        { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-                }
-                showDashboard(user);
-
-                if (!authStateResolved) {
-                    authStateResolved = true;
-                    hideAuthLoader();
-                }
-            } else {
-                // user = null – but we are not yet ready to trust this
-                if (!authStateResolved) {
-                    // Still waiting – do nothing, keep the loading overlay.
-                    // We will add a one‑time timer that resolves the state.
-                    return;
-                }
-
-                // authStateResolved is true, so null genuinely means signed out.
-                if (isDashboardPath(path)) {
-                    window.history.replaceState({ page: 'home' }, 'CauniX', '/');
-                    showLandingPage();
-                } else if (isSignupPath(path)) {
-                    showSignupPage();
-                } else {
-                    showLandingPage();
-                }
-            }
-        });
-
-        // ── Step 4: one‑second grace period for the observer ──────────────
-        // If after 1 second the observer still hasn't supplied a user,
-        // we mark auth as resolved and, if still null, show the appropriate
-        // unauthenticated page (sign‑up or landing).
-        // ── Step 4: 2‑second grace period for the observer ──────────────
-setTimeout(() => {
-    if (!authStateResolved) {
-        authStateResolved = true;
-        hideAuthLoader();
-        const p = window.location.pathname;
-        // If the URL still says /signup, show the signup page; else show landing.
-        if (isSignupPath(p)) {
-            showSignupPage();
-        } else if (isDashboardPath(p)) {
-            window.history.replaceState({ page: 'home' }, 'CauniX', '/');
-            showLandingPage();
-        } else {
-            showLandingPage();
-        }
-    }
-}, 2000);
-    } catch (error) {
-    console.error('Auth init error:', error);
-    localStorage.removeItem('caunixAuthPending');
-    showAuthMessage(error.message, 'error');
-    authStateResolved = true;          // ← ADD THIS LINE
-    hideAuthLoader();
-    showLandingPage();
-   }
-}
-
-        // ── Single entry point ───────────────────────────────────────────────────
-        document.addEventListener('DOMContentLoaded', initFirebase);
-
-        // ── Safety net: if Firebase never fires within 8 s, dismiss the loader ──
-        setTimeout(() => {
-            if (!authStateResolved) {
-                authStateResolved = true;
-                hideAuthLoader();
-                const path = window.location.pathname;
-                if (isDashboardPath(path)) {
-                    window.history.replaceState({ page: 'home' }, 'CauniX', '/');
-                }
-                showLandingPage();
-            }
-        }, 8000);
-
-        // ===== AUTH MESSAGE HELPER =====
-        function showAuthMessage(message, type = 'info') {
-            const messageEl = document.getElementById('auth-message');
-            if (!messageEl) return;
-            messageEl.textContent = message;
-            messageEl.className = `auth-message show ${type}`;
-            setTimeout(() => messageEl.classList.remove('show'), 5000);
-        }
-
-        // ===== GOOGLE AUTH HANDLER (INSTANT REDIRECT) =====
-        function handleGoogleSignUp() {
-            if (!auth) {
-                showAuthMessage('Firebase not initialized. Please refresh the page.', 'error');
-                return;
-            }
-            const googleBtn = document.getElementById('signup-googleBtn');
-            if (!googleBtn) return;
-            googleBtn.disabled = true;
-            googleBtn.innerHTML = '<div class="loading-spinner"></div><span>Redirecting...</span>';
-            googleBtn.classList.add('loading');
-
-            // Stamp a flag so initFirebase knows a redirect is coming when the
-            // page reloads. This prevents onAuthStateChanged(null) from rendering
-            // the signup page during the brief window before tokens are exchanged.
-            localStorage.setItem('caunixAuthPending', '1');
-
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.setCustomParameters({ prompt: 'consent' });
-            auth.signInWithRedirect(provider);
-        }
-
-        // ===== SAVE USER TO DATABASE =====
-        async function saveUserToDatabase(user) {
-            if (!db || !user || !user.uid) return;
-            const caunixId = `user_${user.uid.substring(0, 12)}`;
-            const userData = {
-                uid: user.uid,
-                email: user.email || '',
-                displayName: (user.displayName && user.displayName !== 'undefined')
-                    ? user.displayName : 'CauniX User',
-                photoURL: user.photoURL || '',
-                caunixId: caunixId,
-                lastSeen: new Date().toISOString(),
-                provider: user.providerData?.[0]?.providerId || 'unknown',
-            };
-            try {
-                // Use update so we don't overwrite `createdAt` set on first sign-up
-                const ref = db.ref(`users/${user.uid}`);
-                const snap = await ref.once('value');
-                if (!snap.exists()) {
-                    userData.createdAt = new Date().toISOString();
-                    await ref.set(userData);
-                } else {
-                    await ref.update(userData);
-                }
-                localStorage.setItem('caunixUser', JSON.stringify(userData));
-            } catch (e) {
-                console.error('Database save error:', e);
-                localStorage.setItem('caunixUser', JSON.stringify(userData));
-            }
-        }
-
-        // ===== LOGOUT HANDLER =====
-        async function handleLogout() {
-            if (!auth) return;
-            try {
-                await auth.signOut();
-                localStorage.removeItem('caunixUser');
-                localStorage.removeItem('caunixAuthPending'); // safety clear
-                closeDashboard();
-                window.history.replaceState({ page: 'home' }, 'CauniX', '/');
-                showLandingPage();
-                showAuthMessage('Signed out successfully.', 'success');
-            } catch (error) {
-                console.error('Logout error:', error);
-                showAuthMessage(`Error: ${error.message}`, 'error');
-            }
-        }
-
-        // ===== SHOW DASHBOARD (NEW DESIGN) =====
-        function showDashboard(user) {
-            // Guard: require a fully-populated user object to avoid "undefined" in UI
-            if (!user || !user.uid) {
-                console.warn('showDashboard called with invalid user — aborting');
-                showLandingPage();
-                return;
-            }
-
-            const dashboard = document.getElementById('dashboardContainer');
-            if (!dashboard) return;
-
-            const displayName = (user.displayName && user.displayName !== 'undefined')
-                ? user.displayName : 'CauniX User';
-            const caunixId = `user_${user.uid.substring(0, 12)}`;
-            const email = user.email || '';
-            const photoURL = user.photoURL ||
-                `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(displayName)}`;
-
-            // Populate account view
-            const accountDisplayName = document.getElementById('account-display-name');
-            const accountCaunixId = document.getElementById('account-caunix-id');
-            const accountEmail = document.getElementById('account-email');
-            const accountAvatarImg = document.getElementById('account-avatar-img');
-
-            if (accountDisplayName) accountDisplayName.textContent = displayName;
-            if (accountCaunixId) accountCaunixId.textContent = `@${caunixId}.caunix`;
-            if (accountEmail) accountEmail.textContent = email;
-            if (accountAvatarImg) accountAvatarImg.src = photoURL;
-
-            // Also update chat header
-            const headerName = document.getElementById('header-name');
-            const headerImg = document.getElementById('header-img');
-            if (headerName) headerName.textContent = `@${caunixId}.caunix`;
-            if (headerImg) headerImg.src = photoURL;
-
-            // Store user data for later use
-            dashboard.setAttribute('data-user', JSON.stringify({
-                displayName,
-                caunixId,
-                email,
-                photoURL,
-                uid: user.uid
-            }));
-
-            // Show the dashboard
-            dashboard.classList.add('active');
-            landingPageContainer.classList.add('hidden');
-            signupPageContainer.classList.remove('active');
-            document.documentElement.classList.remove('signup-page');
-            closeLegalPage();
-
-            // Reset to chat view
-            dashboardResetToChatView();
-
-            // Refresh icons
-            setTimeout(() => lucide.createIcons(), 100);
-        }
-
-        function closeDashboard() {
-            const dashboard = document.getElementById('dashboardContainer');
-            if (dashboard) {
-                dashboard.classList.remove('active');
-            }
-        }
-
-        function dashboardResetToChatView() {
-            const chatList = document.getElementById('chat-list');
-            const groupList = document.getElementById('group-list');
-            const accountView = document.getElementById('account-view');
-            const navChat = document.getElementById('nav-chat');
-            const navGroups = document.getElementById('nav-groups');
-            const navAccount = document.getElementById('nav-account');
-
-            if (chatList) chatList.classList.remove('list-panel-hidden', 'hidden-panel');
-            if (groupList) {
-                groupList.classList.add('hidden-panel');
-                groupList.classList.remove('list-panel-hidden');
-            }
-            if (accountView) accountView.classList.remove('active-view');
-            if (navChat) navChat.classList.add('active');
-            if (navGroups) navGroups.classList.remove('active');
-            if (navAccount) navAccount.classList.remove('active');
-        }
-
-        // ===== DASHBOARD TAB SWITCHING =====
-        function dashboardSwitchTab(tab) {
-            dashboardCloseAccount();
-            const navLinks = document.querySelectorAll('#dashboardContainer .nav-link');
-            navLinks.forEach(link => link.classList.remove('active'));
-            const targetNav = document.getElementById('nav-' + tab);
-            if (targetNav) targetNav.classList.add('active');
-
-            const chatList = document.getElementById('chat-list');
-            const groupList = document.getElementById('group-list');
-
-            if (tab === 'chat') {
-                if (chatList) { chatList.classList.remove('hidden-panel', 'list-panel-hidden'); }
-                if (groupList) { groupList.classList.add('hidden-panel');
-                    groupList.classList.remove('list-panel-hidden'); }
-            } else if (tab === 'groups') {
-                if (groupList) { groupList.classList.remove('hidden-panel', 'list-panel-hidden'); }
-                if (chatList) { chatList.classList.add('hidden-panel');
-                    chatList.classList.remove('list-panel-hidden'); }
-            }
-        }
-
-        function dashboardOpenAccount() {
-            const chatList = document.getElementById('chat-list');
-            const groupList = document.getElementById('group-list');
-            const accountView = document.getElementById('account-view');
-            const navLinks = document.querySelectorAll('#dashboardContainer .nav-link');
-
-            if (chatList) chatList.classList.add('list-panel-hidden');
-            if (groupList) groupList.classList.add('list-panel-hidden');
-            if (accountView) accountView.classList.add('active-view');
-
-            navLinks.forEach(link => link.classList.remove('active'));
-            const navAccount = document.getElementById('nav-account');
-            if (navAccount) navAccount.classList.add('active');
-        }
-
-        function dashboardCloseAccount() {
-            const chatList = document.getElementById('chat-list');
-            const groupList = document.getElementById('group-list');
-            const accountView = document.getElementById('account-view');
-            const navAccount = document.getElementById('nav-account');
-            const navChat = document.getElementById('nav-chat');
-
-            if (chatList) chatList.classList.remove('list-panel-hidden');
-            if (groupList) groupList.classList.remove('list-panel-hidden');
-            if (accountView) accountView.classList.remove('active-view');
-            if (navAccount) navAccount.classList.remove('active');
-            if (navChat) navChat.classList.add('active');
-
-            // Ensure chat list is visible, group list is hidden by default
-            if (chatList) chatList.classList.remove('hidden-panel');
-            if (groupList) groupList.classList.add('hidden-panel');
-        }
-
-        function dashboardSwitchToGroupChat() {
-            const chatTitle = document.getElementById('chat-title');
-            const headerName = document.getElementById('header-name');
-            const headerImg = document.getElementById('header-img');
-            const messageArea = document.getElementById('message-area');
-
-            if (chatTitle) chatTitle.innerText = "Group Hub";
-            if (headerName) headerName.innerText = "CauniX Global Group";
-            if (headerImg) headerImg.classList.add('hidden');
-            if (messageArea) {
-                messageArea.innerHTML = `
-                    <div class="bg-purple-600 p-6 rounded-3xl rounded-bl-none text-sm font-medium shadow-sm text-white max-w-[60%]">
-                        <b>System:</b> Switched to CauniX Global. This is a non-custodial community space.
-                    </div>
-                `;
-            }
-        }
-
-        // ===== NAVIGATION =====
-        // navigateTo() handles deliberate user-driven navigation (button clicks, back/fwd).
-        // For auth-driven routing, onAuthStateChanged is used instead.
-        function navigateTo(path, user = null) {
-            if (path.startsWith('/legal/')) {
-                const tab = path.split('/legal/')[1];
-                window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, path);
-                openLegalPage(tab);
-                return;
-            }
-
-            if (isDashboardPath(path)) {
-                // Resolve a live user object — never trust raw localStorage alone
-                const currentUser = user || (auth && auth.currentUser);
-                if (currentUser && currentUser.uid) {
-                    window.history.pushState({ page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-                    showDashboard(currentUser);
-                } else {
-                    // No live session — go to landing; onAuthStateChanged will handle it
-                    window.history.pushState({ page: 'home' }, 'CauniX', '/');
-                    showLandingPage();
-                }
-                return;
-            }
-
-            if (isSignupPath(path)) {
-        // 🛡️ Do not allow navigating to sign‑up if already logged in
-        const currentUser = user || (auth && auth.currentUser);
-        if (currentUser && currentUser.uid) {
-            window.history.replaceState(
-                { page: 'dashboard' },
-                'CauniX Dashboard',
-                '/dashboard'
-            );
-            showDashboard(currentUser);
-            return;
-        }
-        window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
-        showSignupPage();
-        return;
-    }
-}            
-
-        // ===== PAGE ROUTING =====
-        const landingPageContainer = document.getElementById('landingPageContainer');
-        const signupPageContainer = document.getElementById('signupPageContainer');
-        let landingHeroCleanup = null;
-        let signupHeroCleanup = null;
-        let signupRibbonCleanup = null;
-
-        function showLandingPage() {
-            landingPageContainer.classList.remove('hidden');
-            signupPageContainer.classList.remove('active');
-            closeDashboard();
-            document.documentElement.classList.remove('signup-page');
-            closeLegalPage();
-            if (signupHeroCleanup) { signupHeroCleanup();
-                signupHeroCleanup = null; }
-            if (signupRibbonCleanup) { signupRibbonCleanup();
-                signupRibbonCleanup = null; }
-        }
-
-        function showSignupPage() {
-    // 🛡️ Already signed in? Immediately redirect to dashboard.
-    if (auth && auth.currentUser) {
-        window.history.replaceState(
-            { page: 'dashboard' },
-            'CauniX Dashboard',
-            '/dashboard'
-        );
-        showDashboard(auth.currentUser);
-        return;
-    }
-
-    landingPageContainer.classList.add('hidden');
-    signupPageContainer.classList.add('active');
-    closeDashboard();
-    document.documentElement.classList.add('signup-page');
-    closeLegalPage();
-    startSignupAnimations();
-}
-
-        // Navigation buttons
-        const navButtons = [
-            document.getElementById('nav-get-started'),
-            document.getElementById('mobile-get-started'),
-            document.getElementById('hero-launch-call'),
-            document.getElementById('final-launch-call')
-        ];
-        navButtons.forEach(btn => {
-            if (btn) {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
-                    showSignupPage();
-                });
-            }
-        });
-
-        const signupBackBtn = document.getElementById('signup-back-btn');
-        if (signupBackBtn) {
-            signupBackBtn.addEventListener('click', () => {
-                window.history.pushState({ page: 'home' }, 'CauniX', '/');
-                showLandingPage();
-            });
-        }
-
-        // Dashboard logout button
-        const dashboardLogoutBtn = document.getElementById('dashboard-logout-btn');
-        if (dashboardLogoutBtn) {
-            dashboardLogoutBtn.addEventListener('click', handleLogout);
-        }
-
-        // Browser back/forward
-window.addEventListener('popstate', (event) => {
-    const state = event.state;
-    const path = window.location.pathname;
-
-    if (state) {
-        if (state.page === 'signup') {
-            // 🛡️ Do not act before auth is fully initialised
-            if (!authStateResolved) return;
-
-            const liveUser = auth && auth.currentUser;
-            if (liveUser) {
-                window.history.replaceState(
-                    { page: 'dashboard' },
-                    'CauniX Dashboard',
-                    '/dashboard'
-                );
-                showDashboard(liveUser);
-            } else {
-                showSignupPage();
-            }
-        } else if (state.page === 'legal') {
-            openLegalPage(state.tab || 'terms');
-        } else if (state.page === 'dashboard') {
-            const liveUser = auth && auth.currentUser;
-            if (liveUser) {
-                showDashboard(liveUser);
-            } else {
-                showLandingPage();
-            }
-        } else {
-            showLandingPage();
-        }
-    } else {
-        // No state – derive view from the URL
-        if (isDashboardPath(path)) {
-            const liveUser = auth && auth.currentUser;
-            if (liveUser) {
-                showDashboard(liveUser);
-            } else {
-                showLandingPage();
-            }
-        } else if (isSignupPath(path)) {
-            // 🛡️ Wait for auth before handling a /signup URL
-            if (!authStateResolved) return;
-
-            const liveUser = auth && auth.currentUser;
-            if (liveUser) {
-                window.history.replaceState(
-                    { page: 'dashboard' },
-                    'CauniX Dashboard',
-                    '/dashboard'
-                );
-                showDashboard(liveUser);
-            } else {
-                showSignupPage();
-            }
-        } else {
-            showLandingPage();
-        }
-    }
-});
-
-        // ===== SIGNUP FORM HANDLERS =====
-        const tosCheck = document.getElementById('signup-tosCheck');
-        const privacyCheck = document.getElementById('signup-privacyCheck');
-        const googleBtn = document.getElementById('signup-googleBtn');
-
-        function updateSignupBtnState() {
-            if (!googleBtn) return;
-            const isAccepted = tosCheck && tosCheck.checked && privacyCheck && privacyCheck.checked;
-            googleBtn.disabled = !isAccepted;
-        }
-        if (tosCheck) tosCheck.addEventListener('change', updateSignupBtnState);
-        if (privacyCheck) privacyCheck.addEventListener('change', updateSignupBtnState);
-        if (googleBtn) googleBtn.addEventListener('click', handleGoogleSignUp);
-
-        // ===== LANDING PAGE ANIMATIONS =====
-        lucide.createIcons();
-
-        const menuButton = document.getElementById('menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (menuButton && mobileMenu) {
-            menuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-            mobileMenu.querySelectorAll('a, button').forEach(link => {
-                link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); });
-            });
-        }
-
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('animated');
-            });
-        }, { threshold: 0.1 });
-        animatedElements.forEach(el => observer.observe(el));
-
-        // Landing Hero Animation
-        (function initLandingHero() {
-            const hCanvas = document.getElementById('heroCanvas');
-            if (!hCanvas) return;
-            const hCtx = hCanvas.getContext('2d');
-            const scenes = document.querySelectorAll('.scene-content');
-            const finale = document.getElementById('finaleStage');
-            const visual = document.getElementById('visualMainContent');
-
-            let hw, hh, currentScene = 0,
-                frame = 0,
-                showTextScenes = true;
-            let finaleTimeline = null;
-            let animationFrameId = null;
-            const SPEED = 16,
-                SCENE_DURATION = 160;
-
-            function resize() {
-                const container = hCanvas.parentElement;
-                if (!container) return;
-                hw = hCanvas.width = container.clientWidth;
-                hh = hCanvas.height = container.clientHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            class Particle {
-                constructor(preWarm = false) { this.reset(preWarm); }
-                reset(preWarm = false) {
-                    this.x = (Math.random() - 0.5) * 4500;
-                    this.y = (Math.random() - 0.5) * 4500;
-                    this.z = preWarm ? Math.random() * 2000 : 2000;
-                    this.pz = this.z;
-                    this.size = Math.random() * 1.2 + 1.2;
-                }
-                update() {
-                    this.pz = this.z;
-                    this.z -= SPEED;
-                    if (this.z < 1) this.reset();
-                }
-                draw() {
-                    const s = 800 / this.z;
-                    const ps = 800 / this.pz;
-                    const x = this.x * s + hw / 2;
-                    const y = this.y * s + hh / 2;
-                    const px = this.x * ps + hw / 2;
-                    const py = this.y * ps + hh / 2;
-                    hCtx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
-                    hCtx.strokeStyle = '#000000';
-                    hCtx.lineWidth = this.size * s;
-                    hCtx.lineCap = 'round';
-                    hCtx.beginPath();
-                    hCtx.moveTo(x, y);
-                    hCtx.lineTo(px, py);
-                    hCtx.stroke();
-                }
-            }
-
-            const particles = Array.from({ length: 800 }, () => new Particle(true));
-
-            function resetAllScenes() {
-                scenes.forEach((scene) => { scene.classList.remove('active', 'exit'); });
-                if (scenes[0]) scenes[0].classList.add('active');
-            }
-
-            function resetFinaleElements() {
-                gsap.killTweensOf(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame",
-                    "#logoFinal"
-                ]);
-                gsap.set(["#strokeLayer", "#fillLayer", "#urlLayer", ".guide-line", "#introFrame", "#logoFinal"], {
-                    clearProps: "all" });
-                gsap.set("#strokeLayer", { strokeDashoffset: 1200, strokeDasharray: 1200 });
-                gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-                gsap.set("#urlLayer", { opacity: 0 });
-                gsap.set(".guide-line", { opacity: 0 });
-                gsap.set("#introFrame", { scale: 1, x: 0, opacity: 1 });
-                gsap.set("#logoFinal", { opacity: 0, scale: 0.8 });
-            }
-
-            function restartLoop() {
-                if (finaleTimeline) { finaleTimeline.kill();
-                    finaleTimeline = null; }
-                gsap.killTweensOf("*");
-                gsap.set(finale, { display: "none", opacity: 1, clearProps: "all" });
-                gsap.set(visual, { display: "block", opacity: 1, clearProps: "transform" });
-                resetFinaleElements();
-                resetAllScenes();
-                showTextScenes = true;
-                frame = 0;
-                currentScene = 0;
-                if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                animate();
-            }
-
-            function startFinaleTransition() {
-                showTextScenes = false;
-                gsap.to(visual, {
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "power2.inOut",
-                    onComplete: () => {
-                        visual.style.display = "none";
-                        finale.style.display = "flex";
-                        gsap.set(finale, { opacity: 1 });
-                        startGSAPFinale();
-                    }
-                });
-            }
-
-            function startGSAPFinale() {
-                resetFinaleElements();
-                finaleTimeline = gsap.timeline({ onComplete: restartLoop });
-                finaleTimeline
-                    .set(".guide-line", { opacity: 1 }, 0)
-                    .to("#strokeLayer", { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, 0.3)
-                    .to("#fillLayer", { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "power2.inOut" }, 0.5)
-                    .to("#urlLayer", { opacity: 1, duration: 0.8, ease: "power2.inOut" }, 1.2)
-                    .to(".guide-line", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 1.8)
-                    .to("#introFrame", { scale: 0.3, opacity: 0, duration: 1.0, ease: "back.in" }, 2.0)
-                    .to("#logoFinal", { opacity: 1, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.5)" }, 2.5)
-                    .to("#logoFinal", { opacity: 1, duration: 2.0 }, 3.7)
-                    .to("#logoFinal", { opacity: 0, duration: 0.6, ease: "power2.inOut" }, 5.7);
-            }
-
-            function animate() {
-                if (!hCtx) return;
-                hCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                hCtx.fillRect(0, 0, hw, hh);
-                particles.forEach(p => { p.update();
-                    p.draw(); });
-                if (showTextScenes) {
-                    frame++;
-                    if (frame >= SCENE_DURATION) {
-                        frame = 0;
-                        if (currentScene === scenes.length - 1) {
-                            startFinaleTransition();
-                            animationFrameId = requestAnimationFrame(animate);
-                            return;
-                        }
-                        scenes[currentScene].classList.remove('active');
-                        scenes[currentScene].classList.add('exit');
-                        currentScene++;
-                        scenes[currentScene].classList.remove('exit');
-                        scenes[currentScene].classList.add('active');
-                    }
-                }
-                animationFrameId = requestAnimationFrame(animate);
-            }
-            animate();
-            landingHeroCleanup = () => {
-                if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                if (finaleTimeline) finaleTimeline.kill();
-                gsap.killTweensOf("*");
-            };
-        })();
-
-        // Main background canvas
-        (function() {
-            const canvas = document.getElementById('mainCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let width, height, tick = 0,
-                stars = [],
-                bokeh = [];
-            let mainBgAnimId = null;
-
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-                bokeh.length = 0;
-                for (let i = 0; i < 12; i++) {
-                    bokeh.push({ x: Math.random() * width, y: Math.random() * height, r: Math.random() * 100 + 50,
-                        s: Math.random() * 0.1 + 0.05 });
-                }
-            }
-
-            function createStar(isInitial = false) {
-                let x, y, z = Math.random();
-                if (isInitial) { x = Math.random() * width;
-                    y = Math.random() * height; } else { if (Math.random() > 0.5) { x = -150;
-                        y = Math.random() * height - 200; } else { x = Math.random() * width - 200;
-                        y = -150; } }
-                stars.push({ x, y, z, len: (Math.random() * 15 + 10) * (0.5 + z), width: (Math.random() * 1.5 + 1) * (
-                        0.5 + z), speed: (2 + Math.random()) * (0.5 + z * 1.5) });
-                stars.sort((a, b) => a.z - b.z);
-            }
-            window.addEventListener('resize', resize);
-            resize();
-            for (let i = 0; i < 60; i++) createStar(true);
-
-            function drawBg() {
-                if (!ctx) return;
-                ctx.clearRect(0, 0, width, height);
-                bokeh.forEach(p => {
-                    ctx.beginPath();
-                    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-                    g.addColorStop(0, 'rgba(58, 123, 213, 0.04)');
-                    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    ctx.fillStyle = g;
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fill();
-                    p.y -= p.s;
-                    if (p.y + p.r < 0) p.y = height + p.r;
-                });
-                const ribbonGrad = ctx.createLinearGradient(0, 0, width, 0);
-                ribbonGrad.addColorStop(0, '#00d2ff');
-                ribbonGrad.addColorStop(0.5, '#3a7bd5');
-                ribbonGrad.addColorStop(1, '#8e44ad');
-                ctx.fillStyle = ribbonGrad;
-                ctx.beginPath();
-                for (let x = 0; x <= width; x += 4) { const y = (height * 0.5) + Math.sin(x * 0.005 + tick) * 45 + Math.sin(
-                        x * 0.002 + tick * 0.5) * 20; if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y); }
-                for (let x = width; x >= 0; x -= 4) { const thick = 90 + Math.sin(tick + x * 0.003) * 15; const y = (height *
-                        0.5) + thick + Math.sin(x * 0.005 + tick) * 45 + Math.sin(x * 0.002 + tick * 0.5) * 20;
-                    ctx.lineTo(x, y); }
-                ctx.closePath();
-                ctx.fill();
-                for (let i = stars.length - 1; i >= 0; i--) { const s = stars[i];
-                    s.x += s.speed;
-                    s.y += s.speed; const aH = 0.2 + (s.z * 0.7),
-                        aT = 0.1 + (s.z * 0.4); const grad = ctx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
-                    grad.addColorStop(0, 'rgba(142, 68, 173, 0)');
-                    grad.addColorStop(0.5, `rgba(58, 123, 213, ${aT})`);
-                    grad.addColorStop(1, `rgba(0, 210, 255, ${aH})`);
-                    ctx.strokeStyle = grad;
-                    ctx.lineWidth = s.width;
-                    ctx.beginPath();
-                    ctx.moveTo(s.x, s.y);
-                    ctx.lineTo(s.x - s.len, s.y - s.len);
-                    ctx.stroke(); if (s.x > width + 100 || s.y > height + 100) { stars.splice(i, 1);
-                        createStar(); } }
-                tick += 0.015;
-                mainBgAnimId = requestAnimationFrame(drawBg);
-            }
-            drawBg();
-            window.mainBgCleanup = () => { if (mainBgAnimId) cancelAnimationFrame(mainBgAnimId); };
-        })();
-
-        // ===== SIGNUP PAGE ANIMATIONS =====
-        function startSignupAnimations() {
-            if (signupHeroCleanup) { signupHeroCleanup();
-                signupHeroCleanup = null; }
-            if (signupRibbonCleanup) { signupRibbonCleanup();
-                signupRibbonCleanup = null; }
-            initSignupRibbonCanvas();
-            initSignupHeroGraphic();
-        }
-
-        function initSignupRibbonCanvas() {
-            const rCanvas = document.getElementById('signupRibbonCanvas');
-            if (!rCanvas) return;
-            const rCtx = rCanvas.getContext('2d');
-            let rw, rh, rTick = 0;
-            let stars = [],
-                bokeh = [];
-            let ribbonAnimId = null;
-
-            function resizeRibbon() {
-                rw = rCanvas.width = window.innerWidth;
-                rh = rCanvas.height = window.innerHeight;
-                bokeh.length = 0;
-                for (let i = 0; i < 12; i++) { bokeh.push({ x: Math.random() * rw, y: Math.random() * rh, r: Math.random() *
-                        100 + 50, s: Math.random() * 0.1 + 0.05 }); }
-            }
-
-            function createStar(isInitial = false) {
-                let x, y, z = Math.random();
-                if (isInitial) { x = Math.random() * rw;
-                    y = Math.random() * rh; } else { if (Math.random() > 0.5) { x = -150;
-                        y = Math.random() * rh - 200; } else { x = Math.random() * rw - 200;
-                        y = -150; } }
-                stars.push({ x, y, z, len: (Math.random() * 15 + 10) * (0.5 + z), width: (Math.random() * 1.5 + 1) * (
-                        0.5 + z), speed: (2 + Math.random()) * (0.5 + z * 1.5) });
-                stars.sort((a, b) => a.z - b.z);
-            }
-            resizeRibbon();
-            for (let i = 0; i < 60; i++) createStar(true);
-
-            function drawRibbon() {
-                rCtx.clearRect(0, 0, rw, rh);
-                bokeh.forEach(p => { rCtx.beginPath(); let g = rCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-                    g.addColorStop(0, 'rgba(58, 123, 213, 0.04)');
-                    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                    rCtx.fillStyle = g;
-                    rCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    rCtx.fill();
-                    p.y -= p.s; if (p.y + p.r < 0) p.y = rh + p.r; });
-                const ribbonGrad = rCtx.createLinearGradient(0, 0, rw, 0);
-                ribbonGrad.addColorStop(0, '#00d2ff');
-                ribbonGrad.addColorStop(0.5, '#3a7bd5');
-                ribbonGrad.addColorStop(1, '#8e44ad');
-                rCtx.fillStyle = ribbonGrad;
-                rCtx.beginPath();
-                for (let x = 0; x <= rw; x += 4) { const y = (rh * 0.5) + Math.sin(x * 0.005 + rTick) * 45 + Math.sin(x *
-                        0.002 + rTick * 0.5) * 20; if (x === 0) rCtx.moveTo(x, y);
-                    else rCtx.lineTo(x, y); }
-                for (let x = rw; x >= 0; x -= 4) { const thick = 90 + Math.sin(rTick + x * 0.003) * 15; const y = (rh * 0.5) +
-                        thick + Math.sin(x * 0.005 + rTick) * 45 + Math.sin(x * 0.002 + rTick * 0.5) * 20;
-                    rCtx.lineTo(x, y); }
-                rCtx.closePath();
-                rCtx.fill();
-                for (let i = stars.length - 1; i >= 0; i--) { const s = stars[i];
-                    s.x += s.speed;
-                    s.y += s.speed; const aH = 0.2 + (s.z * 0.7),
-                        aT = 0.1 + (s.z * 0.4); const grad = rCtx.createLinearGradient(s.x - s.len, s.y - s.len, s.x, s.y);
-                    grad.addColorStop(0, 'rgba(142, 68, 173, 0)');
-                    grad.addColorStop(0.5, `rgba(58, 123, 213, ${aT})`);
-                    grad.addColorStop(1, `rgba(0, 210, 255, ${aH})`);
-                    rCtx.strokeStyle = grad;
-                    rCtx.lineWidth = s.width;
-                    rCtx.beginPath();
-                    rCtx.moveTo(s.x, s.y);
-                    rCtx.lineTo(s.x - s.len, s.y - s.len);
-                    rCtx.stroke(); if (s.x > rw + 100 || s.y > rh + 100) { stars.splice(i, 1);
-                        createStar(); } }
-                rTick += 0.015;
-                ribbonAnimId = requestAnimationFrame(drawRibbon);
-            }
-            drawRibbon();
-            signupRibbonCleanup = () => { if (ribbonAnimId) cancelAnimationFrame(ribbonAnimId); };
-        }
-
-        function initSignupHeroGraphic() {
-            const hCanvas = document.getElementById('signupHeroCanvas');
-            if (!hCanvas) return;
-            const hCtx = hCanvas.getContext('2d');
-            const scenes = document.querySelectorAll('.signup-scene-content');
-            const finale = document.getElementById('signup-finaleStage');
-            const visual = document.getElementById('signup-animation-container');
-            let hw, hh, currentScene = 0,
-                frame = 0,
-                showTextScenes = true;
-            let finaleTimeline = null;
-            let animationFrameId = null;
-            const SPEED = 16,
-                SCENE_DURATION = 160;
-
-            function resize() { const container = hCanvas.parentElement; if (!container) return;
-                hw = hCanvas.width = container.clientWidth;
-                hh = hCanvas.height = container.clientHeight; }
-            resize();
-            window.addEventListener('resize', resize);
-
-            class Particle {
-                constructor(preWarm = false) { this.reset(preWarm); }
-                reset(preWarm = false) { this.x = (Math.random() - 0.5) * 4500;
-                    this.y = (Math.random() - 0.5) * 4500;
-                    this.z = preWarm ? Math.random() * 2000 : 2000;
-                    this.pz = this.z;
-                    this.size = Math.random() * 1.2 + 1.2; }
-                update() { this.pz = this.z;
-                    this.z -= SPEED; if (this.z < 1) this.reset(); }
-                draw() { const s = 800 / this.z; const ps = 800 / this.pz; const x = this.x * s + hw / 2; const y = this.y *
-                        s + hh / 2; const px = this.x * ps + hw / 2; const py = this.y * ps + hh / 2;
-                    hCtx.globalAlpha = Math.min(0.3, (1600 - this.z) / 1000);
-                    hCtx.strokeStyle = '#000000';
-                    hCtx.lineWidth = this.size * s;
-                    hCtx.lineCap = 'round';
-                    hCtx.beginPath();
-                    hCtx.moveTo(x, y);
-                    hCtx.lineTo(px, py);
-                    hCtx.stroke(); }
-            }
-            const particles = Array.from({ length: 800 }, () => new Particle(true));
-
-            function resetAllScenes() { scenes.forEach((scene) => { scene.classList.remove('active', 'exit'); }); if (
-                    scenes[0]) scenes[0].classList.add('active'); }
-
-            function resetFinaleElements() {
-                gsap.killTweensOf(["#signup-strokeLayer", "#signup-fillLayer", "#signup-urlLayer", ".signup-guide-line",
-                    "#signup-introFrame", "#signup-logoFinal"
-                ]);
-                gsap.set(["#signup-strokeLayer", "#signup-fillLayer", "#signup-urlLayer", ".signup-guide-line",
-                    "#signup-introFrame", "#signup-logoFinal"
-                ], { clearProps: "all" });
-                gsap.set("#signup-strokeLayer", { strokeDashoffset: 1200, strokeDasharray: 1200 });
-                gsap.set("#signup-fillLayer", { clipPath: "inset(100% 0% 0% 0%)" });
-                gsap.set("#signup-urlLayer", { opacity: 0 });
-                gsap.set(".signup-guide-line", { opacity: 0 });
-                gsap.set("#signup-introFrame", { scale: 1, x: 0, opacity: 1 });
-                gsap.set("#signup-logoFinal", { opacity: 0, scale: 0.8 });
-            }
-
-            function restartLoop() { if (finaleTimeline) { finaleTimeline.kill();
-                    finaleTimeline = null; }
-                gsap.killTweensOf("*");
-                gsap.set(finale, { display: "none", opacity: 1, clearProps: "all" });
-                gsap.set(visual, { display: "block", opacity: 1, clearProps: "transform" });
-                resetFinaleElements();
-                resetAllScenes();
-                showTextScenes = true;
-                frame = 0;
-                currentScene = 0; if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                animate(); }
-
-            function startFinaleTransition() { showTextScenes = false;
-                gsap.to(visual, { opacity: 0, duration: 0.6, ease: "power2.inOut", onComplete: () => { visual.style
-                            .display = "none";
-                        finale.style.display = "flex";
-                        gsap.set(finale, { opacity: 1 });
-                        startGSAPFinale(); } }); }
-
-            function startGSAPFinale() { resetFinaleElements();
-                finaleTimeline = gsap.timeline({ onComplete: restartLoop });
-                finaleTimeline.set(".signup-guide-line", { opacity: 1 }, 0).to("#signup-strokeLayer", { strokeDashoffset: 0,
-                    duration: 1.8, ease: "power2.inOut" }, 0.3).to("#signup-fillLayer", { clipPath: "inset(0% 0% 0% 0%)",
-                    duration: 1.0, ease: "power2.inOut" }, 0.5).to("#signup-urlLayer", { opacity: 1, duration: 0.8,
-                    ease: "power2.inOut" }, 1.2).to(".signup-guide-line", { opacity: 0, duration: 0.5,
-                    ease: "power2.inOut" }, 1.8).to("#signup-introFrame", { scale: 0.3, opacity: 0, duration: 1.0,
-                    ease: "back.in" }, 2.0).to("#signup-logoFinal", { opacity: 1, scale: 1, duration: 1.2,
-                    ease: "elastic.out(1, 0.5)" }, 2.5).to("#signup-logoFinal", { opacity: 1, duration: 2.0 }, 3.7).to(
-                    "#signup-logoFinal", { opacity: 0, duration: 0.6, ease: "power2.inOut" }, 5.7); }
-
-            function animate() { if (!hCtx) return;
-                hCtx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                hCtx.fillRect(0, 0, hw, hh);
-                particles.forEach(p => { p.update();
-                    p.draw(); }); if (showTextScenes) { frame++; if (frame >= SCENE_DURATION) { frame = 0; if (
-                            currentScene === scenes.length - 1) { startFinaleTransition();
-                            animationFrameId = requestAnimationFrame(animate); return; }
-                        scenes[currentScene].classList.remove('active');
-                        scenes[currentScene].classList.add('exit');
-                        currentScene++;
-                        scenes[currentScene].classList.remove('exit');
-                        scenes[currentScene].classList.add('active'); } }
-                animationFrameId = requestAnimationFrame(animate); }
-            animate();
-            signupHeroCleanup = () => { if (animationFrameId) cancelAnimationFrame(animationFrameId); if (finaleTimeline)
-                    finaleTimeline.kill();
-                gsap.killTweensOf("*"); };
-        }
-
-        // ===== SEO STRUCTURED DATA =====
-        (function() {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.textContent = JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "SoftwareApplication",
-                "name": "CauniX",
-                "description": "Lightweight internet‑based voice calling app. Sign in with Google, obtain a unique in‑app identity, and connect instantly without a phone number.",
-                "url": "https://caunix.app",
-                "applicationCategory": "CommunicationApplication",
-                "operatingSystem": "Web, Android, iOS",
-                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-                "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "210" }
-            });
-            document.head.appendChild(script);
-        })();
-
-        // ===== LEGAL CONTENT =====
+        // ========== NO AUTH, NO DASHBOARD ==========
+        // Only landing page + legal content + under construction alerts
         const LEGAL_CONTENT = {
             terms: [
-                { q: "1. Scope and Legal Framework",
-                    a: "This document governs access to and use of the CauniX platform, including all associated applications, features, and services (collectively, the \"Service\"). By accessing or using the Service, you agree to be bound by this document. If you do not agree, the Service must not be used." },
-                { q: "2. Nature of the Service",
-                    a: "CauniX is an internet-based communication platform enabling real-time voice communication and Direct Messages. It operates as an over-the-top (OTT) software layer and is not a telecommunications carrier, network operator, or regulated voice service." },
-                { q: "3. Eligibility and Age",
-                    a: "Use is restricted to individuals at least 13 years old (or minimum age by local law) with legal capacity. Minors must have parent/guardian authorization." },
-                { q: "4. Authentication and Identity",
-                    a: "Access is via Google or Apple authentication. A unique CauniX ID is generated; no KYC, government ID, legal name, or address is collected. The Service does not verify real-world identity." },
-                { q: "5. Acceptable Use",
-                    a: "You shall not use the Service to violate laws, transmit illegal/harmful content, harass, threaten, abuse, defraud, impersonate, distribute malware, or spam/scrape. You are responsible for all activity under your account." },
-                { q: "6. Enforcement and Moderation",
-                    a: "We may suspend, restrict, or terminate accounts and blacklist identifiers at our discretion, with or without notice, based on automated or manual detection. No justification is owed." },
-                { q: "7. Communications",
-                    a: "All communications are your sole responsibility. We do not monitor content except for security, abuse prevention, and legal compliance. Encryption may be applied where implemented." },
-                { q: "8. Data Collection",
-                    a: "We collect only authentication tokens, CauniX ID, routing metadata (sender, recipient, timestamps), and limited technical data. No government ID, addresses, phone numbers, or financial data." },
-                { q: "9. Data Processing Purpose",
-                    a: "Data is used solely to provide/maintain the Service, deliver communications, prevent abuse, and comply with legal obligations." },
-                { q: "10. Data Retention and Deletion",
-                    a: "Data retained only as needed. Upon account deletion, the auth-ID link is severed and active data removed within a reasonable time. Some data may be kept for legal/abuse prevention." },
-                { q: "11. Security",
-                    a: "Reasonable safeguards are implemented, but no system is fully secure. Use is at your own risk." },
-                { q: "12. Third-Party Services",
-                    a: "We rely on third-party auth and cloud providers that process data per their policies. We do not control those providers." },
-                { q: "13. Service Availability",
-                    a: "The Service is 'as-is' and 'as-available'. No guarantees of uptime, reliability, or continuity. It may be modified, suspended, or discontinued without notice." },
-                { q: "14. Limitation of Liability",
-                    a: "To the maximum extent permitted by law, we are not liable for indirect, incidental, or consequential damages, data loss, user conduct, or disputes." },
-                { q: "15. Indemnification",
-                    a: "You agree to indemnify us from any claims arising from your use of the Service, violation of these terms, or infringement of others' rights." },
-                { q: "16. Global Use and Compliance",
-                    a: "The Service is accessible globally. You must ensure your use complies with local laws." },
-                { q: "17. Regional Provisions",
-                    a: "EEA users may have additional GDPR rights (access, correction, deletion, restriction). Other regions may have similar local requirements." },
-                { q: "18. Governing Law",
-                    a: "Governed by the laws of Kenya, unless mandatory local laws apply." },
-                { q: "19. Dispute Resolution",
-                    a: "Disputes are subject to competent courts in Kenya, unless otherwise required by law." },
-                { q: "20. Modifications",
-                    a: "This document may be updated anytime. Continued use constitutes acceptance of the revised terms." },
-                { q: "21. Entire Agreement",
-                    a: "This document constitutes the entire agreement and supersedes any prior understandings." }
+                { q: "1. Scope", a: "These Terms will apply once CauniX launches. For now the platform is under construction." },
+                { q: "2. Eligibility", a: "Minimum age 13, no KYC required. Full details released at launch." }
             ],
             privacy: [
-                { q: "8. Data Collection",
-                    a: "We collect only authentication tokens, your generated CauniX ID, routing metadata (sender, recipient, timestamps), and limited technical/device data for security and performance." },
-                { q: "9. Purpose of Processing",
-                    a: "Data is processed solely for providing the Service, delivering communications, preventing abuse, and complying with legal obligations." },
-                { q: "10. Data Retention and Deletion",
-                    a: "Data is kept only as long as necessary. On account deletion, the auth-ID association is removed and active data deleted within a reasonable timeframe. Some data may be retained for legal/abuse purposes." },
-                { q: "11. Security",
-                    a: "We implement reasonable technical and organizational safeguards. No system is impenetrable; use is at your own risk." },
-                { q: "7. Encryption",
-                    a: "Where implemented, communications may be end-to-end encrypted. Otherwise, content may be temporarily processed to enable delivery." },
-                { q: "12. Third-Party Services",
-                    a: "Authentication (Google, Apple) and cloud infrastructure providers process data per their own privacy policies. We do not control that processing." },
-                { q: "17. Regional Rights (EEA)",
-                    a: "Users in the EEA may exercise rights to access, rectify, delete, or restrict processing of personal data under GDPR." }
+                { q: "Data Principles", a: "CauniX will collect only authentication tokens and CauniX ID. No phone numbers, no unnecessary personal data. Full policy effective at launch." }
             ],
             rules: [
-                { q: "5. Acceptable Use and Platform Rules",
-                    a: "You must not: violate any law; transmit illegal, harmful, or exploitative content; harass, threaten, or abuse others; engage in fraud, impersonation, or deception; distribute malware or conduct cyber‑attacks; exploit the platform for spam, automation abuse, or unauthorized scraping." },
-                { q: "6. Enforcement",
-                    a: "We may suspend, restrict, or permanently terminate accounts and blacklist associated identifiers at our sole discretion, with or without notice, using automated or manual detection. No explanation is required." }
+                { q: "Acceptable Use", a: "No harassment, spam, or illegal content. Moderation tools will be enforced when service goes live." }
             ]
         };
-
         function renderLegalTab(tab) {
             const items = LEGAL_CONTENT[tab] || [];
             const container = document.getElementById('legalContentBody');
-            container.innerHTML = items.map((item, i) => `
-                <div class="faq-item">
-                    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                        <span>${item.q}</span>
-                        <i data-lucide="chevron-down" class="w-5 h-5 faq-chevron"></i>
-                    </div>
-                    <div class="faq-answer">${item.a.replace(/\n/g, '<br>')}</div>
+            container.innerHTML = items.map(item => `
+                <div class="border-b border-slate-100 py-6">
+                    <div class="font-bold text-lg mb-2">${item.q}</div>
+                    <div class="text-slate-600">${item.a}</div>
                 </div>
             `).join('');
-            lucide.createIcons();
+            if(window.lucide) lucide.createIcons();
         }
-
-        function openLegalPage(tab = 'terms') {
+        window.openLegalPage = function(tab = 'terms') {
             const legalPage = document.getElementById('legalPageContainer');
-            legalPage.classList.add('active');
-            document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === tab);
-            });
+            legalPage.style.display = 'block';
+            document.querySelectorAll('.legal-tab-btn').forEach(btn => btn.classList.remove('bg-blue-600', 'text-white', 'bg-slate-100'));
+            document.querySelectorAll('.legal-tab-btn').forEach(btn => { btn.classList.add('bg-slate-100'); if(btn.dataset.tab === tab) { btn.classList.remove('bg-slate-100'); btn.classList.add('bg-blue-600', 'text-white'); }});
             renderLegalTab(tab);
-            window.scrollTo(0, 0);
+            window.scrollTo(0,0);
+        };
+        window.closeLegalPage = function() {
+            document.getElementById('legalPageContainer').style.display = 'none';
+        };
+        // under construction alerts
+        function showUnderConstruction() {
+            alert("🚧 CauniX is currently under construction. The full calling platform & dashboard will be available in early access soon. Stay tuned!");
         }
+        document.querySelectorAll('#global-coming-soon-btn, #hero-construction, #footer-construction-btn, #mobile-coming-soon').forEach(btn => {
+            if(btn) btn.addEventListener('click', showUnderConstruction);
+        });
+        // menu toggle
+        const menuBtn = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if(menuBtn && mobileMenu) menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-        function closeLegalPage() {
-            document.getElementById('legalPageContainer').classList.remove('active');
-        }
+        // animations & GSAP hero
+        lucide.createIcons();
+        const animateElements = document.querySelectorAll('.animate-on-scroll');
+        const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('animated'); }); }, { threshold: 0.1 });
+        animateElements.forEach(el => obs.observe(el));
 
-        // Legal tab navigation clicks
-        document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+        // Hero animation (same as original but without auth)
+        (function initLandingHero() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const scenes = document.querySelectorAll('.scene-content');
+            const finale = document.getElementById('finaleStage');
+            const visual = document.getElementById('visualMainContent');
+            let w, h, current = 0, frame = 0, showText = true;
+            let animFrame, finaleTimeline;
+            const SPEED = 16, SCENE_DUR = 160;
+
+            function resize() { const parent = canvas.parentElement; if(parent) { w = canvas.width = parent.clientWidth; h = canvas.height = parent.clientHeight; } }
+            window.addEventListener('resize', resize); resize();
+            class Particle { constructor(pre=false) { this.reset(pre); } reset(pre=false) { this.x = (Math.random()-0.5)*4500; this.y = (Math.random()-0.5)*4500; this.z = pre ? Math.random()*2000 : 2000; this.pz = this.z; this.size = Math.random()*1.2+1.2; } update() { this.pz = this.z; this.z -= SPEED; if(this.z<1) this.reset(); } draw() { const s = 800/this.z, ps = 800/this.pz, x = this.x*s + w/2, y = this.y*s + h/2, px = this.x*ps + w/2, py = this.y*ps + h/2; ctx.globalAlpha = Math.min(0.3, (1600-this.z)/1000); ctx.strokeStyle = '#000'; ctx.lineWidth = this.size*s; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(px,py); ctx.stroke(); } }
+            const particles = Array.from({ length: 600 }, () => new Particle(true));
+            function resetScenes() { scenes.forEach(s => s.classList.remove('active','exit')); if(scenes[0]) scenes[0].classList.add('active'); }
+            function resetFinale() { gsap.killTweensOf(["#strokeLayer","#fillLayer","#urlLayer",".guide-line","#introFrame","#logoFinal"]); gsap.set("#strokeLayer", { strokeDashoffset: 1200, strokeDasharray: 1200 }); gsap.set("#fillLayer", { clipPath: "inset(100% 0% 0% 0%)" }); gsap.set("#urlLayer",{opacity:0}); gsap.set(".guide-line",{opacity:0}); gsap.set("#introFrame",{scale:1,opacity:1}); gsap.set("#logoFinal",{opacity:0,scale:0.8}); }
+            function restartLoop() { if(finaleTimeline) finaleTimeline.kill(); gsap.killTweensOf("*"); gsap.set(finale,{display:"none"}); gsap.set(visual,{display:"block",opacity:1}); resetFinale(); resetScenes(); showText=true; frame=0; current=0; cancelAnimationFrame(animFrame); animate(); }
+            function startFinale() { showText=false; gsap.to(visual,{opacity:0,duration:0.6,onComplete:()=>{ visual.style.display="none"; finale.style.display="flex"; gsap.set(finale,{opacity:1}); let tl = gsap.timeline({onComplete:restartLoop}); tl.set(".guide-line",{opacity:1},0).to("#strokeLayer",{strokeDashoffset:0,duration:1.8},0.3).to("#fillLayer",{clipPath:"inset(0% 0% 0% 0%)",duration:1.0},0.5).to("#urlLayer",{opacity:1,duration:0.8},1.2).to(".guide-line",{opacity:0,duration:0.5},1.8).to("#introFrame",{scale:0.3,opacity:0,duration:1.0},2.0).to("#logoFinal",{opacity:1,scale:1,duration:1.2,ease:"elastic.out(1,0.5)"},2.5).to("#logoFinal",{opacity:0,duration:0.6},5.7); }}); }
+            function animate() { ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(0,0,w,h); particles.forEach(p=>{p.update();p.draw();}); if(showText){ frame++; if(frame>=SCENE_DUR){ frame=0; if(current===scenes.length-1){ startFinale(); animFrame=requestAnimationFrame(animate); return; } scenes[current].classList.remove('active'); scenes[current].classList.add('exit'); current++; scenes[current].classList.remove('exit'); scenes[current].classList.add('active'); } } animFrame = requestAnimationFrame(animate); }
+            animate();
+        })();
+
+        // background canvas effect (original)
+        (function() {
+            const bgCanvas = document.getElementById('mainCanvas');
+            if(!bgCanvas) return;
+            const bgCtx = bgCanvas.getContext('2d');
+            let width, height, tick=0, stars=[], bokeh=[];
+            function resizeBg() { width = bgCanvas.width = window.innerWidth; height = bgCanvas.height = window.innerHeight; bokeh=[]; for(let i=0;i<12;i++) bokeh.push({ x:Math.random()*width, y:Math.random()*height, r:Math.random()*100+50, s:Math.random()*0.1+0.05 }); }
+            function createStar(init=false){ let x,y,z=Math.random(); if(init){ x=Math.random()*width; y=Math.random()*height; } else { if(Math.random()>0.5){ x=-150; y=Math.random()*height-200; } else { x=Math.random()*width-200; y=-150; } } stars.push({ x,y,z, len:(Math.random()*15+10)*(0.5+z), width:(Math.random()*1.5+1)*(0.5+z), speed:(2+Math.random())*(0.5+z*1.5) }); stars.sort((a,b)=>a.z-b.z); }
+            window.addEventListener('resize', resizeBg); resizeBg();
+            for(let i=0;i<60;i++) createStar(true);
+            function drawBg() { bgCtx.clearRect(0,0,width,height); bokeh.forEach(p=>{ let grad = bgCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r); grad.addColorStop(0,'rgba(58,123,213,0.04)'); grad.addColorStop(1,'rgba(255,255,255,0)'); bgCtx.fillStyle=grad; bgCtx.beginPath(); bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2); bgCtx.fill(); p.y-=p.s; if(p.y+p.r<0) p.y=height+p.r; }); let grad2 = bgCtx.createLinearGradient(0,0,width,0); grad2.addColorStop(0,'#00d2ff'); grad2.addColorStop(0.5,'#3a7bd5'); grad2.addColorStop(1,'#8e44ad'); bgCtx.fillStyle=grad2; bgCtx.beginPath(); for(let x=0;x<=width;x+=4){ let y = (height*0.5)+Math.sin(x*0.005+tick)*45+Math.sin(x*0.002+tick*0.5)*20; if(x===0) bgCtx.moveTo(x,y); else bgCtx.lineTo(x,y); } for(let x=width;x>=0;x-=4){ let thick=90+Math.sin(tick+x*0.003)*15; let y=(height*0.5)+thick+Math.sin(x*0.005+tick)*45+Math.sin(x*0.002+tick*0.5)*20; bgCtx.lineTo(x,y); } bgCtx.fill(); stars.forEach((s,i)=>{ s.x+=s.speed; s.y+=s.speed; let aH=0.2+(s.z*0.7), aT=0.1+(s.z*0.4); let grad=bgCtx.createLinearGradient(s.x-s.len,s.y-s.len,s.x,s.y); grad.addColorStop(0,'rgba(142,68,173,0)'); grad.addColorStop(0.5,`rgba(58,123,213,${aT})`); grad.addColorStop(1,`rgba(0,210,255,${aH})`); bgCtx.strokeStyle=grad; bgCtx.lineWidth=s.width; bgCtx.beginPath(); bgCtx.moveTo(s.x,s.y); bgCtx.lineTo(s.x-s.len,s.y-s.len); bgCtx.stroke(); if(s.x>width+100 || s.y>height+100){ stars.splice(i,1); createStar(); } }); tick+=0.015; requestAnimationFrame(drawBg); }
+            drawBg();
+        })();
+        // legal tab listeners
+        document.querySelectorAll('.legal-tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
                 const tab = btn.dataset.tab;
-                window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`,
-                    `/legal/${tab}`);
-                openLegalPage(tab);
+                document.querySelectorAll('.legal-tab-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white', 'bg-slate-100'));
+                btn.classList.add('bg-blue-600', 'text-white');
+                renderLegalTab(tab);
             });
         });
     </script>
