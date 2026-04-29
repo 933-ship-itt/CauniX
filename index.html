@@ -1460,12 +1460,11 @@ let firebaseInitialized = false;
 let auth = null;
 let db = null;
 
-function initFirebase() {
+async function initFirebase() {
     if (firebaseInitialized) return;
 
     if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
-        console.warn('Firebase components not yet available, retrying...');
-        setTimeout(initFirebase, 50); 
+        setTimeout(initFirebase, 50);
         return;
     }
 
@@ -1477,32 +1476,37 @@ function initFirebase() {
         auth = firebase.auth();
         db = firebase.database();
         firebaseInitialized = true;
-        console.log('Firebase ready.');
 
-        // 1. Catch the user returning from Google sign-in
-        auth.getRedirectResult().then(async (result) => {
-            if (result && result.user) {
-                await saveUserToDatabase(result.user);
-                redirectToDashboard(result.user);
-            }
-        }).catch((error) => {
-            console.error('Redirect sign-in error:', error);
-            showAuthMessage(`Sign-in failed: ${error.message}`, 'error');
-        });
+        // 1. Handle the redirect result FIRST
+        const result = await auth.getRedirectResult();
+        
+        if (result && result.user) {
+            // New user or returning user just signed in
+            await saveUserToDatabase(result.user);
+            navigateTo('/dashboard'); // Explicitly force them to dashboard
+            return; // Stop further execution
+        }
 
-        // 2. Automatically log in users who already have an active session
+        // 2. Only check general auth state if there wasn't a redirect result
         auth.onAuthStateChanged((user) => {
+            const path = window.location.pathname;
+            
             if (user) {
-                // Only redirect if they are on the home or signup page
-                const path = window.location.pathname;
+                // If logged in and on landing/signup, move to dashboard
                 if (path === '/' || path === '/signup') {
-                    redirectToDashboard(user);
+                    navigateTo('/dashboard');
+                }
+            } else {
+                // If NOT logged in and trying to access dashboard, boot to landing
+                if (path === '/dashboard') {
+                    navigateTo('/');
                 }
             }
         });
 
     } catch (error) {
-        console.error('Initialization failed:', error);
+        console.error('Auth error:', error);
+        showAuthMessage(error.message, 'error');
     }
 }
 
@@ -1695,22 +1699,33 @@ function handleGoogleSignUp() {
             document.getElementById('legalPageContainer').classList.remove('active');
         }
 
-        // ===== GLOBAL ROUTING (pushState) =====
         function navigateTo(path) {
-            if (path.startsWith('/legal/')) {
-                const tab = path.split('/legal/')[1];
-                window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, path);
-                openLegalPage(tab);
-                return;
-            }
-            if (path === '/signup') {
-                window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
-                showSignupPage();
-                return;
-            }
-            window.history.pushState({ page: 'home' }, 'CauniX', '/');
-            showLandingPage();
-        }
+    // 1. Handle Legal Routes
+    if (path.startsWith('/legal/')) {
+        const tab = path.split('/legal/')[1];
+        window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, path);
+        openLegalPage(tab);
+        return;
+    }
+
+    // 2. Handle Dashboard Route (Crucial for successful login)
+    if (path === '/dashboard') {
+        window.history.pushState({ page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
+        showDashboardPage(); // Make sure this function exists to toggle your UI
+        return;
+    }
+
+    // 3. Handle Signup Route
+    if (path === '/signup') {
+        window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
+        showSignupPage();
+        return;
+    }
+
+    // 4. Fallback to Home
+    window.history.pushState({ page: 'home' }, 'CauniX', '/');
+    showLandingPage();
+}
 
         // ===== PAGE ROUTING WITH HISTORY API =====
         const landingPageContainer = document.getElementById('landingPageContainer');
