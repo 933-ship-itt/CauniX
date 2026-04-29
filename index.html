@@ -1463,7 +1463,6 @@ let db = null;
 function initFirebase() {
     if (firebaseInitialized) return;
 
-    // Check for both the base object and the specific auth/db methods
     if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
         console.warn('Firebase components not yet available, retrying...');
         setTimeout(initFirebase, 50); 
@@ -1479,6 +1478,29 @@ function initFirebase() {
         db = firebase.database();
         firebaseInitialized = true;
         console.log('Firebase ready.');
+
+        // 1. Catch the user returning from Google sign-in
+        auth.getRedirectResult().then(async (result) => {
+            if (result && result.user) {
+                await saveUserToDatabase(result.user);
+                redirectToDashboard(result.user);
+            }
+        }).catch((error) => {
+            console.error('Redirect sign-in error:', error);
+            showAuthMessage(`Sign-in failed: ${error.message}`, 'error');
+        });
+
+        // 2. Automatically log in users who already have an active session
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Only redirect if they are on the home or signup page
+                const path = window.location.pathname;
+                if (path === '/' || path === '/signup') {
+                    redirectToDashboard(user);
+                }
+            }
+        });
+
     } catch (error) {
         console.error('Initialization failed:', error);
     }
@@ -1496,32 +1518,24 @@ document.addEventListener('DOMContentLoaded', initFirebase);
         }
 
         // ===== GOOGLE AUTH HANDLER (INSTANT REDIRECT) =====
-        async function handleGoogleSignUp() {
-            if (!auth) {
-                showAuthMessage('Firebase not initialized. Please refresh the page.', 'error');
-                return;
-            }
+        // ===== GOOGLE AUTH HANDLER (INSTANT REDIRECT) =====
+function handleGoogleSignUp() {
+    if (!auth) {
+        showAuthMessage('Firebase not initialized. Please refresh the page.', 'error');
+        return;
+    }
 
-            const googleBtn = document.getElementById('signup-googleBtn');
-            googleBtn.disabled = true;
-            const originalText = googleBtn.innerHTML;
-            googleBtn.innerHTML = '<div class="loading-spinner"></div><span>Signing in...</span>';
-            googleBtn.classList.add('loading');
+    const googleBtn = document.getElementById('signup-googleBtn');
+    googleBtn.disabled = true;
+    googleBtn.innerHTML = '<div class="loading-spinner"></div><span>Redirecting...</span>';
+    googleBtn.classList.add('loading');
 
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                provider.setCustomParameters({ prompt: 'consent' });
-                const result = await auth.signInWithPopup(provider);
-                await saveUserToDatabase(result.user);
-                redirectToDashboard(result.user);
-            } catch (error) {
-                console.error('Google sign-up error:', error);
-                showAuthMessage(`Error: ${error.message}`, 'error');
-                googleBtn.disabled = false;
-                googleBtn.innerHTML = originalText;
-                googleBtn.classList.remove('loading');
-            }
-        }
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'consent' });
+    
+    // Use redirect instead of popup to bypass COOP blocks
+    auth.signInWithRedirect(provider);
+}
 
         // ===== SAVE USER TO DATABASE =====
         async function saveUserToDatabase(user) {
