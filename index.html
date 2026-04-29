@@ -1693,22 +1693,23 @@
         // If after 1 second the observer still hasn't supplied a user,
         // we mark auth as resolved and, if still null, show the appropriate
         // unauthenticated page (sign‑up or landing).
-        setTimeout(() => {
-            if (!authStateResolved) {
-                authStateResolved = true;
-                hideAuthLoader();
-                const p = window.location.pathname;
-                if (isSignupPath(p)) {
-                    showSignupPage();
-                } else if (isDashboardPath(p)) {
-                    window.history.replaceState({ page: 'home' }, 'CauniX', '/');
-                    showLandingPage();
-                } else {
-                    showLandingPage();
-                }
-            }
-        }, 1000);
-
+        // ── Step 4: 2‑second grace period for the observer ──────────────
+setTimeout(() => {
+    if (!authStateResolved) {
+        authStateResolved = true;
+        hideAuthLoader();
+        const p = window.location.pathname;
+        // If the URL still says /signup, show the signup page; else show landing.
+        if (isSignupPath(p)) {
+            showSignupPage();
+        } else if (isDashboardPath(p)) {
+            window.history.replaceState({ page: 'home' }, 'CauniX', '/');
+            showLandingPage();
+        } else {
+            showLandingPage();
+        }
+    }
+}, 2000);
     } catch (error) {
     console.error('Auth init error:', error);
     localStorage.removeItem('caunixAuthPending');
