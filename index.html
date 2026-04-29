@@ -1625,40 +1625,74 @@
                 db = firebase.database();
                 firebaseInitialized = true;
 
-                // ── Step 1: Process redirect result (data-save only, NO navigation) ──
-                // onAuthStateChanged fires right after this with the correct user,
-                // so we let it be the single navigation authority.
+                // Read the pending-redirect flag BEFORE any async work.
+                // This was written by handleGoogleSignUp() just before the page
+                // navigated away to Google OAuth.
+                const authPending = localStorage.getItem('caunixAuthPending') === '1';
+
+                // ── Step 1: getRedirectResult — MUST finish before we register ──────
+                // onAuthStateChanged so we know whether we have a redirect user.
+                // Firebase compat can fire onAuthStateChanged(null) on init before
+                // it has exchanged the OAuth tokens; we need the result first so we
+                // can immediately route to /dashboard and mark the session resolved,
+                // stopping the null-state handler from showing the signup page.
+                let redirectUser = null;
                 try {
                     const result = await auth.getRedirectResult();
                     if (result && result.user) {
-                        // Persist to DB in the background; do NOT navigate here.
+                        redirectUser = result.user;
+                        localStorage.removeItem('caunixAuthPending');
+                        // Persist user to DB (non-blocking — don't await here)
                         saveUserToDatabase(result.user).catch(e =>
                             console.error('DB save error after redirect:', e));
+                    } else if (authPending) {
+                        // Redirect was expected but result came back empty → clear flag
+                        localStorage.removeItem('caunixAuthPending');
                     }
                 } catch (redirectError) {
                     console.error('Redirect result error:', redirectError);
+                    localStorage.removeItem('caunixAuthPending');
                     if (redirectError.code === 'auth/credential-already-in-use') {
-                        showAuthMessage('This Google account is already linked. Try signing in again.', 'error');
+                        showAuthMessage('This account is already linked. Try signing in again.', 'error');
                     }
                 }
 
-                // ── Step 2: onAuthStateChanged — SINGLE source of truth for ALL UI ──
+                // ── Step 2: If we captured a redirect user, go straight to dashboard ─
+                // This is the fast path — no need to wait for onAuthStateChanged.
+                if (redirectUser) {
+                    window.history.replaceState(
+                        { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
+                    showDashboard(redirectUser);
+                    authStateResolved = true;
+                    hideAuthLoader();
+                }
+
+                // ── Step 3: onAuthStateChanged — ongoing session management ──────────
+                // Handles: returning logged-in users, logouts, and any edge cases
+                // where the redirect user wasn't caught in Step 2.
                 auth.onAuthStateChanged((user) => {
                     const path = window.location.pathname;
 
                     if (user) {
-                        // ── Logged-in user ─────────────────────────────────────────
+                        // Always land on dashboard when authenticated
                         if (!isDashboardPath(path)) {
-                            // Silently update the URL without adding a history entry
-                            // so the back-button still works naturally.
                             window.history.replaceState(
                                 { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
                         }
                         showDashboard(user);
+
                     } else {
-                        // ── Logged-out user ────────────────────────────────────────
+                        // ── Null auth state ────────────────────────────────────────
+                        // If authStateResolved is already true it means Step 2 already
+                        // routed to the dashboard — this null event is a stale/extra
+                        // callback from Firebase initialising; ignore it.
+                        if (authStateResolved) return;
+
+                        // If authPending is set, a redirect is still in-flight or has
+                        // just been consumed; keep showing the loader, don't render UI.
+                        if (authPending) return;
+
                         if (isDashboardPath(path)) {
-                            // Unauthorised access attempt → send to landing
                             window.history.replaceState({ page: 'home' }, 'CauniX', '/');
                             showLandingPage();
                         } else if (isSignupPath(path)) {
@@ -1668,7 +1702,7 @@
                         }
                     }
 
-                    // Remove the loading overlay on FIRST auth resolution
+                    // Dismiss loader on first resolved auth event
                     if (!authStateResolved) {
                         authStateResolved = true;
                         hideAuthLoader();
@@ -1677,8 +1711,8 @@
 
             } catch (error) {
                 console.error('Auth init error:', error);
+                localStorage.removeItem('caunixAuthPending');
                 showAuthMessage(error.message, 'error');
-                // Ensure loader is removed even on failure so the user sees the page
                 hideAuthLoader();
                 showLandingPage();
             }
@@ -1707,6 +1741,11 @@
             googleBtn.disabled = true;
             googleBtn.innerHTML = '<div class="loading-spinner"></div><span>Redirecting...</span>';
             googleBtn.classList.add('loading');
+
+            // Stamp a flag so initFirebase knows a redirect is coming when the
+            // page reloads. This prevents onAuthStateChanged(null) from rendering
+            // the signup page during the brief window before tokens are exchanged.
+            localStorage.setItem('caunixAuthPending', '1');
 
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'consent' });
@@ -1750,6 +1789,7 @@
             try {
                 await auth.signOut();
                 localStorage.removeItem('caunixUser');
+                localStorage.removeItem('caunixAuthPending'); // safety clear
                 closeDashboard();
                 window.history.replaceState({ page: 'home' }, 'CauniX', '/');
                 showLandingPage();
