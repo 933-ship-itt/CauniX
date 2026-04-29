@@ -1589,21 +1589,6 @@
         let db = null;
         let authStateResolved = false; // track when onAuthStateChanged fires first time
 
-        function setView(view) {
-    document.getElementById('landingPageContainer').classList.remove('hidden');
-    document.getElementById('signupPageContainer').classList.remove('active');
-    document.getElementById('dashboardContainer').classList.remove('active');
-
-    if (view === 'signup') {
-        document.getElementById('signupPageContainer').classList.add('active');
-    }
-
-    if (view === 'dashboard') {
-        document.getElementById('landingPageContainer').classList.add('hidden');
-        document.getElementById('dashboardContainer').classList.add('active');
-    }
-}
-
         // ─── Path helpers (robust for local dev, file:// & prod) ───────────────
         function isDashboardPath(p) {
             p = p || window.location.pathname;
@@ -1714,19 +1699,6 @@
                 showLandingPage();
             }
         }
-        firebase.auth().onAuthStateChanged(user => {
-    const loader = document.getElementById('auth-loader');
-
-    if (user) {
-        setView('dashboard');
-    } else {
-        setView('signup');
-    }
-
-    // kill loader AFTER decision
-    loader.classList.add('fade-out');
-    setTimeout(() => loader.classList.add('hidden'), 300);
-});
 
         // ── Single entry point ───────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', initFirebase);
