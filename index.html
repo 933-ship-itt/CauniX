@@ -1024,7 +1024,7 @@
 
         .faq-item {
             border-bottom: 1px solid #f1f5f9;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
         }
 
         .faq-question {
@@ -1033,7 +1033,7 @@
             cursor: pointer;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             user-select: none;
             color: #0f172a;
         }
@@ -1041,6 +1041,7 @@
         .faq-chevron {
             transition: transform 0.2s;
             flex-shrink: 0;
+            margin-top: 4px;
         }
 
         .faq-item.open .faq-chevron {
@@ -1049,10 +1050,11 @@
 
         .faq-answer {
             display: none;
-            margin-top: 1rem;
+            margin-top: 1.25rem;
             font-size: 0.95rem;
             color: #334155;
-            line-height: 1.7;
+            line-height: 1.8;
+            white-space: pre-line;
         }
 
         .faq-item.open .faq-answer {
@@ -1442,51 +1444,65 @@
     </div>
 
     <script>
-        // ===== FIREBASE INITIALIZATION =====
-        // Fix: remove process.env references and use window variables or empty string
-        // ===== FIREBASE INITIALIZATION =====
-// ===== FIREBASE INITIALIZATION =====
-const firebaseConfig = {
-    apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
-    authDomain: "tervallx.firebaseapp.com",
-    projectId: "tervallx",
-    storageBucket: "tervallx.firebasestorage.app",
-    messagingSenderId: "1097149640832",
-    appId: "1:1097149640832:web:24205417b4f481b7523665",
-    measurementId: "G-32MMXKPB83"
-};
+        // ===== FIREBASE INITIALIZATION WITH READY PROMISE =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyC96QB4RWl-8vHCSAkuWa-1D1wp6sGiO3E",
+            authDomain: "tervallx.firebaseapp.com",
+            projectId: "tervallx",
+            storageBucket: "tervallx.firebasestorage.app",
+            messagingSenderId: "1097149640832",
+            appId: "1:1097149640832:web:24205417b4f481b7523665",
+            measurementId: "G-32MMXKPB83"
+        };
 
-let firebaseInitialized = false;
-let auth = null;
-let db = null;
+        let firebaseInitialized = false;
+        let auth = null;
+        let db = null;
+        let firebaseReadyPromise = null;
 
-function initFirebase() {
-    if (firebaseInitialized) return;
+        function initFirebase() {
+            if (firebaseInitialized) return;
 
-    // Check for both the base object and the specific auth/db methods
-    if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
-        console.warn('Firebase components not yet available, retrying...');
-        setTimeout(initFirebase, 50); 
-        return;
-    }
+            if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
+                setTimeout(initFirebase, 50);
+                return;
+            }
 
-    try {
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+            try {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                auth = firebase.auth();
+                db = firebase.database();
+                firebaseInitialized = true;
+                console.log('Firebase ready.');
+            } catch (error) {
+                console.error('Initialization failed:', error);
+                // retry after a while
+                setTimeout(initFirebase, 1000);
+            }
         }
-        
-        auth = firebase.auth();
-        db = firebase.database();
-        firebaseInitialized = true;
-        console.log('Firebase ready.');
-    } catch (error) {
-        console.error('Initialization failed:', error);
-    }
-}
 
-// Start initialization immediately and on DOM load
-initFirebase();
-document.addEventListener('DOMContentLoaded', initFirebase);
+        function getFirebaseReadyPromise() {
+            if (!firebaseReadyPromise) {
+                firebaseReadyPromise = new Promise((resolve) => {
+                    const check = () => {
+                        if (firebaseInitialized) {
+                            resolve();
+                        } else {
+                            setTimeout(check, 100);
+                        }
+                    };
+                    check();
+                });
+            }
+            return firebaseReadyPromise;
+        }
+
+        // kick off immediately and on DOM load
+        initFirebase();
+        document.addEventListener('DOMContentLoaded', initFirebase);
+
         // ===== AUTH MESSAGE HELPER =====
         function showAuthMessage(message, type = 'info') {
             const messageEl = document.getElementById('auth-message');
@@ -1495,10 +1511,12 @@ document.addEventListener('DOMContentLoaded', initFirebase);
             setTimeout(() => messageEl.classList.remove('show'), 5000);
         }
 
-        // ===== GOOGLE AUTH HANDLER (INSTANT REDIRECT) =====
+        // ===== GOOGLE AUTH HANDLER (with firebase ready check) =====
         async function handleGoogleSignUp() {
+            await getFirebaseReadyPromise(); // ensure Firebase is initialized
+
             if (!auth) {
-                showAuthMessage('Firebase not initialized. Please refresh the page.', 'error');
+                showAuthMessage('Firebase failed to initialize. Please refresh the page.', 'error');
                 return;
             }
 
@@ -1540,23 +1558,21 @@ document.addEventListener('DOMContentLoaded', initFirebase);
             localStorage.setItem('caunixUser', JSON.stringify(userData));
         }
 
-        // ===== REDIRECT TO DASHBOARD =====
+        // ===== REDIRECT TO DASHBOARD (with hash navigation) =====
         function redirectToDashboard(user) {
-            showLandingPage = false;
             showDashboard(user);
-            window.history.pushState({ page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
+            window.location.hash = '#/dashboard';
         }
 
         // ===== LOGOUT HANDLER =====
         async function handleLogout() {
+            await getFirebaseReadyPromise();
             if (!auth) return;
             try {
                 await auth.signOut();
                 localStorage.removeItem('caunixUser');
-                showAuthMessage('Logged out successfully', 'success');
-                closeDashboard();
-                window.history.pushState({ page: 'home' }, 'CauniX', '/');
-                setTimeout(() => location.reload(), 1000);
+                window.location.hash = ''; // back to home
+                setTimeout(() => location.reload(), 100); // ensure fresh state
             } catch (error) {
                 console.error('Logout error:', error);
                 showAuthMessage(`Error: ${error.message}`, 'error');
@@ -1589,8 +1605,7 @@ document.addEventListener('DOMContentLoaded', initFirebase);
         }
 
         function closeDashboard() {
-            const dashboard = document.getElementById('dashboardContainer');
-            dashboard.classList.remove('active');
+            document.getElementById('dashboardContainer').classList.remove('active');
         }
 
         // ===== SEO - STRUCTURED DATA =====
@@ -1611,94 +1626,194 @@ document.addEventListener('DOMContentLoaded', initFirebase);
             document.head.appendChild(script);
         })();
 
-        // ===== LEGAL CONTENT (split into three tabs, with escaped quotes) =====
+        // ===== LEGAL CONTENT (long, boring, verbose) =====
         const LEGAL_CONTENT = {
             terms: [
-                { q: "1. Scope and Legal Framework", a: "This document governs access to and use of the CauniX platform, including all associated applications, features, and services (collectively, the \"Service\"). By accessing or using the Service, you agree to be bound by this document. If you do not agree, the Service must not be used." },
-                { q: "2. Nature of the Service", a: "CauniX is an internet-based communication platform enabling real-time voice communication and Direct Messages. It operates as an over-the-top (OTT) software layer and is not a telecommunications carrier, network operator, or regulated voice service." },
-                { q: "3. Eligibility and Age", a: "Use is restricted to individuals at least 13 years old (or minimum age by local law) with legal capacity. Minors must have parent/guardian authorization." },
-                { q: "4. Authentication and Identity", a: "Access is via Google or Apple authentication. A unique CauniX ID is generated; no KYC, government ID, legal name, or address is collected. The Service does not verify real-world identity." },
-                { q: "5. Acceptable Use", a: "You shall not use the Service to violate laws, transmit illegal/harmful content, harass, threaten, abuse, defraud, impersonate, distribute malware, or spam/scrape. You are responsible for all activity under your account." },
-                { q: "6. Enforcement and Moderation", a: "We may suspend, restrict, or terminate accounts and blacklist identifiers at our discretion, with or without notice, based on automated or manual detection. No justification is owed." },
-                { q: "7. Communications", a: "All communications are your sole responsibility. We do not monitor content except for security, abuse prevention, and legal compliance. Encryption may be applied where implemented." },
-                { q: "8. Data Collection", a: "We collect only authentication tokens, CauniX ID, routing metadata (sender, recipient, timestamps), and limited technical data. No government ID, addresses, phone numbers, or financial data." },
-                { q: "9. Data Processing Purpose", a: "Data is used solely to provide/maintain the Service, deliver communications, prevent abuse, and comply with legal obligations." },
-                { q: "10. Data Retention and Deletion", a: "Data retained only as needed. Upon account deletion, the auth-ID link is severed and active data removed within a reasonable time. Some data may be kept for legal/abuse prevention." },
-                { q: "11. Security", a: "Reasonable safeguards are implemented, but no system is fully secure. Use is at your own risk." },
-                { q: "12. Third-Party Services", a: "We rely on third-party auth and cloud providers that process data per their policies. We do not control those providers." },
-                { q: "13. Service Availability", a: "The Service is 'as-is' and 'as-available'. No guarantees of uptime, reliability, or continuity. It may be modified, suspended, or discontinued without notice." },
-                { q: "14. Limitation of Liability", a: "To the maximum extent permitted by law, we are not liable for indirect, incidental, or consequential damages, data loss, user conduct, or disputes." },
-                { q: "15. Indemnification", a: "You agree to indemnify us from any claims arising from your use of the Service, violation of these terms, or infringement of others' rights." },
-                { q: "16. Global Use and Compliance", a: "The Service is accessible globally. You must ensure your use complies with local laws." },
-                { q: "17. Regional Provisions", a: "EEA users may have additional GDPR rights (access, correction, deletion, restriction). Other regions may have similar local requirements." },
-                { q: "18. Governing Law", a: "Governed by the laws of Kenya, unless mandatory local laws apply." },
-                { q: "19. Dispute Resolution", a: "Disputes are subject to competent courts in Kenya, unless otherwise required by law." },
-                { q: "20. Modifications", a: "This document may be updated anytime. Continued use constitutes acceptance of the revised terms." },
-                { q: "21. Entire Agreement", a: "This document constitutes the entire agreement and supersedes any prior understandings." }
+                {
+                    q: "1. Introduction and Acceptance of Terms",
+                    a: "These Terms of Service (\"Terms\") form a binding legal agreement between you (\"User\" or \"you\") and CauniX (\"Company\", \"we\", \"us\", or \"our\"), governing your access to and use of the CauniX communication platform, including all associated services, features, websites, applications, and content (collectively, the \"Service\"). By creating an account, accessing, or using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms. If you do not agree, you must immediately cease all use of the Service.\n\nYour use of the Service is also subject to our Privacy Policy and any other policies we may publish from time to time. These Terms apply to all visitors, users, and others who access or use the Service."
+                },
+                {
+                    q: "2. Eligibility and Legal Capacity",
+                    a: "The Service is intended solely for individuals who are at least 13 years of age (or the minimum age of digital consent in their jurisdiction, whichever is higher). By accessing the Service, you represent and warrant that you meet the eligibility requirements and that you have the legal capacity to enter into these Terms. If you are under the age of 18, you must have your parent or legal guardian review and consent to these Terms on your behalf; such consent constitutes their acceptance of full responsibility for your actions.\n\nWe may, at our sole discretion, refuse to offer the Service to any person or entity and change its eligibility criteria at any time. The Service is void where prohibited by law."
+                },
+                {
+                    q: "3. Description of the Service",
+                    a: "CauniX is an over-the-top (OTT) internet communication platform that enables real-time voice communication between users. It operates exclusively through internet connectivity and does not rely on traditional telephony networks, cellular carriers, or SIM cards. The Service provides a unique user identifier (CauniX ID) generated upon successful authentication via the supported third-party identity provider, currently limited to Google Sign-In.\n\nWe reserve the right to modify, suspend, or discontinue any aspect of the Service at any time, including the availability of any feature, database, or content. We may also impose limits on certain features and services or restrict your access to parts or all of the Service without notice or liability."
+                },
+                {
+                    q: "4. Authentication and Account Identity",
+                    a: "Access to the Service requires authentication through an approved single sign-on provider. As of the effective date of these Terms, the sole supported authentication method is Google Sign-In. By authenticating via Google, you authorize us to retrieve certain profile information (such as your name, email address, and profile picture) as permitted by your Google account settings.\n\nUpon your first successful authentication, the Service will automatically generate a unique CauniX identifier (\"CauniX ID\") associated with your account. Your CauniX ID is not a telephone number and does not provide any functionality outside the CauniX ecosystem. We do not collect or require government-issued identification documents, phone numbers, or physical addresses.\n\nYou are solely responsible for maintaining the security of your Google account and ensuring that unauthorized persons do not gain access to the Service via your credentials. Any activity occurring under your CauniX ID will be deemed your responsibility."
+                },
+                {
+                    q: "5. User Conduct and Acceptable Use",
+                    a: "You agree to use the Service only for lawful purposes and in accordance with these Terms. Prohibited activities include, but are not limited to:\n\n- Violating any applicable local, national, or international law or regulation.\n- Transmitting, distributing, or storing material that is unlawful, harmful, threatening, abusive, harassing, defamatory, obscene, invasive of privacy, or otherwise objectionable.\n- Impersonating any person or entity, or falsely stating or misrepresenting your affiliation with a person or entity.\n- Interfering with or disrupting the Service or servers or networks connected to the Service.\n- Uploading or transmitting viruses, malware, or any other harmful code.\n- Using the Service to engage in spam, unsolicited advertising, or any form of unauthorized data collection (scraping, harvesting, etc.).\n- Attempting to gain unauthorized access to any portion or feature of the Service.\n\nWe reserve the right, but have no obligation, to monitor user activity and to remove or suspend access to any content or account that we deem in violation of these Terms, with or without notice."
+                },
+                {
+                    q: "6. Account Suspension and Termination",
+                    a: "We may, in our sole discretion and without prior notice or liability, suspend, restrict, or terminate your access to the Service, permanently or temporarily, if we determine that your conduct violates these Terms, poses a risk of legal exposure, or negatively affects the Service or other users. We may also implement automated mechanisms (including blacklists and rate-limiters) to enforce these measures.\n\nUpon termination, all rights and licenses granted to you shall immediately cease. Any data associated with your account may be deleted or retained in accordance with our data retention policies. We shall not be liable to you or any third party for any termination of your access to the Service."
+                },
+                {
+                    q: "7. Communications and Content",
+                    a: "The Service facilitates direct voice communication between users. You understand and agree that all communications are transmitted over the internet and may be subject to inherent risks, including interception or unauthorized access. While we implement reasonable security measures (including encryption where applicable), we cannot guarantee the absolute security of any communication.\n\nYou are solely responsible for the content of your communications. We do not actively monitor voice calls or messages except as necessary for service operation, abuse prevention, or compliance with legal obligations. We reserve the right to review and disclose any content if required to do so by law or in the good faith belief that such action is necessary to comply with legal process, enforce these Terms, respond to claims, or protect the rights, property, or safety of the Company, its users, or the public."
+                },
+                {
+                    q: "8. Intellectual Property Rights",
+                    a: "The Service, including its original content, features, and functionality, is owned by CauniX and is protected by international copyright, trademark, patent, trade secret, and other intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of our Service or its software, nor may you reverse engineer or attempt to extract the source code, unless laws prohibit these restrictions or you have our written permission.\n\nBy submitting feedback, suggestions, or ideas regarding the Service, you grant us a perpetual, irrevocable, worldwide, royalty-free license to use such feedback without any obligation of compensation or recognition."
+                },
+                {
+                    q: "9. Third-Party Services and Links",
+                    a: "The Service may integrate with or link to third-party services (such as Google for authentication and Firebase for backend infrastructure). We do not control these providers and are not responsible for their privacy practices, terms, or performance. Your use of such third-party services is at your own risk and subject to their respective terms and policies.\n\nWe make no warranties regarding the availability or reliability of third-party services, and shall not be liable for any loss or damage arising from their use."
+                },
+                {
+                    q: "10. Privacy and Data Handling",
+                    a: "Our Privacy Policy (available via the legal section of our website) explains in detail how we collect, store, process, and share your personal information. By using the Service, you consent to the practices described therein. In summary, we collect only the minimum information necessary to provide the Service, including authentication tokens, your CauniX ID, routing metadata (sender, recipient, timestamps), and limited technical data.\n\nWe do not sell, rent, or share your personal data with third parties for their own marketing purposes. Data is retained only as long as necessary for the purposes outlined and is deleted or anonymized upon account deletion, subject to legal obligations."
+                },
+                {
+                    q: "11. No Emergency Services",
+                    a: "CauniX is not a telephony replacement and does NOT provide access to emergency services (such as 911, 112, or equivalent). You must have alternative means to contact emergency services if needed. By using the Service, you acknowledge and accept this limitation and agree to hold us harmless from any claims arising from the inability to reach emergency services."
+                },
+                {
+                    q: "12. Disclaimer of Warranties",
+                    a: "THE SERVICE IS PROVIDED ON AN \"AS IS\" AND \"AS AVAILABLE\" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, ERROR-FREE, OR FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS.\n\nYOUR USE OF THE SERVICE IS SOLELY AT YOUR OWN RISK. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSIONS MAY NOT APPLY TO YOU."
+                },
+                {
+                    q: "13. Limitation of Liability",
+                    a: "TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL CAUNIX, ITS AFFILIATES, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM (I) YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SERVICE; (II) ANY CONDUCT OR CONTENT OF ANY THIRD PARTY ON THE SERVICE; (III) ANY CONTENT OBTAINED FROM THE SERVICE; AND (IV) UNAUTHORIZED ACCESS, USE OR ALTERATION OF YOUR TRANSMISSIONS OR CONTENT, WHETHER BASED ON WARRANTY, CONTRACT, TORT (INCLUDING NEGLIGENCE) OR ANY OTHER LEGAL THEORY, WHETHER OR NOT WE HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGE.\n\nIN NO EVENT SHALL OUR AGGREGATE LIABILITY EXCEED THE AMOUNT YOU PAID US, IF ANY, IN THE PAST SIX MONTHS FOR THE SERVICE GIVING RISE TO THE CLAIM, OR ONE HUNDRED DOLLARS ($100), WHICHEVER IS GREATER."
+                },
+                {
+                    q: "14. Indemnification",
+                    a: "You agree to defend, indemnify, and hold harmless CauniX and its affiliates, officers, directors, employees, and agents from and against any and all claims, damages, obligations, losses, liabilities, costs, or debt, and expenses (including but not limited to attorney’s fees) arising from (i) your use of and access to the Service, (ii) your violation of any term of these Terms, (iii) your violation of any third-party right, including without limitation any copyright, property, or privacy right, or (iv) any claim that your content caused damage to a third party. This defense and indemnification obligation will survive these Terms and your use of the Service."
+                },
+                {
+                    q: "15. Governing Law and Jurisdiction",
+                    a: "These Terms shall be governed and construed in accordance with the laws of the Republic of Kenya, without regard to its conflict of law provisions. Any legal suit, action, or proceeding arising out of, or related to, these Terms or the Service shall be instituted exclusively in the competent courts located in Nairobi, Kenya, unless otherwise mandated by the applicable laws of your jurisdiction."
+                },
+                {
+                    q: "16. Dispute Resolution",
+                    a: "Before resorting to formal legal action, you agree to attempt to resolve any dispute informally by contacting us at legal@caunix.app. We will attempt to resolve the dispute within 30 days. If the dispute is not resolved informally, either party may initiate arbitration or litigation in the applicable venue as described in Section 15.\n\nYou agree that any dispute resolution proceedings will be conducted on an individual basis and not in a class, consolidated, or representative action. You waive any right to a jury trial."
+                },
+                {
+                    q: "17. Modification of Terms",
+                    a: "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will make reasonable efforts to provide notice of material changes, such as by posting a notice on the Service or sending an email. Your continued use of the Service after any such changes constitutes your acceptance of the new Terms. If you do not agree to the revised Terms, you must cease using the Service."
+                },
+                {
+                    q: "18. Miscellaneous",
+                    a: "These Terms, together with our Privacy Policy and any other legal notices published by us on the Service, constitute the entire agreement between you and CauniX concerning the Service. If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that these Terms shall otherwise remain in full force and effect and enforceable. The failure of either party to exercise in any respect any right provided for herein shall not be deemed a waiver of any further rights hereunder."
+                }
             ],
             privacy: [
-                { q: "8. Data Collection", a: "We collect only authentication tokens, your generated CauniX ID, routing metadata (sender, recipient, timestamps), and limited technical/device data for security and performance." },
-                { q: "9. Purpose of Processing", a: "Data is processed solely for providing the Service, delivering communications, preventing abuse, and complying with legal obligations." },
-                { q: "10. Data Retention and Deletion", a: "Data is kept only as long as necessary. On account deletion, the auth-ID association is removed and active data deleted within a reasonable timeframe. Some data may be retained for legal/abuse purposes." },
-                { q: "11. Security", a: "We implement reasonable technical and organizational safeguards. No system is impenetrable; use is at your own risk." },
-                { q: "7. Encryption", a: "Where implemented, communications may be end-to-end encrypted. Otherwise, content may be temporarily processed to enable delivery." },
-                { q: "12. Third-Party Services", a: "Authentication (Google, Apple) and cloud infrastructure providers process data per their own privacy policies. We do not control that processing." },
-                { q: "17. Regional Rights (EEA)", a: "Users in the EEA may exercise rights to access, rectify, delete, or restrict processing of personal data under GDPR." }
+                {
+                    q: "1. Introduction and Scope",
+                    a: "This Privacy Policy explains how CauniX (\"we\", \"us\", \"our\") collects, uses, stores, shares, and protects information in connection with the CauniX communication platform (the \"Service\"). We are committed to protecting your privacy and handling your data in an open and transparent manner. This policy applies to all users of the Service globally, but may be supplemented by regional provisions as required by law.\n\nPlease read this policy carefully. By using the Service, you acknowledge the practices described herein. If you do not agree with this policy, you must not use the Service."
+                },
+                {
+                    q: "2. Information We Collect",
+                    a: "We collect only the minimum data necessary to provide and improve the Service. The categories of information we may collect include:\n\n- Authentication Data: When you sign in via Google, we receive an authentication token and profile information (such as your name, email address, and profile picture) as permitted by your Google account settings. We do not have access to your Google password.\n- User Identifier: Upon your first sign-in, we generate a unique CauniX ID, which is associated with your account and used for service delivery.\n- Communication Metadata: To enable voice calls, we process metadata such as the sender and recipient CauniX IDs, timestamps, call duration, and IP addresses for routing and security purposes.\n- Device and Technical Data: We automatically receive certain technical information, including IP address, browser type, operating system, access times, and referring URLs. This data is used for operational diagnostics, security, and aggregated analytics.\n- User-Provided Information: Any feedback, support requests, or reports you submit to us."
+                },
+                {
+                    q: "3. How We Use Your Information",
+                    a: "We use the collected information for the following purposes:\n\n- To provide, maintain, and improve the Service, including facilitating voice calls, presence status, and user identity.\n- To ensure the security and integrity of the Service, detect and prevent fraud, abuse, and violations of our Terms.\n- To communicate with you about service updates, security alerts, and support inquiries.\n- To comply with applicable legal obligations, such as responding to lawful requests from public authorities.\n- For internal analytics and research to understand usage trends and improve user experience (in aggregated, de-identified form)."
+                },
+                {
+                    q: "4. Data Sharing and Disclosure",
+                    a: "We do not sell, rent, or trade your personal information. We may share information in the following limited circumstances:\n\n- With service providers and partners (such as Google for authentication and Firebase for cloud infrastructure) who process data on our behalf according to our instructions and their own privacy policies.\n- If required by law, such as to comply with a subpoena, court order, or similar legal process.\n- When we believe in good faith that disclosure is necessary to protect our rights, your safety or the safety of others, investigate fraud, or respond to a government request.\n- In connection with a merger, acquisition, or sale of all or a portion of our assets; you will be notified via email and/or a prominent notice on our Service of any change in ownership or uses of your personal information.\n\nAll third-party service providers are contractually bound to protect your data and use it only for the purposes we specify."
+                },
+                {
+                    q: "5. Data Retention and Deletion",
+                    a: "We retain personal information only for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required or permitted by law. When you delete your CauniX account (via the settings or by contacting us), we will sever the link between your authentication provider and your CauniX ID and remove your active personal data from our systems within a reasonable timeframe (generally 30–90 days).\n\nSome data may be retained in our backup systems for a limited additional period due to operational complexity, but we will take steps to ensure such data is not actively processed. We may also retain de-identified or aggregated data for analytical purposes."
+                },
+                {
+                    q: "6. Security of Your Information",
+                    a: "We implement appropriate technical and organizational measures designed to protect the security of your personal information, including encryption in transit, access controls, and regular security assessments. However, no method of transmission over the Internet or method of electronic storage is 100% secure. Therefore, while we strive to use commercially acceptable means to protect your personal information, we cannot guarantee absolute security."
+                },
+                {
+                    q: "7. Children's Privacy",
+                    a: "The Service is not directed to individuals under the age of 13 (or the applicable age of digital consent in your jurisdiction). We do not knowingly collect personal information from children under 13. If we become aware that a child under the relevant age has provided us with personal data, we will take steps to delete such information and terminate the corresponding account."
+                },
+                {
+                    q: "8. International Data Transfers",
+                    a: "Your information may be transferred to, and maintained on, computers located outside of your state, province, country, or other governmental jurisdiction where the data protection laws may differ. By using the Service, you consent to such transfer and processing. We take appropriate safeguards to require that your personal data will remain protected in accordance with this Privacy Policy."
+                },
+                {
+                    q: "9. Your Rights and Choices",
+                    a: "Depending on your jurisdiction, you may have certain rights regarding your personal data, including the right to access, correct, update, or delete your information, the right to object to or restrict processing, the right to data portability, and the right to withdraw consent. To exercise these rights, please contact us at privacy@caunix.app. We will respond to your request within the timeframe required by law.\n\nIf you reside in the European Economic Area (EEA), you may also lodge a complaint with a supervisory authority. For users in other regions, local laws may provide additional avenues for recourse."
+                },
+                {
+                    q: "10. Changes to This Privacy Policy",
+                    a: "We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new Privacy Policy on this page and updating the \"Effective Date\" at the top. You are advised to review this Privacy Policy periodically for any changes. Your continued use of the Service after the effective date of a revised policy constitutes acceptance of the updated terms."
+                },
+                {
+                    q: "11. Contact Us",
+                    a: "If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:\n\nEmail: privacy@caunix.app\nAddress: CauniX Legal, P.O. Box xxxx, Nairobi, Kenya\n\nWe are committed to resolving complaints about your privacy and our collection or use of your personal information."
+                }
             ],
             rules: [
-                { q: "5. Acceptable Use and Platform Rules", a: "You must not: violate any law; transmit illegal, harmful, or exploitative content; harass, threaten, or abuse others; engage in fraud, impersonation, or deception; distribute malware or conduct cyber‑attacks; exploit the platform for spam, automation abuse, or unauthorized scraping." },
-                { q: "6. Enforcement", a: "We may suspend, restrict, or permanently terminate accounts and blacklist associated identifiers at our sole discretion, with or without notice, using automated or manual detection. No explanation is required." }
+                {
+                    q: "Acceptable Use and Platform Rules",
+                    a: "In addition to the Terms of Service, you must adhere to the following platform-specific rules designed to maintain a safe and respectful environment for all users. Violation of any rule may result in immediate account suspension or termination.\n\n-- You must not engage in any activity that could be considered harassment, bullying, hate speech, or threats of violence against any person or group.\n-- You must not use the Service to distribute or promote sexually explicit content, child sexual abuse material, or any form of exploitation.\n-- You must not impersonate other users or CauniX staff, or engage in deceptive activities such as phishing or social engineering.\n-- You must not use automated tools to create accounts, send bulk messages, or extract data from the Service without our express written permission.\n-- You must not attempt to circumvent any security measures, access controls, or reporting mechanisms implemented by the Service.\n\nWe employ a combination of automated detection and manual review to identify and address violations. Users may report abusive behavior via the in-app reporting feature or by emailing abuse@caunix.app. We will investigate all reports and take appropriate action, but we make no guarantees regarding response time or specific outcome."
+                },
+                {
+                    q: "Enforcement and Consequences",
+                    a: "Account enforcement actions are at our sole discretion and may include temporary suspension, permanent termination, and blacklisting of associated identifiers (such as Google account or IP address). We are not obligated to provide a warning or prior notice. In cases of severe abuse, we may proactively report relevant information to law enforcement authorities.\n\nYou may appeal a suspension or termination by contacting support@caunix.app within 14 days. We will review the appeal and respond in a reasonable time, but our decision shall be final. While an account is suspended, you will not be able to use the Service or access your data."
+                }
             ]
         };
 
-        // ===== LEGAL PAGE RENDERING =====
-        function renderLegalTab(tab) {
-            const items = LEGAL_CONTENT[tab] || [];
-            const container = document.getElementById('legalContentBody');
-            container.innerHTML = items.map((item, i) => `
-                <div class="faq-item">
-                    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                        <span>${item.q}</span>
-                        <i data-lucide="chevron-down" class="w-5 h-5 faq-chevron"></i>
-                    </div>
-                    <div class="faq-answer">${item.a.replace(/\n/g, '<br>')}</div>
-                </div>
-            `).join('');
-            lucide.createIcons();
+        // ===== HASH‑BASED ROUTING =====
+        function parseHash() {
+            const hash = window.location.hash.replace(/^#/, '');
+            if (!hash) return { page: 'home' };
+
+            if (hash.startsWith('/legal/')) {
+                const tab = hash.split('/legal/')[1];
+                return { page: 'legal', tab: tab || 'terms' };
+            }
+            if (hash.startsWith('/signup')) return { page: 'signup' };
+            if (hash.startsWith('/dashboard')) return { page: 'dashboard' };
+            return { page: 'home' };
         }
 
-        function openLegalPage(tab = 'terms') {
-            const legalPage = document.getElementById('legalPageContainer');
-            legalPage.classList.add('active');
-            document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === tab);
-            });
-            renderLegalTab(tab);
-            window.scrollTo(0, 0);
-        }
-
-        function closeLegalPage() {
-            document.getElementById('legalPageContainer').classList.remove('active');
-        }
-
-        // ===== GLOBAL ROUTING (pushState) =====
         function navigateTo(path) {
-            if (path.startsWith('/legal/')) {
-                const tab = path.split('/legal/')[1];
-                window.history.pushState({ page: 'legal', tab: tab }, `CauniX - ${tab}`, path);
-                openLegalPage(tab);
-                return;
-            }
-            if (path === '/signup') {
-                window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
-                showSignupPage();
-                return;
-            }
-            window.history.pushState({ page: 'home' }, 'CauniX', '/');
-            showLandingPage();
+            window.location.hash = `#${path}`;
         }
 
-        // ===== PAGE ROUTING WITH HISTORY API =====
+        function handleHashChange() {
+            const route = parseHash();
+            switch (route.page) {
+                case 'signup':
+                    showSignupPage();
+                    break;
+                case 'legal':
+                    openLegalPage(route.tab);
+                    break;
+                case 'dashboard':
+                    // Reconstruct user from localStorage if possible
+                    const stored = localStorage.getItem('caunixUser');
+                    if (stored) {
+                        try {
+                            const u = JSON.parse(stored);
+                            showDashboard({ displayName: u.displayName, email: u.email, uid: u.uid });
+                        } catch (e) {
+                            window.location.hash = '';
+                        }
+                    } else {
+                        window.location.hash = '';
+                    }
+                    break;
+                default:
+                    showLandingPage();
+            }
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+        // initial load
+        window.addEventListener('DOMContentLoaded', () => {
+            handleHashChange();
+            // also trigger any anchor links in hash if needed
+        });
+
+        // ===== PAGE ROUTING CONTROL =====
         const landingPageContainer = document.getElementById('landingPageContainer');
         const signupPageContainer = document.getElementById('signupPageContainer');
         let landingHeroCleanup = null;
@@ -1724,7 +1839,7 @@ document.addEventListener('DOMContentLoaded', initFirebase);
             startSignupAnimations();
         }
 
-        // Navigation buttons
+        // Navigation buttons (already use navigateTo, which sets hash)
         const navButtons = [
             document.getElementById('nav-get-started'),
             document.getElementById('mobile-get-started'),
@@ -1736,37 +1851,17 @@ document.addEventListener('DOMContentLoaded', initFirebase);
             if (btn) {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
-                    showSignupPage();
+                    navigateTo('/signup');
                 });
             }
         });
 
         document.getElementById('signup-back-btn').addEventListener('click', () => {
-            window.history.pushState({ page: 'home' }, 'CauniX', '/');
-            showLandingPage();
+            navigateTo('/'); // back to home
         });
 
         // Logout button
         document.getElementById('logout-btn')?.addEventListener('click', handleLogout);
-
-        // Browser back/forward
-        window.addEventListener('popstate', (event) => {
-            if (event.state) {
-                if (event.state.page === 'signup') {
-                    showSignupPage();
-                } else if (event.state.page === 'legal') {
-                    openLegalPage(event.state.tab || 'terms');
-                } else if (event.state.page === 'dashboard') {
-                    const user = JSON.parse(localStorage.getItem('caunixUser') || 'null');
-                    if (user) showDashboard({ displayName: user.displayName, email: user.email, uid: user.uid });
-                } else {
-                    showLandingPage();
-                }
-            } else {
-                showLandingPage();
-            }
-        });
 
         // ===== SIGNUP FORM HANDLERS =====
         const tosCheck = document.getElementById('signup-tosCheck');
@@ -2288,7 +2383,46 @@ document.addEventListener('DOMContentLoaded', initFirebase);
             };
         }
 
-      
+        // ===== LEGAL PAGE RENDERING =====
+        function renderLegalTab(tab) {
+            const items = LEGAL_CONTENT[tab] || [];
+            const container = document.getElementById('legalContentBody');
+            container.innerHTML = items.map((item, i) => `
+                <div class="faq-item">
+                    <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+                        <span>${item.q}</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 faq-chevron"></i>
+                    </div>
+                    <div class="faq-answer">${item.a.replace(/\n/g, '<br>')}</div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openLegalPage(tab = 'terms') {
+            const legalPage = document.getElementById('legalPageContainer');
+            legalPage.classList.add('active');
+            document.querySelectorAll('#legalTabNav .legal-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+            });
+            renderLegalTab(tab);
+            window.scrollTo(0, 0);
+        }
+
+        function closeLegalPage() {
+            document.getElementById('legalPageContainer').classList.remove('active');
+        }
+
+        // Legal tab navigation via hash
+        document.getElementById('legalTabNav').addEventListener('click', (e) => {
+            const btn = e.target.closest('.legal-tab-btn');
+            if (btn) {
+                const tab = btn.dataset.tab;
+                navigateTo(`/legal/${tab}`);
+            }
+        });
+
+        // Initial legal tab activation based on hash is handled by routeHash => openLegalPage
     </script>
 </body>
 </html>
