@@ -2016,7 +2016,10 @@
         }
 
         function showSignupPage() {
-    // ✅ FIX: Never show sign‑up if already signed in
+    // 🛡️ Never decide before auth is fully initialised
+    if (!authStateResolved) return;
+
+    // ✅ Existing guard: already signed in → dashboard
     if (auth && auth.currentUser) {
         window.history.replaceState(
             { page: 'dashboard' },
@@ -2073,6 +2076,9 @@ window.addEventListener('popstate', (event) => {
 
     if (state) {
         if (state.page === 'signup') {
+            // 🛡️ Wait until auth is resolved before making any decision
+            if (!authStateResolved) return;
+
             // ✅ Guard: if user is now logged in, go to dashboard immediately
             const liveUser = auth && auth.currentUser;
             if (liveUser) {
@@ -2093,7 +2099,6 @@ window.addEventListener('popstate', (event) => {
             if (liveUser) {
                 showDashboard(liveUser);
             } else {
-                // Auth not settled yet — wait for onAuthStateChanged
                 showLandingPage();
             }
         } else {
@@ -2109,7 +2114,9 @@ window.addEventListener('popstate', (event) => {
                 showLandingPage();
             }
         } else if (isSignupPath(path)) {
-            // ✅ Same guard for URL‑based signup detection
+            // 🛡️ Also ignore URL-based signup before auth is ready
+            if (!authStateResolved) return;
+
             const liveUser = auth && auth.currentUser;
             if (liveUser) {
                 window.history.replaceState(
