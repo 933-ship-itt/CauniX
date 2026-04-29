@@ -2016,10 +2016,7 @@
         }
 
         function showSignupPage() {
-    // 🛡️ Never decide before auth is fully initialised
-    if (!authStateResolved) return;
-
-    // ✅ Existing guard: already signed in → dashboard
+    // 🛡️ Already signed in? Immediately redirect to dashboard.
     if (auth && auth.currentUser) {
         window.history.replaceState(
             { page: 'dashboard' },
@@ -2076,10 +2073,9 @@ window.addEventListener('popstate', (event) => {
 
     if (state) {
         if (state.page === 'signup') {
-            // 🛡️ Wait until auth is resolved before making any decision
+            // 🛡️ Do not act before auth is fully initialised
             if (!authStateResolved) return;
 
-            // ✅ Guard: if user is now logged in, go to dashboard immediately
             const liveUser = auth && auth.currentUser;
             if (liveUser) {
                 window.history.replaceState(
@@ -2094,7 +2090,6 @@ window.addEventListener('popstate', (event) => {
         } else if (state.page === 'legal') {
             openLegalPage(state.tab || 'terms');
         } else if (state.page === 'dashboard') {
-            // Only show dashboard if Firebase actually has a live session
             const liveUser = auth && auth.currentUser;
             if (liveUser) {
                 showDashboard(liveUser);
@@ -2105,7 +2100,7 @@ window.addEventListener('popstate', (event) => {
             showLandingPage();
         }
     } else {
-        // No state: derive view from the URL
+        // No state – derive view from the URL
         if (isDashboardPath(path)) {
             const liveUser = auth && auth.currentUser;
             if (liveUser) {
@@ -2114,7 +2109,7 @@ window.addEventListener('popstate', (event) => {
                 showLandingPage();
             }
         } else if (isSignupPath(path)) {
-            // 🛡️ Also ignore URL-based signup before auth is ready
+            // 🛡️ Wait for auth before handling a /signup URL
             if (!authStateResolved) return;
 
             const liveUser = auth && auth.currentUser;
