@@ -1607,98 +1607,116 @@
             setTimeout(() => loader.classList.add('hidden'), 380);
         }
 
-        // ─── Single initialisation — only via DOMContentLoaded ──────────────────
         async function initFirebase() {
-            if (firebaseInitialized) return;
+    if (firebaseInitialized) return;
 
-            if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
-                setTimeout(initFirebase, 50);
-                return;
+    if (typeof firebase === 'undefined' || !firebase.auth || !firebase.database) {
+        setTimeout(initFirebase, 50);
+        return;
+    }
+
+    try {
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db   = firebase.database();
+        firebaseInitialized = true;
+
+        // ── Step 1: consume any pending OAuth redirect ───────────────────
+        let redirectUser = null;
+        try {
+            const result = await auth.getRedirectResult();
+            if (result && result.user) {
+                redirectUser = result.user;
+                saveUserToDatabase(result.user).catch(e =>
+                    console.error('DB save error:', e));
             }
+        } catch (redirectError) {
+            console.error('Redirect result error:', redirectError);
+            if (redirectError.code === 'auth/credential-already-in-use') {
+                showAuthMessage('Account already linked — please try again.', 'error');
+            }
+        } finally {
+            localStorage.removeItem('caunixAuthPending');
+        }
 
-            try {
-                if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-                auth = firebase.auth();
-                db   = firebase.database();
-                firebaseInitialized = true;
+        // ── Step 2: fast-path for fresh redirect ─────────────────────────
+        if (redirectUser) {
+            window.history.replaceState(
+                { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
+            showDashboard(redirectUser);
+            authStateResolved = true;
+            hideAuthLoader();
+        }
 
-                // ── Step 1: consume any pending OAuth redirect ───────────────────
-                // Always clear the pending flag in `finally` so it can never get
-                // stuck in localStorage regardless of what getRedirectResult returns.
-                let redirectUser = null;
-                try {
-                    const result = await auth.getRedirectResult();
-                    if (result && result.user) {
-                        redirectUser = result.user;
-                        saveUserToDatabase(result.user).catch(e =>
-                            console.error('DB save error:', e));
-                    }
-                } catch (redirectError) {
-                    console.error('Redirect result error:', redirectError);
-                    if (redirectError.code === 'auth/credential-already-in-use') {
-                        showAuthMessage('Account already linked — please try again.', 'error');
-                    }
-                } finally {
-                    // Always clear; the const was causing the deadlock in the old code.
-                    localStorage.removeItem('caunixAuthPending');
-                }
+        // ── Step 3: set up the auth state listener ────────────────────────
+        // We will NOT accept a 'null' user as the final answer until
+        // `authStateResolved` becomes true.  That flag will be set either:
+        //   • immediately by a successful `getRedirectResult`
+        //   • when the observer fires with a `user`
+        //   • after a 1‑second grace period (safety net inside the observer)
+        auth.onAuthStateChanged((user) => {
+            const path = window.location.pathname;
 
-                // ── Step 2: fast-path for fresh redirect ─────────────────────────
-                // If getRedirectResult gave us a user, render the dashboard NOW and
-                // mark auth as resolved so onAuthStateChanged can't override it.
-                if (redirectUser) {
+            if (user) {
+                // user present → dashboard
+                if (!isDashboardPath(path)) {
                     window.history.replaceState(
                         { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-                    showDashboard(redirectUser);
+                }
+                showDashboard(user);
+
+                if (!authStateResolved) {
                     authStateResolved = true;
                     hideAuthLoader();
                 }
+            } else {
+                // user = null – but we are not yet ready to trust this
+                if (!authStateResolved) {
+                    // Still waiting – do nothing, keep the loading overlay.
+                    // We will add a one‑time timer that resolves the state.
+                    return;
+                }
 
-                // ── Step 3: onAuthStateChanged — handles every other case ────────
-                // • Returning users whose session is already cached in IndexedDB
-                // • Users who log out
-                // • Any redirect edge-case not caught above
-                //
-                // The `authStateResolved` guard ensures that once Step 2 has already
-                // shown the dashboard, a subsequent null-state callback (which Firebase
-                // sometimes emits during initialisation) cannot override it.
-                auth.onAuthStateChanged((user) => {
-                    const path = window.location.pathname;
-
-                    if (user) {
-                        if (!isDashboardPath(path)) {
-                            window.history.replaceState(
-                                { page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-                        }
-                        showDashboard(user);
-                    } else {
-                        // Ignore stale null callbacks after we already resolved auth.
-                        if (authStateResolved) return;
-
-                        if (isDashboardPath(path)) {
-                            window.history.replaceState({ page: 'home' }, 'CauniX', '/');
-                            showLandingPage();
-                        } else if (isSignupPath(path)) {
-                            showSignupPage();
-                        } else {
-                            showLandingPage();
-                        }
-                    }
-
-                    if (!authStateResolved) {
-                        authStateResolved = true;
-                        hideAuthLoader();
-                    }
-                });
-
-            } catch (error) {
-                console.error('Auth init error:', error);
-                localStorage.removeItem('caunixAuthPending');
-                showAuthMessage(error.message, 'error');
-                hideAuthLoader();
-                showLandingPage();
+                // authStateResolved is true, so null genuinely means signed out.
+                if (isDashboardPath(path)) {
+                    window.history.replaceState({ page: 'home' }, 'CauniX', '/');
+                    showLandingPage();
+                } else if (isSignupPath(path)) {
+                    showSignupPage();
+                } else {
+                    showLandingPage();
+                }
             }
-        }
+        });
+
+        // ── Step 4: one‑second grace period for the observer ──────────────
+        // If after 1 second the observer still hasn't supplied a user,
+        // we mark auth as resolved and, if still null, show the appropriate
+        // unauthenticated page (sign‑up or landing).
+        setTimeout(() => {
+            if (!authStateResolved) {
+                authStateResolved = true;
+                hideAuthLoader();
+                const p = window.location.pathname;
+                if (isSignupPath(p)) {
+                    showSignupPage();
+                } else if (isDashboardPath(p)) {
+                    window.history.replaceState({ page: 'home' }, 'CauniX', '/');
+                    showLandingPage();
+                } else {
+                    showLandingPage();
+                }
+            }
+        }, 1000);
+
+    } catch (error) {
+        console.error('Auth init error:', error);
+        localStorage.removeItem('caunixAuthPending');
+        showAuthMessage(error.message, 'error');
+        hideAuthLoader();
+        showLandingPage();
+    }
+}
 
         // ── Single entry point ───────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', initFirebase);
