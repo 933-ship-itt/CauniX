@@ -1979,14 +1979,21 @@
             }
 
             if (isSignupPath(path)) {
-                window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
-                showSignupPage();
-                return;
-            }
-
-            window.history.pushState({ page: 'home' }, 'CauniX', '/');
-            showLandingPage();
+        // 🛡️ Do not allow navigating to sign‑up if already logged in
+        const currentUser = user || (auth && auth.currentUser);
+        if (currentUser && currentUser.uid) {
+            window.history.replaceState(
+                { page: 'dashboard' },
+                'CauniX Dashboard',
+                '/dashboard'
+            );
+            showDashboard(currentUser);
+            return;
         }
+        window.history.pushState({ page: 'signup' }, 'CauniX Sign Up', '/signup');
+        showSignupPage();
+        return;
+    }
 
         // ===== PAGE ROUTING =====
         const landingPageContainer = document.getElementById('landingPageContainer');
@@ -2008,13 +2015,24 @@
         }
 
         function showSignupPage() {
-            landingPageContainer.classList.add('hidden');
-            signupPageContainer.classList.add('active');
-            closeDashboard();
-            document.documentElement.classList.add('signup-page');
-            closeLegalPage();
-            startSignupAnimations();
-        }
+    // ✅ FIX: Never show sign‑up if already signed in
+    if (auth && auth.currentUser) {
+        window.history.replaceState(
+            { page: 'dashboard' },
+            'CauniX Dashboard',
+            '/dashboard'
+        );
+        showDashboard(auth.currentUser);
+        return;
+    }
+
+    landingPageContainer.classList.add('hidden');
+    signupPageContainer.classList.add('active');
+    closeDashboard();
+    document.documentElement.classList.add('signup-page');
+    closeLegalPage();
+    startSignupAnimations();
+}
 
         // Navigation buttons
         const navButtons = [
@@ -2048,39 +2066,65 @@
         }
 
         // Browser back/forward
-        window.addEventListener('popstate', (event) => {
-            const state = event.state;
-            const path = window.location.pathname;
+window.addEventListener('popstate', (event) => {
+    const state = event.state;
+    const path = window.location.pathname;
 
-            if (state) {
-                if (state.page === 'signup') {
-                    showSignupPage();
-                } else if (state.page === 'legal') {
-                    openLegalPage(state.tab || 'terms');
-                } else if (state.page === 'dashboard') {
-                    // Only show dashboard if Firebase actually has a live session
-                    const liveUser = auth && auth.currentUser;
-                    if (liveUser) {
-                        showDashboard(liveUser);
-                    } else {
-                        // Auth not settled yet — wait for onAuthStateChanged
-                        showLandingPage();
-                    }
-                } else {
-                    showLandingPage();
-                }
+    if (state) {
+        if (state.page === 'signup') {
+            // ✅ Guard: if user is now logged in, go to dashboard immediately
+            const liveUser = auth && auth.currentUser;
+            if (liveUser) {
+                window.history.replaceState(
+                    { page: 'dashboard' },
+                    'CauniX Dashboard',
+                    '/dashboard'
+                );
+                showDashboard(liveUser);
             } else {
-                // No state: derive view from the URL
-                if (isDashboardPath(path)) {
-                    const liveUser = auth && auth.currentUser;
-                    if (liveUser) { showDashboard(liveUser); } else { showLandingPage(); }
-                } else if (isSignupPath(path)) {
-                    showSignupPage();
-                } else {
-                    showLandingPage();
-                }
+                showSignupPage();
             }
-        });
+        } else if (state.page === 'legal') {
+            openLegalPage(state.tab || 'terms');
+        } else if (state.page === 'dashboard') {
+            // Only show dashboard if Firebase actually has a live session
+            const liveUser = auth && auth.currentUser;
+            if (liveUser) {
+                showDashboard(liveUser);
+            } else {
+                // Auth not settled yet — wait for onAuthStateChanged
+                showLandingPage();
+            }
+        } else {
+            showLandingPage();
+        }
+    } else {
+        // No state: derive view from the URL
+        if (isDashboardPath(path)) {
+            const liveUser = auth && auth.currentUser;
+            if (liveUser) {
+                showDashboard(liveUser);
+            } else {
+                showLandingPage();
+            }
+        } else if (isSignupPath(path)) {
+            // ✅ Same guard for URL‑based signup detection
+            const liveUser = auth && auth.currentUser;
+            if (liveUser) {
+                window.history.replaceState(
+                    { page: 'dashboard' },
+                    'CauniX Dashboard',
+                    '/dashboard'
+                );
+                showDashboard(liveUser);
+            } else {
+                showSignupPage();
+            }
+        } else {
+            showLandingPage();
+        }
+    }
+});
 
         // ===== SIGNUP FORM HANDLERS =====
         const tosCheck = document.getElementById('signup-tosCheck');
