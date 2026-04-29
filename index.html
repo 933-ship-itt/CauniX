@@ -1513,6 +1513,34 @@ async function initFirebase() {
 // Start initialization immediately and on DOM load
 initFirebase();
 document.addEventListener('DOMContentLoaded', initFirebase);
+
+
+    firebase.auth().onAuthStateChanged((user) => {
+    const landing = document.getElementById('landingPageContainer');
+    const signup = document.getElementById('signupPageContainer');
+    const dashboard = document.getElementById('dashboardContainer');
+
+    if (user) {
+        // ✅ User is signed in → show dashboard
+        landing.classList.add('hidden');
+        signup.classList.remove('active');
+        dashboard.classList.add('active');
+
+        // Populate user info
+        document.getElementById('userName').textContent = user.displayName || "User";
+        document.getElementById('userEmail').textContent = user.email;
+
+        const initials = (user.displayName || "U").charAt(0).toUpperCase();
+        document.getElementById('userAvatar').textContent = initials;
+        document.getElementById('welcomeName').textContent = user.displayName || "User";
+
+    } else {
+        // ❌ Not signed in → show landing
+        landing.classList.remove('hidden');
+        signup.classList.remove('active');
+        dashboard.classList.remove('active');
+    }
+});
         // ===== AUTH MESSAGE HELPER =====
         function showAuthMessage(message, type = 'info') {
             const messageEl = document.getElementById('auth-message');
