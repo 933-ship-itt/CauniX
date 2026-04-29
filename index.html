@@ -1710,10 +1710,17 @@ function handleGoogleSignUp() {
 
     // 2. Handle Dashboard Route (Crucial for successful login)
     if (path === '/dashboard') {
-        window.history.pushState({ page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
-        showDashboardPage(); // Make sure this function exists to toggle your UI
-        return;
+    const user = firebase.auth().currentUser; // Get the currently logged-in user
+    window.history.pushState({ page: 'dashboard' }, 'CauniX Dashboard', '/dashboard');
+    
+    if (user) {
+        showDashboard(user); // Use your actual working function
+    } else {
+        // If someone tries to go to /dashboard without being logged in, send them home
+        showLandingPage();
     }
+    return;
+}
 
     // 3. Handle Signup Route
     if (path === '/signup') {
