@@ -1710,12 +1710,13 @@
         }, 1000);
 
     } catch (error) {
-        console.error('Auth init error:', error);
-        localStorage.removeItem('caunixAuthPending');
-        showAuthMessage(error.message, 'error');
-        hideAuthLoader();
-        showLandingPage();
-    }
+    console.error('Auth init error:', error);
+    localStorage.removeItem('caunixAuthPending');
+    showAuthMessage(error.message, 'error');
+    authStateResolved = true;          // ← ADD THIS LINE
+    hideAuthLoader();
+    showLandingPage();
+   }
 }
 
         // ── Single entry point ───────────────────────────────────────────────────
